@@ -3,8 +3,13 @@
 	// export let data;
 </script>
 
-<div class="my-4 w-full text-center">
-	<h1 class="text-4xl">About</h1>
+<!-- Hero Section -->
+<div class="hero bg-base-200">
+	<div class="hero-content py-12 text-center">
+		<div class="max-w-md">
+			<h1 class="text-5xl font-bold">About the Club</h1>
+		</div>
+	</div>
 </div>
 
 <div class="w-full">

@@ -31,7 +31,7 @@
 				<li><a href="/events" aria-label="events link">Events</a></li>
 				<li>
 					<a href="/courses" aria-label="courses link">Courses</a>
-					<ul class="p-2">
+					<ul class="p-2 z-10">
 						<li><a href="/courses/pioneer" aria-label="pioneer course link">Pioneer DGC</a></li>
 						<li>
 							<a href="/courses/cascades" aria-label="cascades course link">Cascades DGC</a>
@@ -64,17 +64,7 @@
 		<ul class="menu menu-horizontal hidden px-1 font-semibold text-white lg:flex">
 			<li><a href="/membership" aria-label="membership link">Membership</a></li>
 			<li><a href="/events" aria-label="events link">Events</a></li>
-			<li>
-				<details>
-					<summary>Courses</summary>
-					<ul class="bg-neutral text-neutral-content p-2">
-						<li><a href="/courses/pioneer" aria-label="pioneer course link">Pioneer DGC</a></li>
-						<li>
-							<a href="/courses/cascades" aria-label="cascades course link">Cascades DGC</a>
-						</li>
-					</ul>
-				</details>
-			</li>
+			<li><a href="/courses" aria-label="events link">Courses</a></li>
 			<li><a href="/calendar" aria-label="calendar link">Calendar</a></li>
 			<li><a href="/board" aria-label="board link">Board</a></li>
 			<li><a href="/donate" aria-label="donate link">Donate</a></li>

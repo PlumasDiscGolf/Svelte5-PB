@@ -1,6 +1,6 @@
 <script>
 	/** @type {import('./$types').PageData} */
-	export let data;
+
 </script>
 
 <div class="my-4 w-full text-center">

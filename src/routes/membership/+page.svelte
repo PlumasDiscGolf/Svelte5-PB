@@ -1,6 +1,6 @@
 <script>
 	/** @type {import('./$types').PageData} */
-	export let data;
+	
 </script>
 
 <!-- Zeffy Script -->
@@ -10,17 +10,25 @@
 	></script>
 </svelte:head>
 
+<!-- Hero Section -->
+<div class="hero bg-base-200">
+	<div class="hero-content py-12 text-center">
+		<div class="max-w-md">
+			<h1 class="text-5xl font-bold">Membership</h1>
+		</div>
+	</div>
+</div>
+
 <div class="my-4 w-full text-center">
-	<h1 class="text-4xl">Membership</h1>
-	<p class="my-4 font-semibold text-secondary max-w-[72ch] mx-auto">
+	<p class="my-4 font-semibold text-secondary">
 		We are now processing online memberships through Zeffy, our non-profit financial partner. They
-		do not take any fees from our transactions, allowing us to use your full payment to help achieve our
-		goals.
+		do not take any fees from our transactions, allowing us to use your full payment to help achieve
+		our goals.
 	</p>
 </div>
 
 <div class="grid md:grid-cols-2">
-	<div class="m-auto px-4 max-w-[72ch]">
+	<div class="m-auto max-w-[72ch] px-4">
 		<p class="my-4 font-semibold">
 			Becoming a Club Member is one of the best ways to support Plumas Disc Golf. Memberships are
 			one of our primary fundraising sources each year. Thank you for your support!

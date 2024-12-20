@@ -1,21 +1,26 @@
 <script>
 	/** @type {import('./$types').PageData} */
-	export let data;
 </script>
 
-<div class="my-4 w-full text-center">
-	<h1 class="text-4xl">Donate</h1>
+<!-- Hero Section -->
+<div class="hero bg-base-200">
+	<div class="hero-content py-12 text-center">
+		<div class="max-w-md">
+			<h1 class="text-5xl font-bold">Donate</h1>
+		</div>
+	</div>
 </div>
 
-<div class="flex flex-col">
-	<div class="m-auto max-w-[72ch]">
-		<p class="my-4 font-semibold">
-			If you are interested in making a donation to Plumas Disc Golf, thank you. Donations will help
+<div class="my-4 w-full text-center">
+	<p class="my-4 font-semibold text-secondary">
+		If you are interested in making a donation to Plumas Disc Golf, thank you. Donations will help
 			us maintain our current courses, create new courses in Plumas County, and support other
 			projects. We are always working to better our community through the lens of disc golf, and
 			your donation will help us acheive our goals. Thank you for your consideration.
-		</p>
-	</div>
+	</p>
+</div>
+
+<div class="flex flex-col">
 	<div style="position:relative;overflow:hidden;height:1200px;width:100%;">
 		<iframe
 			title="Donation form powered by Zeffy"
