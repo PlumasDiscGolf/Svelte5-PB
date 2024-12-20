@@ -21,7 +21,28 @@ export async function load() {
 			resultsURL: '',
 			publishDate: '',
 			published: true,
-			resultsPosted: true,
+			resultsPosted: true
+		},
+		{
+			startDate: '2024-04-13',
+			endDate: '2024-10-16',
+			name: 'Plumas Disc Golf Bag Tags League',
+			slug: '2024-bag-tags',
+			shortDescription:
+				'<p>Every Wednesday at Pioneer Park Disc Golf Course at 5:30PM. &nbsp;Come join us to play for the lowest tag!</p>',
+			description:
+				'<p>Every Wednesday at Pioneer Park Disc Golf Course at 5:30PM. &nbsp;Come join us to play for the lowest tag!</p>',
+			location: 'Pioneer Park Disc Golf Course',
+			imageURL:
+				'https://storage.googleapis.com/plumasdiscgolf-f3247.appspot.com/Events/2024/Bag%20Tags/2024_Bag_Tags.jpg',
+			registrationURL: 'https://plumasdiscgolf.com/membership',
+			pdgaURL: '',
+			discGolfSceneURL: '',
+			eventInfoURL: '',
+			resultsURL: '',
+			publishDate: '',
+			published: true,
+			resultsPosted: false
 		}
 	];
 
