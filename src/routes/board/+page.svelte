@@ -52,7 +52,7 @@
 		{/each}
 	</div>
 	<h2 class="text-center text-2xl">Board Meeting Documents</h2>
-	<div class="mx-32 mt-6 overflow-x-auto">
+	<div class="md:mx-32 mt-6 overflow-x-auto">
 		<table class="table">
 			<!-- head -->
 			<thead>
