@@ -11,7 +11,7 @@
 		</div>
 	</div>
 </div>
-<div class="flex w-full">
+<div class="flex w-full mt-6">
 	<div class="responsiveCal mx-auto">
 		<div class="deskContent hidden md:block">
 			<!-- svelte-ignore a11y_missing_attribute -->
