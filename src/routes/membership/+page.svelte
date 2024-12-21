@@ -20,7 +20,7 @@
 </div>
 
 <div class="my-4 w-full text-center">
-	<p class="my-4 font-semibold text-secondary">
+	<p class="my-4 font-semibold text-secondary mx-auto max-w-[72ch]">
 		We are now processing online memberships through Zeffy, our non-profit financial partner. They
 		do not take any fees from our transactions, allowing us to use your full payment to help achieve
 		our goals.

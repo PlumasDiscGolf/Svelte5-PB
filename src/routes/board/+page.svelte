@@ -10,38 +10,43 @@
 <div class="hero bg-base-200">
 	<div class="hero-content py-12 text-center">
 		<div class="max-w-md">
-			<h1 class="text-5xl font-bold">Board</h1>
+			<h1 class="text-5xl font-bold">Board of Directors</h1>
 		</div>
 	</div>
 </div>
-<div class="mt-8 w-full">
-	<h2 class="my-2 text-center text-2xl">Current Members</h2>
 
-	<div class="grid w-full gap-2 md:grid-cols-2 md:gap-4">
+
+<div class="mt-8 w-full">
+	<h2 class="my-2 text-center text-3xl">Current Members</h2>
+	<!-- active members List -->
+	<div class="container mx-auto px-4 py-8">
+		<!-- member Card -->
 		{#each activeMembers as member}
-			<div
-				class="card card-side border-4 border-slate-800 bg-primary p-6 text-secondary-content shadow-xl"
-			>
-				<figure class="min-w-fit">
-					<img src={member.image_url} alt="" class="w-48 rounded-3xl" />
+			<div class="card mb-8 bg-base-200 shadow-xl lg:card-side">
+				<figure class="lg:w-1/3">
+					<img src={member.imageURL} alt="member banner" class="h-full w-full object-cover" />
 				</figure>
-				<div class="card-body">
-					<h3 class="card-title text-2xl">{member.role}</h3>
-					<h4 class="text-lg font-semibold">{member.name}</h4>
-					<p>{member.bio}</p>
+				<div class="card-body lg:w-2/3">
+					<div class="flex flex-wrap gap-2">
+						<div class="badge badge-neutral uppercase">{member.role}</div>
+					</div>
+					<h2 class="card-title text-2xl">{member.name}</h2>
+
+					<p>{@html member.bio}</p>
 				</div>
 			</div>
 		{/each}
 	</div>
-	<h2 class="mt-4 text-center text-2xl">Former Members</h2>
-	<div class="grid w-full gap-4 px-8 py-4">
+	<h2 class="mt-4 text-center text-3xl">Former Members</h2>
+	<!-- active members List -->
+	<div class="container mx-auto px-4 py-8">
+		<!-- member Card -->
 		{#each inactiveMembers as member}
-			<div
-				class="card mx-24 border-4 border-slate-800 bg-neutral p-6 text-neutral-content shadow-xl"
-			>
-				<div class="card-body">
-					<h4 class="text-lg font-semibold">{member.name}</h4>
-					<p>{member.bio}</p>
+			<div class="card mb-8 bg-neutral text-neutral-content shadow-xl lg:card-side">
+				<div class="card-body lg:w-2/3">
+					<h2 class="card-title text-2xl">{member.name}</h2>
+
+					<p>{@html member.bio}</p>
 				</div>
 			</div>
 		{/each}
@@ -63,13 +68,14 @@
 						<th>{meeting.date}</th>
 						<td
 							><a href={meeting.agenda} target="_blank" class="btn btn-primary btn-sm">Agenda</a
-								></td
+							></td
 						>
 						{#if !meeting.minutes}
 							<td>-</td>
 						{:else}
 							<td
-								><a href={meeting.minutes} target="_blank" class="btn btn-secondary btn-sm">Minutes</a
+								><a href={meeting.minutes} target="_blank" class="btn btn-secondary btn-sm"
+									>Minutes</a
 								></td
 							>
 						{/if}
@@ -79,4 +85,3 @@
 		</table>
 	</div>
 </div>
-

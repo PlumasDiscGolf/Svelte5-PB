@@ -12,7 +12,7 @@
 </div>
 
 <div class="my-4 w-full text-center">
-	<p class="my-4 font-semibold text-secondary">
+	<p class="my-4 font-semibold text-secondary mx-auto max-w-[72ch]">
 		If you are interested in making a donation to Plumas Disc Golf, thank you. Donations will help
 			us maintain our current courses, create new courses in Plumas County, and support other
 			projects. We are always working to better our community through the lens of disc golf, and

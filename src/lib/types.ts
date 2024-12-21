@@ -40,3 +40,10 @@ export type Course = {
 	type: string;
 	imageURL: string;
 };
+
+export type Board = {
+	name: string;
+	role: string;
+	bio: string;
+	imageURL: string;
+}

@@ -2,7 +2,7 @@
 	import logoImg from '/images/header_logo.png';
 </script>
 
-<div class="navbar bg-neutral text-neutral-content uppercase">
+<div class="navbar bg-neutral uppercase text-neutral-content">
 	<div class="navbar-start">
 		<!-- Menu for small screens -->
 		<div class="dropdown">
@@ -25,19 +25,11 @@
 			<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 			<ul
 				tabindex="0"
-				class="menu dropdown-content menu-sm rounded-box bg-neutral z-[1] mt-3 w-52 p-2 font-semibold text-white shadow"
+				class="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-neutral p-2 font-semibold text-white shadow"
 			>
 				<li><a href="/membership" aria-label="membership link">Membership</a></li>
 				<li><a href="/events" aria-label="events link">Events</a></li>
-				<li>
-					<a href="/courses" aria-label="courses link">Courses</a>
-					<ul class="p-2 z-10">
-						<li><a href="/courses/pioneer" aria-label="pioneer course link">Pioneer DGC</a></li>
-						<li>
-							<a href="/courses/cascades" aria-label="cascades course link">Cascades DGC</a>
-						</li>
-					</ul>
-				</li>
+				<li><a href="/courses" aria-label="courses link">Courses</a></li>
 				<li><a href="/calendar" aria-label="calendar link">Calendar</a></li>
 				<li><a href="/board" aria-label="board link">Board</a></li>
 				<li><a href="/donate" aria-label="donate link">Donate</a></li>
