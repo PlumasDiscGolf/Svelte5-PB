@@ -1,5 +1,4 @@
 type DateStyle = Intl.DateTimeFormatOptions['dateStyle'];
-import { onMount } from 'svelte';
 
 export function formatDate(date: string, dateStyle: DateStyle = 'medium', locales = 'en') {
 	// Safari is mad about dashes in the date
@@ -7,3 +6,7 @@ export function formatDate(date: string, dateStyle: DateStyle = 'medium', locale
 	const dateFormatter = new Intl.DateTimeFormat(locales, { dateStyle });
 	return dateFormatter.format(dateToFormat);
 }
+
+export const serializeNonPOJOs = (obj) => {
+	return structuredClone(obj);
+};

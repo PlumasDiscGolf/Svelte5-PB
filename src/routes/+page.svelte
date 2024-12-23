@@ -28,13 +28,13 @@
 				<!-- <figure><img src="" alt="Article thumbnail"/></figure> -->
 				<div class="card-body">
 					<h2 class="card-title">{post.title}</h2>
-					<p>{post.shortDescription}</p>
+					<p>{@html post.content.substring(0,150)} ...</p>
 					<div class="card-actions mt-4 items-center justify-between">
 						<button class="btn btn-primary btn-sm">Read More</button>
 					</div>
 					<div class="flex gap-2">
 						{#each post.categories as category}
-							<div class="badge badge-secondary uppercase">{category}</div>
+							<div class="badge badge-secondary">{category}</div>
 						{/each}
 					</div>
 				</div>

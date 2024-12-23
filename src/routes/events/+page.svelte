@@ -3,6 +3,7 @@
 	import * as config from '$lib/config';
 
 	let { data } = $props();
+	console.log(data)
 </script>
 
 <svelte:head>
@@ -68,11 +69,11 @@
 					</svg>
 					<span>{event.checkInTime}</span>
 				</div>
-				<p>{@html event.shortDescription}</p>
+				<p>{@html event.description.substring(0,450)} ...</p>
 				<div class="card-actions items-center justify-between">
 					<button class="btn btn-info">More Info</button>
 					<button class="btn btn-primary">Register Now</button>
-					{#if event.resultsPosted === true}
+					{#if event.resultsURL }
 						<button class="btn btn-warning">Results</button>
 					{/if}
 				</div>
@@ -103,7 +104,7 @@
 					<div class="badge badge-secondary uppercase">{event.type}</div>
 				</div>
 				<h2 class="card-title text-2xl">{event.name}</h2>
-				<div class="flex items-center gap-2 text-sm">
+				<div class="flex items-center gap-2 text-sm prose">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-4 w-4"
@@ -136,7 +137,7 @@
 					</svg>
 					<span>{event.checkInTime}</span>
 				</div>
-				<p>{@html event.shortDescription}</p>
+				<p>{@html event.description.substring(0,450)} ...</p>
 				<div class="card-actions items-center justify-between">
 					<button class="btn btn-info">More Info</button>
 					<button class="btn btn-primary">Register Now</button>

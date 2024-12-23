@@ -23,7 +23,7 @@
 	<!-- Course Card -->
 	{#each data.courses as course}
 		<div class="card mb-8 bg-base-100 shadow-xl lg:card-side max-h-72">
-			<figure class="lg:w-1/3">
+			<figure class="w-full lg:w-1/3">
 				<img src={course.imageURL} alt="course banner" class="h-full w-full object-cover" />
 			</figure>
 			<div class="card-body lg:w-2/3">
@@ -43,7 +43,6 @@
 							d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 13l5.447-2.724A1 1 0 0021 16.382V5.618a1 1 0 00-1.447-.894L15 7m0 13V7m0 0L9 4"
 						/>
 					</svg>
-					<span>{course.type}</span>
 					<span class="mx-2">•</span>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -67,7 +66,7 @@
 					</svg>
 					<span>{course.location}</span>
 				</div>
-				<p>{@html course.shortDescription}</p>
+				<p>{@html course.description.substring(0,300)} ...</p>
 				<div class="card-actions items-center justify-end">
 					<button class="btn btn-info">Course Info</button>
 				</div>

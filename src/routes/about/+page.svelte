@@ -56,7 +56,7 @@
 		<h3 class="text-semibold my-4 text-center text-3xl">What We Do</h3>
 		<ul class="pb-4">
 			<li>
-				<strong>Tournaments: </strong> We host a variety of exciting tournaments to cater to all types
+				<strong>Tournaments:</strong> We host a variety of exciting tournaments to cater to all types
 				of players. Our annual Fight Type 1 Diabetes Fundraiser brings the community together for a great
 				cause with its bring-your-own-partner doubles format. We like to get creative with our events,
 				like the popular Dynamic Discs Trilogy Challenge and the exciting MVP Circuit Challenge tournament.
@@ -65,13 +65,13 @@
 				and women. Tournament registration is typically handled through Disc Golf Scene.
 			</li>
 			<li>
-				<strong>Leagues: </strong>We offer weekly bag tag and ladies' leagues, with prizes ranging
+				<strong>Leagues:</strong> We offer weekly bag tag and ladies' leagues, with prizes ranging
 				from coveted bag tags to gift cards and trophy discs. We've also recently added putting
 				leagues to help players hone their skills. Bag tag registration is included in the yearly
 				membership fee, while registration for other leagues is in-person on the day of play.
 			</li>
 			<li>
-				<strong>Course Development: </strong>We're committed to expanding access to disc golf by
+				<strong>Course Development:</strong> We're committed to expanding access to disc golf by
 				developing and maintaining high-quality courses. We recently started our second course,
 				Cascade Disc Golf Course, and are actively seeking opportunities to add more courses
 				throughout the county.
@@ -87,19 +87,19 @@
 		<ul class="pb-4">
 			<li>
 				<strong>Connect with us: </strong> Follow us on
-				<a href="https://facebook.com/plumasdiscgolf">Facebook</a>
-				and <a href="https://www.instagram.com/plumasdiscgolf/">Instagram</a> @plumasdiscgolf for the
+				<a href="https://facebook.com/plumasdiscgolf" class="text-secondary">Facebook</a>
+				and <a href="https://www.instagram.com/plumasdiscgolf/"  class="text-secondary">Instagram</a> @plumasdiscgolf for the
 				latest updates and event announcements.
 			</li>
 			<li>
 				<strong>Play Disc Golf: </strong> Join our weekly bag tag league, meet at Pioneer Disc Golf Course
-				every Saturday at 10:30 am.
+				every Wednesday at 5:30 pm, April through September.
 			</li>
 			<li>
 				<strong>Make a difference: </strong> Visit our website at
-				<a href="https://plumasdiscgolf.com">plumasdiscgolf.com</a>
+				<a href="https://plumasdiscgolf.com" class="text-secondary">plumasdiscgolf.com</a>
 				to learn more about membership options and volunteer opportunities, or contact us at
-				<a href="mailto:info@plumasdiscgolf.com">info@plumasdiscgolf.com</a> to find out how you can
+				<a href="mailto:info@plumasdiscgolf.com" class="text-secondary">info@plumasdiscgolf.com</a> to find out how you can
 				contribute. We need volunteers to help us maintain our courses, assist with events, and teach
 				disc golf to beginners.
 			</li>
