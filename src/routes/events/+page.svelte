@@ -3,13 +3,12 @@
 	import * as config from '$lib/config';
 
 	let { data } = $props();
-	console.log(data)
+	console.log(data.upcomingEvents);
 </script>
 
 <svelte:head>
 	<title>{config.title} - Events Page</title>
 </svelte:head>
-
 
 <!-- Hero Section -->
 <div class="hero bg-base-200">
@@ -29,7 +28,13 @@
 	{#each data.upcomingEvents as event}
 		<div class="card mb-8 bg-base-100 shadow-xl lg:card-side">
 			<figure class="lg:w-1/3">
-				<img src={event.imageURL} alt="Event banner" class="h-full w-full object-cover" />
+				{#if event.eventImage}
+					<img
+						src="http://localhost:8090/api/files/{event.collectionId}/{event.id}/{event.eventImage}?download=1}"
+						alt="Event banner"
+						class="h-full w-full object-cover"
+					/>
+				{/if}
 			</figure>
 			<div class="card-body lg:w-2/3">
 				<div class="flex flex-wrap gap-2">
@@ -51,7 +56,7 @@
 							d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
 						/>
 					</svg>
-					<span>{formatDate(event.startDate)}</span>
+					<span>{event.startDateTime}</span>
 					<span class="mx-2">•</span>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -69,11 +74,11 @@
 					</svg>
 					<span>{event.checkInTime}</span>
 				</div>
-				<p>{@html event.description.substring(0,450)} ...</p>
+				<p>{@html event.description.substring(0, 450)} ...</p>
 				<div class="card-actions items-center justify-between">
 					<button class="btn btn-info">More Info</button>
 					<button class="btn btn-primary">Register Now</button>
-					{#if event.resultsURL }
+					{#if event.resultsURL}
 						<button class="btn btn-warning">Results</button>
 					{/if}
 				</div>
@@ -95,16 +100,22 @@
 <div class="container mx-auto px-4 py-8">
 	<!-- Event Card -->
 	{#each data.pastEvents as event}
-		<div class="card mb-8 bg-base-100 shadow-xl lg:card-side">
+		<div class="card mb-8 border border-gray-400 bg-base-100 shadow-xl lg:card-side">
 			<figure class="lg:w-1/3">
-				<img src={event.imageURL} alt="Event banner" class="h-full w-full object-cover" />
+				{#if event.eventImage}
+					<img
+						src="http://localhost:8090/api/files/{event.collectionId}/{event.id}/{event.eventImage}?download=1}"
+						alt="Event banner"
+						class="h-full w-full object-cover"
+					/>
+				{/if}
 			</figure>
 			<div class="card-body lg:w-2/3">
 				<div class="flex flex-wrap gap-2">
 					<div class="badge badge-secondary uppercase">{event.type}</div>
 				</div>
 				<h2 class="card-title text-2xl">{event.name}</h2>
-				<div class="flex items-center gap-2 text-sm prose">
+				<div class="prose flex items-center gap-2 text-sm">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-4 w-4"
@@ -119,7 +130,7 @@
 							d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
 						/>
 					</svg>
-					<span>{formatDate(event.startDate)}</span>
+					<span>{formatDate(event.startDateTime)}</span>
 					<span class="mx-2">•</span>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +148,7 @@
 					</svg>
 					<span>{event.checkInTime}</span>
 				</div>
-				<p>{@html event.description.substring(0,450)} ...</p>
+				<p>{@html event.description.substring(0, 450)} ...</p>
 				<div class="card-actions items-center justify-between">
 					<button class="btn btn-info">More Info</button>
 					<button class="btn btn-primary">Register Now</button>
