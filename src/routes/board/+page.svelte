@@ -1,10 +1,14 @@
 <script>
 	/** @type {import('./$types').PageData} */
+	import { formatDate } from '$lib/utils';
+	import * as config from '$lib/config';
 	let { data } = $props();
-	const activeMembers = data.board_members.active;
-	const inactiveMembers = data.board_members.inactive;
-	const meetings = data.meetings;
+
 </script>
+
+<svelte:head>
+	<title>{config.title} - Board Page</title>
+</svelte:head>
 
 <!-- Hero Section -->
 <div class="hero bg-base-200">
@@ -21,10 +25,10 @@
 	<!-- active members List -->
 	<div class="container mx-auto px-4 py-8">
 		<!-- member Card -->
-		{#each activeMembers as member}
+		{#each data.activeMembers as member}
 			<div class="card mb-8 bg-base-200 shadow-xl lg:card-side">
 				<figure class="lg:w-1/3">
-					<img src={member.imageURL} alt="member banner" class="h-full w-full object-cover" />
+					<img src="http://localhost:8090/api/files/{member.collectionId}/{member.id}/{member.image}?download=1}" alt="member banner" class="h-full w-full object-cover" />
 				</figure>
 				<div class="card-body lg:w-2/3">
 					<div class="flex flex-wrap gap-2">
@@ -41,7 +45,7 @@
 	<!-- active members List -->
 	<div class="container mx-auto px-4 py-8">
 		<!-- member Card -->
-		{#each inactiveMembers as member}
+		{#each data.inactiveMembers as member}
 			<div class="card mb-8 bg-neutral text-neutral-content shadow-xl lg:card-side">
 				<div class="card-body lg:w-2/3">
 					<h2 class="card-title text-2xl">{member.name}</h2>
@@ -52,6 +56,7 @@
 		{/each}
 	</div>
 	<h2 class="text-center text-2xl">Board Meeting Documents</h2>
+	<p class="text-center text-sm">Contact us for older meeting documents</p>
 	<div class="md:mx-32 mt-6 overflow-x-auto">
 		<table class="table">
 			<!-- head -->
@@ -63,18 +68,18 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each meetings as meeting}
+				{#each data.boardMeetings.items as meeting}
 					<tr class="hover">
-						<th>{meeting.date}</th>
+						<th>{formatDate(meeting.meetingDateTime)}</th>
 						<td
-							><a href={meeting.agenda} target="_blank" class="btn btn-primary btn-sm">Agenda</a
+							><a href="http://localhost:8090/api/files/{meeting.collectionId}/{meeting.id}/{meeting.agendaFile}?download=1}" target="_blank" class="btn btn-primary btn-sm">Agenda</a
 							></td
 						>
-						{#if !meeting.minutes}
+						{#if !meeting.minutesFile}
 							<td>-</td>
 						{:else}
 							<td
-								><a href={meeting.minutes} target="_blank" class="btn btn-secondary btn-sm"
+								><a href="http://localhost:8090/api/files/{meeting.collectionId}/{meeting.id}/{meeting.minutesFile}?download=1}" target="_blank" class="btn btn-secondary btn-sm"
 									>Minutes</a
 								></td
 							>

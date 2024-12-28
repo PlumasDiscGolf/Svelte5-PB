@@ -3,7 +3,7 @@
 	import * as config from '$lib/config';
 
 	let { data } = $props();
-	console.log(data.upcomingEvents);
+	
 </script>
 
 <svelte:head>

@@ -22,9 +22,13 @@
 <div class="container mx-auto px-4 py-8">
 	<!-- Course Card -->
 	{#each data.courses as course}
-		<div class="card mb-8 bg-base-100 shadow-xl lg:card-side max-h-72">
+		<div class="card mb-8 md:max-h-72 bg-base-100 shadow-xl lg:card-side">
 			<figure class="w-full lg:w-1/3">
-				<img src={course.imageURL} alt="course banner" class="h-full w-full object-cover" />
+				<img
+					src="http://localhost:8090/api/files/{course.collectionId}/{course.id}/{course.image}?download=1}"
+					alt="course banner"
+					class="h-full w-full object-cover"
+				/>
 			</figure>
 			<div class="card-body lg:w-2/3">
 				<h2 class="card-title text-2xl">{course.name}</h2>
@@ -43,6 +47,7 @@
 							d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 13l5.447-2.724A1 1 0 0021 16.382V5.618a1 1 0 00-1.447-.894L15 7m0 13V7m0 0L9 4"
 						/>
 					</svg>
+					<span>{course.numberOfHoles} Holes</span>
 					<span class="mx-2">•</span>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -66,9 +71,16 @@
 					</svg>
 					<span>{course.location}</span>
 				</div>
-				<p>{@html course.description.substring(0,300)} ...</p>
+				<div class="md:h-96">
+					<p>{@html course.description.substring(0, 250)} ...</p>
+				</div>
+				<div>
+					{#each course.tags as tag}
+						<div class="badge badge-outline">{tag}</div>
+					{/each}
+				</div>
 				<div class="card-actions items-center justify-end">
-					<button class="btn btn-info">Course Info</button>
+					<a href="/courses/{course.id}" class="btn btn-info">Course Info</a>
 				</div>
 			</div>
 		</div>

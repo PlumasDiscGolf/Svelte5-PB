@@ -1,8 +1,9 @@
-<script lang="ts">
+<script>
 	import { formatDate } from '$lib/utils';
 	import * as config from '$lib/config';
 
 	let { data } = $props();
+	console.log(data.publishedPosts[0])
 </script>
 
 <svelte:head>
@@ -27,14 +28,15 @@
 			<div class="card bg-base-100 shadow-xl">
 				<!-- <figure><img src="" alt="Article thumbnail"/></figure> -->
 				<div class="card-body">
+					<p class="font-semibold">{formatDate(post.publishedDate)}</p>
 					<h2 class="card-title">{post.title}</h2>
 					<p>{@html post.content.substring(0,150)} ...</p>
 					<div class="card-actions mt-4 items-center justify-between">
 						<button class="btn btn-primary btn-sm">Read More</button>
 					</div>
 					<div class="flex gap-2">
-						{#each post.categories as category}
-							<div class="badge badge-secondary">{category}</div>
+						{#each post.expand.categories as category}
+							<div class="badge badge-secondary">{category.name}</div>
 						{/each}
 					</div>
 				</div>
