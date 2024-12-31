@@ -3,7 +3,6 @@
 	import * as config from '$lib/config';
 
 	let { data } = $props();
-	console.log(data.publishedPosts[0])
 </script>
 
 <svelte:head>

@@ -6,23 +6,10 @@
 
 	let event = data.event;
 
-	// Format dates
-	const formatDate = (date) => {
-		return new Date(date).toLocaleDateString('en-US', {
-			weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
-		});
-	};
-
-	let startDate = $state(formatDate(event.startDate));
-	let endDate = $state(formatDate(event.endDate));
-	let isMultiDayEvent = $state(event.startDate !== event.endDate);
 </script>
 
 <svelte:head>
-	<title>{config.title} - Homepage</title>
+	<title>{event.name} - {config.title}</title>
 </svelte:head>
 
 <!-- Hero Section -->
