@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>{config.title} - Events Page</title>
+	<title>Events Page - {config.title}</title>
 </svelte:head>
 
 <!-- Hero Section -->
@@ -74,7 +74,11 @@
 					</svg>
 					<span>{event.checkInTime}</span>
 				</div>
+				{#if event.description.length > 450}
 				<p>{@html event.description.substring(0, 450)} ...</p>
+				{:else}
+				<p>{@html event.description}</p>
+				{/if}
 				<div class="card-actions items-center justify-between">
 					<button class="btn btn-info">More Info</button>
 					<button class="btn btn-primary">Register Now</button>
