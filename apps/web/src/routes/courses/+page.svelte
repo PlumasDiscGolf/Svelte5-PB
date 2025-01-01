@@ -74,7 +74,7 @@
 				<div class="md:h-96">
 					<p>{@html course.description.substring(0, 250)} ...</p>
 				</div>
-				<div>
+				<div class="flex gap-2">
 					{#each course.tags as tag}
 						<div class="badge badge-outline">{tag}</div>
 					{/each}

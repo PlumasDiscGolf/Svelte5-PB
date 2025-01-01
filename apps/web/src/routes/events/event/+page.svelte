@@ -1,5 +1,5 @@
 <script>
-	/** @type {import('./$types').PageData} */
+	/** @type {import('../event/$types').PageData} */
 	import * as config from '$lib/config';
 
 	let { data } = $props();
@@ -49,9 +49,9 @@
 						/>
 					</svg>
 					<span>
-						{startDate}
-						{#if isMultiDayEvent}
-							through {endDate}
+						{event.startDate}
+						{#if event.startDate != event.endDate}
+							through {event.endDate}
 						{/if}
 					</span>
 				</div>
