@@ -59,7 +59,7 @@
 			<li>
 				<a href="/courses" aria-label="events link">Courses</a>
 				<ul class="clear bg-neutral rounded-xl mt-4 py-2">
-					<li><a href="/courses/390f1cfs6hb80b0">Pioneer DGC</a></li>
+					<li ><a href="/courses/390f1cfs6hb80b0">Pioneer DGC</a></li>
 					<li><a href="/courses/0hwk22l0al0sr9m">Cascades DGC</a></li>
 				</ul>
 			</li>
