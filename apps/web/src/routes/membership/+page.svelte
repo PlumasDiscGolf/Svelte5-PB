@@ -1,6 +1,5 @@
 <script>
 	/** @type {import('./$types').PageData} */
-	
 </script>
 
 <!-- Zeffy Script -->
@@ -20,14 +19,14 @@
 </div>
 
 <div class="my-4 w-full text-center">
-	<p class="my-4 font-semibold text-secondary mx-auto max-w-[72ch]">
+	<p class="text-secondary mx-auto my-4 max-w-[72ch] font-semibold">
 		We are now processing online memberships through Zeffy, our non-profit financial partner. They
 		do not take any fees from our transactions, allowing us to use your full payment to help achieve
 		our goals.
 	</p>
 </div>
 
-<div class="grid md:grid-cols-2">
+<div class="grid">
 	<div class="m-auto max-w-[72ch] px-4">
 		<p class="my-4 font-semibold">
 			Becoming a Club Member is one of the best ways to support Plumas Disc Golf. Memberships are
@@ -40,7 +39,13 @@
 			<li>Discounted entry into club events for the year</li>
 		</ul>
 	</div>
-	<div style="position:relative;overflow:hidden;height:500px;width:100%;padding-top:500px;">
+	<div class="flex w-full justify-center mt-4">
+		<button
+			zeffy-form-link="https://www.zeffy.com/embed/ticketing/club-membership--2025?modal=true"
+			class="btn btn-secondary p">Join Plumas Disc Golf</button
+		>
+	</div>
+	<!-- <div style="position:relative;overflow:hidden;height:500px;width:100%;padding-top:500px;">
 		<iframe
 			title="Donation form powered by Zeffy"
 			style="position: absolute; border: 0; top:0;left:0;bottom:0;right:0;width:100%;height:100%"
@@ -48,5 +53,5 @@
 			allowpaymentrequest
 			allowTransparency="true"
 		></iframe>
-	</div>
+	</div> -->
 </div>

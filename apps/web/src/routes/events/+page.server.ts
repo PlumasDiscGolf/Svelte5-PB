@@ -2,7 +2,7 @@ export async function load({ locals }) {
 	const currentDate = new Date();
 
 	const events = await locals.pb.collection('events').getFullList({
-		sort: '-startDateTime'
+		sort: '-endDateTime'
 	});
 
 

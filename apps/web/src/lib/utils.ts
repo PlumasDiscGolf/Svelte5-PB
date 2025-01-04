@@ -7,6 +7,16 @@ export function formatDate(date: string, dateStyle: DateStyle = 'medium', locale
 	return dateFormatter.format(dateToFormat);
 }
 
+export function formatTime(date, locales = 'en') {
+	const timeToFormat = new Date(date.replaceAll('-', '/'));
+	const timeFormatter = new Intl.DateTimeFormat(locales, {
+		hour: 'numeric',
+		minute: '2-digit',
+		hour12: true
+	});
+	return timeFormatter.format(timeToFormat);
+}
+
 export const serializeNonPOJOs = (obj) => {
 	return structuredClone(obj);
 };

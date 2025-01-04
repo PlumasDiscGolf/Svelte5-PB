@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { formatDate } from '$lib/utils';
 	import * as config from '$lib/config';
+	import { Icon, Clock, Calendar } from 'svelte-hero-icons';
 
 	let { data } = $props();
-	
 </script>
 
 <svelte:head>
@@ -22,11 +22,13 @@
 	</div>
 </div>
 
-<!-- Events List -->
+<!-- Upcoming Events List -->
 <div class="container mx-auto px-4 py-8">
 	<!-- Event Card -->
 	{#each data.upcomingEvents as event}
-		<div class="card mb-8 bg-base-100 shadow-xl lg:card-side">
+		<div
+			class="card bg-base-100 lg:card-side mb-8 border border-gray-400 shadow-lg shadow-gray-400"
+		>
 			<figure class="lg:w-1/3">
 				{#if event.eventImage}
 					<img
@@ -38,51 +40,26 @@
 			</figure>
 			<div class="card-body lg:w-2/3">
 				<div class="flex flex-wrap gap-2">
+					{#if event.type}
 					<div class="badge badge-secondary uppercase">{event.type}</div>
+					{/if}
 				</div>
 				<h2 class="card-title text-2xl">{event.name}</h2>
-				<div class="flex items-center gap-2 text-sm">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-4 w-4"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-						/>
-					</svg>
-					<span>{event.startDateTime}</span>
-					<span class="mx-2">•</span>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-4 w-4"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-						/>
-					</svg>
-					<span>{event.checkInTime}</span>
+				<div class="prose flex items-center gap-2 text-sm">
+					<Icon src={Calendar} class="size-5" />
+					{#if formatDate(event.startDateTime) == formatDate(event.endDateTime) || !event.endDateTime}
+						<span>{formatDate(event.startDateTime)}</span>
+					{:else}
+						<span>{formatDate(event.startDateTime)}</span>
+						<span class="mx-1">-</span>
+						<span>{formatDate(event.endDateTime)}</span>
+					{/if}
 				</div>
-				{#if event.description.length > 450}
 				<p>{@html event.description.substring(0, 450)} ...</p>
-				{:else}
-				<p>{@html event.description}</p>
-				{/if}
-				<div class="card-actions items-center justify-between">
-					<button class="btn btn-info">More Info</button>
+				<div class="card-actions mt-4 items-center justify-between">
+					<a href="/events/{event.id}" class="btn btn-info">More Info</a>
 					<button class="btn btn-primary">Register Now</button>
-					{#if event.resultsURL}
+					{#if event.resultsPosted === true}
 						<button class="btn btn-warning">Results</button>
 					{/if}
 				</div>
@@ -100,11 +77,13 @@
 	</div>
 </div>
 
-<!-- Events List -->
+<!-- Past Events List -->
 <div class="container mx-auto px-4 py-8">
 	<!-- Event Card -->
 	{#each data.pastEvents as event}
-		<div class="card mb-8 border border-gray-400 bg-base-100 shadow-xl lg:card-side">
+		<div
+			class="card bg-base-100 lg:card-side mb-8 border border-gray-400 shadow-lg shadow-gray-400"
+		>
 			<figure class="lg:w-1/3">
 				{#if event.eventImage}
 					<img
@@ -116,45 +95,24 @@
 			</figure>
 			<div class="card-body lg:w-2/3">
 				<div class="flex flex-wrap gap-2">
+					{#if event.type}
 					<div class="badge badge-secondary uppercase">{event.type}</div>
+					{/if}
 				</div>
 				<h2 class="card-title text-2xl">{event.name}</h2>
 				<div class="prose flex items-center gap-2 text-sm">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-4 w-4"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-						/>
-					</svg>
-					<span>{formatDate(event.startDateTime)}</span>
-					<span class="mx-2">•</span>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-4 w-4"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-						/>
-					</svg>
-					<span>{event.checkInTime}</span>
+					<Icon src={Calendar} class="size-5" />
+					{#if formatDate(event.startDateTime) == formatDate(event.endDateTime) || !event.endDateTime}
+						<span>{formatDate(event.startDateTime)}</span>
+					{:else}
+						<span>{formatDate(event.startDateTime)}</span>
+						<span class="mx-1">-</span>
+						<span>{formatDate(event.endDateTime)}</span>
+					{/if}
 				</div>
 				<p>{@html event.description.substring(0, 450)} ...</p>
-				<div class="card-actions items-center justify-between">
-					<button class="btn btn-info">More Info</button>
+				<div class="card-actions mt-4 items-center justify-between">
+					<a href="/events/{event.id}" class="btn btn-info">More Info</a>
 					<button class="btn btn-primary">Register Now</button>
 					{#if event.resultsPosted === true}
 						<button class="btn btn-warning">Results</button>

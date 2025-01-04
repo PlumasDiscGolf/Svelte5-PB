@@ -1,12 +1,9 @@
 export async function load({ locals }) {
-	const posts = await locals.pb.collection('posts').getFullList({
+	const posts = await locals.pb.collection('posts').getList(1, 3, {
 		sort: '-publishedDate',
-		expand: 'categories'
+		expand: 'categories',
+        filter: 'published = true'
 	});
 
-	const publishedPosts = posts.filter((post) => {
-		return post.published === true;
-	});
-
-	return { publishedPosts };
+	return { posts };
 }
