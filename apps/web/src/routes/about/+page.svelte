@@ -14,7 +14,7 @@
 
 <div class="w-full">
 	<div class="mx-auto max-w-[72ch] p-2">
-		<h3 class="text-semibold my-4 text-center text-3xl">Our Story</h3>
+		<h3 class="font-semibold my-4 text-center text-3xl">Our Story</h3>
 		<p class="">
 			Founded in 2018 by Jeremiah Bridges and Richard Dolezal, Plumas Disc Golf is a passionate
 			non-profit organization dedicated to promoting the sport of disc golf in Plumas County,
@@ -32,7 +32,7 @@
 	</div>
 
 	<div class="mx-auto max-w-[72ch] p-2">
-		<h3 class="text-semibold my-4 text-center text-3xl">Our Mission</h3>
+		<h3 class="font-semibold my-4 text-center text-3xl">Our Mission</h3>
 		<p class="">
 			At Plumas Disc Golf, our mission is to cultivate a love for disc golf by providing accessible,
 			high-quality courses and events that bring people together. As a non-profit organization, we
@@ -41,7 +41,7 @@
 		</p>
 	</div>
 	<div class="mx-auto max-w-[72ch] p-2">
-		<h3 class="text-semibold py-4 text-center text-3xl">Our Vision</h3>
+		<h3 class="font-semibold py-4 text-center text-3xl">Our Vision</h3>
 		<p class="">
 			We envision a future where disc golf is a staple recreational activity in Plumas County, with
 			a network of sustainable disc golf courses and a thriving community of players. Our goal is to
@@ -53,7 +53,7 @@
 	</div>
 
 	<div class="mx-auto max-w-[72ch] p-2">
-		<h3 class="text-semibold my-4 text-center text-3xl">What We Do</h3>
+		<h3 class="font-semibold my-4 text-center text-3xl">What We Do</h3>
 		<ul class="pb-4">
 			<li>
 				<strong>Tournaments:</strong> We host a variety of exciting tournaments to cater to all types
@@ -79,7 +79,7 @@
 		</ul>
 	</div>
 	<div class="mx-auto max-w-[72ch] p-2">
-		<h3 class="text-semibold my-4 text-center text-3xl">Get Involved</h3>
+		<h3 class="font-semibold my-4 text-center text-3xl">Get Involved</h3>
 		<p class="my-4">
 			Join us in our mission to grow the sport of disc golf in Plumas County! Whether you're a
 			seasoned player or a curious newcomer, there's a place for you in our community.

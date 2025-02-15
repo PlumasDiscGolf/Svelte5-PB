@@ -21,7 +21,7 @@
 
 
 <div class="mt-8 w-full">
-	<h2 class="my-2 text-center text-3xl">Current Members</h2>
+	<h2 class="mb-6 text-center text-3xl font-bold">Current Members</h2>
 	<!-- active members List -->
 	<div class="container mx-auto px-4 py-8">
 		<!-- member Card -->
@@ -41,7 +41,7 @@
 			</div>
 		{/each}
 	</div>
-	<h2 class="mt-4 text-center text-3xl">Former Members</h2>
+	<h2 class="mb-6 text-center text-3xl font-bold">Former Members</h2>
 	<!-- active members List -->
 	<div class="container mx-auto px-4 py-8">
 		<!-- member Card -->
@@ -55,7 +55,7 @@
 			</div>
 		{/each}
 	</div>
-	<h2 class="text-center text-2xl">Board Meeting Documents</h2>
+	<h2 class="mb-6 text-center text-3xl font-bold">Board Meeting Documents</h2>
 	<p class="text-center text-sm">Contact us for older meeting documents</p>
 	<div class="md:mx-32 mt-6 overflow-x-auto">
 		<table class="table">
