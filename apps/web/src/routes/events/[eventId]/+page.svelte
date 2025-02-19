@@ -119,8 +119,12 @@
 						{/if}
 						{#if event.onsiteRegistration}
 							<p class="text-base-content/70 text-sm">
-								Late registration on-site {#if event.lateRegistration}
-									for extra ${event.lateFee}{/if}
+								Registration on-site
+							</p>
+						{/if}
+						{#if event.lateRegistration}
+							<p class="text-base-content/70 text-sm">
+								Late registration on-site for extra ${event.lateFee}
 							</p>
 						{/if}
 					{/if}
@@ -168,8 +172,8 @@
 		</div>
 		<!-- Event Description -->
 		<div class="card bg-base-100 mb-8 shadow-lg shadow-gray-400">
-			<div class="card-body prose max-w-none">
-				<h2 class="card-title">Event Details</h2>
+			<div class="card-body text-base-content leading-1 prose max-w-none">
+				<h2 class="card-title text-2xl">Event Details</h2>
 				{@html event.description}
 			</div>
 		</div>

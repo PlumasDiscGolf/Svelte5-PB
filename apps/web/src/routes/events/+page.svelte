@@ -41,7 +41,7 @@
 			<div class="card-body lg:w-2/3">
 				<div class="flex flex-wrap gap-2">
 					{#if event.type}
-					<div class="badge badge-secondary uppercase">{event.type}</div>
+						<div class="badge badge-secondary uppercase">{event.type}</div>
 					{/if}
 				</div>
 				<h2 class="card-title text-2xl">{event.name}</h2>
@@ -58,7 +58,9 @@
 				<p>{@html event.description.substring(0, 450)} ...</p>
 				<div class="card-actions mt-4 items-center justify-between">
 					<a href="/events/{event.id}" class="btn btn-info">More Info</a>
-					<button class="btn btn-primary">Register Now</button>
+					{#if event.registratinURL}
+						<button class="btn btn-primary">Register Now</button>
+					{/if}
 					{#if event.resultsPosted === true}
 						<button class="btn btn-warning">Results</button>
 					{/if}
@@ -96,7 +98,7 @@
 			<div class="card-body lg:w-2/3">
 				<div class="flex flex-wrap gap-2">
 					{#if event.type}
-					<div class="badge badge-secondary uppercase">{event.type}</div>
+						<div class="badge badge-secondary uppercase">{event.type}</div>
 					{/if}
 				</div>
 				<h2 class="card-title text-2xl">{event.name}</h2>

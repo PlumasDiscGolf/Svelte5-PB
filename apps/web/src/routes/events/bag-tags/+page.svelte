@@ -38,9 +38,9 @@
 		</div>
 	</div>
 	<div>
-		<h2 class="my-6 text-center text-3xl font-bold">League Schedule</h2>
+		<h2 class="mb-6  mt-6 md:mt-0 text-center text-3xl font-bold">2025 League Schedule</h2>
 		<div class="prose lg:prose-xl mx-auto">
-			<p><strong>Season Start:</strong> Plumas Disc Golf Membership Drive, April 5th, 2025. For more info, click <a href="">here</a>.</p>
+			<p><strong>Season Start:</strong> Plumas Disc Golf Membership Drive, April 5th, 2025. For more info, click <a href="/events/9qsc06b3jum1810">here</a>.</p>
 			<p>
 				<strong>Regular Season:</strong> Following the Membership Drive, leagues will follow the regular schedule.
 			</p>
