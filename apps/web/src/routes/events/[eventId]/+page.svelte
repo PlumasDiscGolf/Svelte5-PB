@@ -16,7 +16,7 @@
 {#if event.bannerImage}
 	<div
 		class="hero relative min-h-[40vh]"
-		style="background-image: url({`http://localhost:8090/api/files/${event.collectionId}/${event.id}/${event.bannerImage}?download=1`})"
+		style="background-image: url({`https://pdg.pockethost.io/api/files/${event.collectionId}/${event.id}/${event.bannerImage}?download=1`})"
 	>
 		<div class="hero-overlay bg-opacity-20"></div>
 		<div class="hero-content text-neutral-content h-full text-center">
@@ -93,7 +93,7 @@
 						<Icon src={CurrencyDollar} class="size-6" />
 						<h3 class="card-title">Event Fee</h3>
 					</div>
-					<p class="text-lg font-semibold">${event.cost}</p>
+					<p class="text-lg font-semibold">{event.cost}</p>
 				{/if}
 			</div>
 		</div>
@@ -137,7 +137,7 @@
 		<div>
 			{#if event.eventImage}
 				<img
-					src="http://localhost:8090/api/files/{event.collectionId}/{event.id}/{event.eventImage}?download=1}"
+					src="https://pdg.pockethost.io/api/files/{event.collectionId}/{event.id}/{event.eventImage}?download=1}"
 					alt="Event banner"
 					class="w-full"
 				/>
