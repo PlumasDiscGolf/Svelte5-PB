@@ -1,7 +1,6 @@
 <script>
-	/** @type {import('./$types').PageData} */ import { formatDate } from '$lib/utils';
+	/** @type {import('./$types').PageData} */
 	import * as config from '$lib/config';
-	let { data } = $props();
 </script>
 
 <svelte:head><title>{config.title} - Bag Tags League</title></svelte:head>

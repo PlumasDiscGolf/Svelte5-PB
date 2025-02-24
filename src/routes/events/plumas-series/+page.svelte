@@ -1,8 +1,6 @@
 <script>
 	/** @type {import('./$types').PageData} */
-	import { formatDate } from '$lib/utils';
 	import * as config from '$lib/config';
-	let { data } = $props();
 </script>
 
 <svelte:head>
