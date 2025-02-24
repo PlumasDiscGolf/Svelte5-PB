@@ -17,8 +17,8 @@
 		</div>
 	</div>
 </div>
-<div class="mt-8 grid w-full md:grid-cols-2">
-	<div>
+<div class="mt-8 grid w-full xl:space-x-12 xl:grid-cols-2 px-4">
+	<div class="w-full">
 		<h2 class="mb-6 text-center text-3xl font-bold">What is a Bag Tags League?</h2>
 		<div class="prose lg:prose-xl mx-auto">
 			<p>Bag Tag leagues are a fun and competitive way to play disc golf! Here's the basic idea:</p>
@@ -37,8 +37,8 @@
 			<p>For the Plumas Disc Golf Bag Tag Leagues Comprehensive Rules, click <a href="/events/bag-tags/rules">here</a></p>
 		</div>
 	</div>
-	<div>
-		<h2 class="mb-6  mt-6 md:mt-0 text-center text-3xl font-bold">2025 League Schedule</h2>
+	<div class="w-full">
+		<h2 class="mb-6 mt-6 lg:mt-0 text-center text-3xl font-bold">2025 League Schedule</h2>
 		<div class="prose lg:prose-xl mx-auto">
 			<p><strong>Season Start:</strong> Plumas Disc Golf Membership Drive, April 5th, 2025. For more info, click <a href="/events/9qsc06b3jum1810">here</a>.</p>
 			<p>

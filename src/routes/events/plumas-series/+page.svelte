@@ -18,14 +18,14 @@
 	</div>
 </div>
 <div class="w-full">
-	<div class="prose mx-auto mt-6 max-w-[72ch] lg:prose-xl">
+	<div class="prose mx-auto mt-6 max-w-[72ch] lg:prose-xl px-4">
 		<p>Get ready to test your skills and battle for disc golf supremacy in the 2025 Plumas Series! This exciting 8-event series, held at the beautiful Pioneer Disc Golf Course, is designed for amateur players of all skill levels right here in Plumas County.</p>
 	</div>
 </div>
-<div class="mt-8 grid w-full md:grid-cols-2">
+<div class="mt-12 grid w-full xl:space-x-12 xl:grid-cols-2 px-4">
 	<div>
 		<h2 class="mb-6 text-center text-3xl font-bold">What is the Plumas Series?</h2>
-		<div class="prose mx-auto lg:prose-xl">
+		<div class="prose mx-auto md:prose-xl mb-8 xl:mb-0">
 			<p>The Plumas Series is an 8-part disc golf tournament series spanning the entire 2025 season. Seven of the events will be handicap-based, allowing players of all abilities to compete on a level playing field. Earn points throughout the series to qualify for the climactic final event: a thrilling Survivor Razz Round Championship!</p>
 			<p>
 				<strong>Cost:</strong>
@@ -54,7 +54,7 @@
 		</div>
 	</div>
 	<div>
-		<h2 class="my-6 text-center text-3xl font-bold md:mt-0">2025 Event Schedule</h2>
+		<h2 class="mb-6 mt-6 lg:mt-0 text-center text-3xl font-bold md:mt-0">2025 Event Schedule</h2>
 		<div class="prose mx-auto mb-6 lg:prose-xl">
 			<ul>
 				<li><strong>All events start at 10:00 AM, with check-ins starting at 9:00 AM</strong></li>
