@@ -28,7 +28,7 @@
 		{#each data.activeMembers as member}
 			<div class="card mb-8 bg-base-200 shadow-xl lg:card-side">
 				<figure class="lg:w-1/3">
-					<img src="http://localhost:8090/api/files/{member.collectionId}/{member.id}/{member.image}?download=1}" alt="member banner" class="h-full w-full object-cover" />
+					<img src="http://pdg.pockethost.io/api/files/{member.collectionId}/{member.id}/{member.image}?download=1}" alt="member banner" class="h-full w-full object-cover" />
 				</figure>
 				<div class="card-body lg:w-2/3">
 					<div class="flex flex-wrap gap-2">
