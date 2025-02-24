@@ -14,8 +14,9 @@
 			<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 			<ul tabindex="0" class="menu dropdown-content menu-sm rounded-box bg-neutral z-[1] mt-3 w-52 p-2 font-semibold text-white shadow">
 				<li><a href="/membership" aria-label="membership link">Membership</a></li>
-				<li><a href="/events" aria-label="events link">Events</a></li>
-				<li><a href="/events/bag-tags" aria-label="events link">Bag Tags League</a></li>
+				<li class=""><a href="/events" aria-label="events link">Events</a></li>
+				<li class="pl-3"><a href="/events/bag-tags" aria-label="events link">Bag Tags League</a></li>
+				<li class="pl-3"><a href="/events/plumas-series" aria-label="events link">Plumas Series</a></li>
 				<li><a href="/courses" aria-label="courses link">Courses</a></li>
 				<li><a href="/calendar" aria-label="calendar link">Calendar</a></li>
 				<li><a href="/board" aria-label="board link">Board</a></li>
@@ -39,6 +40,7 @@
 				<ul class="clear bg-neutral mt-4 rounded-xl py-2">
 					<li><a href="/events">Event Listing</a></li>
 					<li><a href="/events/bag-tags">Bag Tags Leagues</a></li>
+					<li><a href="/events/plumas-series">Plumas Series</a></li>
 				</ul>
 			</li>
 			<li>
