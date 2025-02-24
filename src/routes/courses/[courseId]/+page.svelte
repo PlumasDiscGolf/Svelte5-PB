@@ -6,7 +6,7 @@
 </script>
 
 <!-- Hero Section -->
-<div class="hero relative min-h-[40vh]" style="background-image: url({`http://localhost:8090/api/files/${course.collectionId}/${course.id}/${course.image}?download=1`}})">
+<div class="hero relative min-h-[40vh]" style="background-image: url({`http://pdg.pockethost.io/api/files/${course.collectionId}/${course.id}/${course.image}?download=1`}})">
 	<div class="hero-overlay bg-opacity-60"></div>
 	<div class="hero-content text-center text-neutral-content">
 		<div class="max-w-md">

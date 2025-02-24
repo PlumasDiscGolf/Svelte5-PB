@@ -25,7 +25,7 @@
 		<div class="card mb-8 md:max-h-72 bg-base-100 shadow-lg shadow-gray-400 lg:card-side">
 			<figure class="w-full lg:w-1/3">
 				<img
-					src="http://localhost:8090/api/files/{course.collectionId}/{course.id}/{course.image}?download=1}"
+					src="http://pdg.pockehost.io/api/files/{course.collectionId}/{course.id}/{course.image}?download=1}"
 					alt="course banner"
 					class="h-full w-full object-cover"
 				/>
