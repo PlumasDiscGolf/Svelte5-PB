@@ -89,7 +89,7 @@
 			<figure class="lg:w-1/3">
 				{#if event.eventImage}
 					<img
-						src="http://localhost:8090/api/files/{event.collectionId}/{event.id}/{event.eventImage}?download=1}"
+						src="http://pdg.pockethost.io/api/files/{event.collectionId}/{event.id}/{event.eventImage}?download=1}"
 						alt="Event banner"
 						class="h-full w-full object-cover"
 					/>
