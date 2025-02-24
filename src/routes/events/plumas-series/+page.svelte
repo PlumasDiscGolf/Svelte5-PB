@@ -43,7 +43,7 @@
 				<strong>Who Can Play?</strong> This series is open to all amateur disc golfers. Whether you're just starting out or have been playing for years, come join the fun!
 			</p>
 			<p>
-				<strong>Registration Details:</strong> Registration will take place day-of for all events, and entry fees will be collect in person during check-in.
+				<strong>Registration Details:</strong> Registration will take place day-of for all events, and entry fees will be collected in person during check-in.
 			</p>
 			<p><strong>Follow us on social media for updates:</strong></p>
 			<ul>
