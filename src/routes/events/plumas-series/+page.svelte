@@ -26,7 +26,7 @@
 	<div>
 		<h2 class="mb-6 text-center text-3xl font-bold">What is the Plumas Series?</h2>
 		<div class="prose mx-auto md:prose-xl mb-8 xl:mb-0">
-			<p>The Plumas Series is an 8-part disc golf tournament series spanning the entire 2025 season. Seven of the events will be handicap-based, allowing players of all abilities to compete on a level playing field. Earn points throughout the series to qualify for the climactic final event: a thrilling Survivor Razz Round Championship!</p>
+			<p>The Plumas Series is an 8 event disc golf tournament series spanning the entire 2025 season. Seven of the events will be handicap-based, allowing players of all abilities to compete on a level playing field. Earn points throughout the series to qualify for the climactic final event: a thrilling Survivor Razz Round Championship!</p>
 			<p>
 				<strong>Cost:</strong>
 			</p>
