@@ -72,14 +72,14 @@
 					<tr class="hover">
 						<th>{formatDate(meeting.meetingDateTime)}</th>
 						<td
-							><a href="http://localhost:8090/api/files/{meeting.collectionId}/{meeting.id}/{meeting.agendaFile}?download=1}" target="_blank" class="btn btn-primary btn-sm">Agenda</a
+							><a href="http://pdg.pockethost.io/api/files/{meeting.collectionId}/{meeting.id}/{meeting.agendaFile}?download=1}" target="_blank" class="btn btn-primary btn-sm">Agenda</a
 							></td
 						>
 						{#if !meeting.minutesFile}
 							<td>-</td>
 						{:else}
 							<td
-								><a href="http://localhost:8090/api/files/{meeting.collectionId}/{meeting.id}/{meeting.minutesFile}?download=1}" target="_blank" class="btn btn-secondary btn-sm"
+								><a href="http://pdg.pockethost.io/api/files/{meeting.collectionId}/{meeting.id}/{meeting.minutesFile}?download=1}" target="_blank" class="btn btn-secondary btn-sm"
 									>Minutes</a
 								></td
 							>
