@@ -31,7 +31,7 @@
 					<h2 class="card-title">{post.title}</h2>
 					<p>{@html post.content.substring(0,150)} ...</p>
 					<div class="card-actions mt-4 items-center justify-between">
-						<button class="btn btn-primary btn-sm">Read More</button>
+						<a href="/posts/{post.id}" class="btn btn-primary btn-sm">Read More</a>
 					</div>
 					<div class="flex gap-2">
 						{#each post.expand.categories as category}
