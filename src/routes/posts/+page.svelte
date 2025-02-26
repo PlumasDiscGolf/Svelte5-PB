@@ -1,5 +1,5 @@
 <script>
-	import { formatDate } from '$lib/utils';
+	import moment from 'moment'
 	import * as config from '$lib/config';
 
 	let { data } = $props();

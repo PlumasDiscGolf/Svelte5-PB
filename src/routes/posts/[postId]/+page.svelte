@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import moment from 'moment'
 
 	let { data }: { data: PageData } = $props();
 </script>
