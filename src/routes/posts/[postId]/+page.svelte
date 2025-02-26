@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import moment from 'moment'
 
 	let { data }: { data: PageData } = $props();
+	let post = data.post
 </script>
 
 <!-- Hero Section -->
@@ -20,13 +20,14 @@
 		<div class="mx-auto max-w-4xl">
 			<!-- Article Content -->
 			<div class="prose prose-lg max-w-none">
-				{@html data.post.content}
+				{@html post.content}
 			</div>
 
 			<!-- Tags -->
-			<div class="my-8 flex flex-wrap gap-2">
-				<div class="badge badge-secondary">Pioneer DGC</div>
-				<div class="badge badge-secondary">News</div>
+			<div class="flex gap-2">
+				{#each post.categories as category}
+					<div class="badge badge-secondary">{category}</div>
+				{/each}
 			</div>
 		</div>
 	</article>

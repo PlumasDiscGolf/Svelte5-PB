@@ -43,8 +43,8 @@
 						<a href="/posts/{post.id}" class="btn btn-primary btn-sm">Read More</a>
 					</div>
 					<div class="flex gap-2">
-						{#each post.expand.categories as category}
-							<div class="badge badge-secondary">{category.name}</div>
+						{#each post.categories as category}
+							<div class="badge badge-secondary">{category}</div>
 						{/each}
 					</div>
 				</div>
