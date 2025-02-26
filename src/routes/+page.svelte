@@ -35,7 +35,7 @@
 				<!-- <figure><img src="" alt="Article thumbnail"/></figure> -->
 				<div class="card-body">
 					<p class="font-semibold">
-						{moment(post.publishedDate).format('MMMM Do YYYY, h:mm A')}
+						{moment(post.publishedDate).format('MMMM Do YYYY')}
 					</p>
 					<h2 class="card-title">{post.title}</h2>
 					<p>{@html post.content.substring(0, 150)} ...</p>
