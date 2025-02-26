@@ -40,7 +40,7 @@
 					<h2 class="card-title">{post.title}</h2>
 					<p>{@html post.content.substring(0, 150)} ...</p>
 					<div class="card-actions mt-4 items-center justify-between">
-						<a href="https://dev.plumasdiscgolf.com/posts/{post.id}" class="btn btn-primary btn-sm">Read More</a>
+						<a href="/posts/{post.id}" class="btn btn-primary btn-sm">Read More</a>
 					</div>
 					<div class="flex gap-2">
 						{#each post.categories as category}
