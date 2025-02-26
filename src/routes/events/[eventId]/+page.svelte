@@ -1,5 +1,6 @@
 <script>
 	/** @type {import('./$types').PageData} */
+	import moment from 'moment'
 	import { Icon, Calendar, MapPin, Trophy, UserPlus, CurrencyDollar } from 'svelte-hero-icons';
 	import * as config from '$lib/config';
 	import { formatDate, formatTime } from '$lib/utils';
@@ -54,10 +55,10 @@
 				</div>
 				<div class="mb-4 space-y-1">
 					<p>
-						{#if formatDate(event.startDateTime) != formatDate(event.endDateTime)}
-							{formatDate(event.startDateTime)} through {formatDate(event.endDateTime)}
+						{#if moment(event.startDateTime).format('MMMM Do YYYY') != moment(event.endDateTime).format('MMMM Do YYYY')}
+							{moment(event.startDateTime).format('MMMM Do YYYY')} through {moment(event.endDateTime).format('MMMM Do YYYY')}
 						{:else}
-							{formatDate(event.startDateTime)}
+							{moment(event.startDateTime).format('MMMM Do YYYY, h:mm A')}
 						{/if}
 					</p>
 					{#if event.checkInTime}

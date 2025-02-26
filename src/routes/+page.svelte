@@ -1,5 +1,6 @@
 <script>
-	import { formatDate } from '$lib/utils';
+	import moment from 'moment'
+	import { dateOptions } from '$lib/utils';
 	import * as config from '$lib/config';
 
 	let { data } = $props();
@@ -33,7 +34,9 @@
 			<div class="card bg-base-100 shadow-lg shadow-gray-400">
 				<!-- <figure><img src="" alt="Article thumbnail"/></figure> -->
 				<div class="card-body">
-					<p class="font-semibold">{formatDate(post.publishedDate)}</p>
+					<p class="font-semibold">
+						{moment(post.publishedDate).format('MMMM Do YYYY, h:mm A')}
+					</p>
 					<h2 class="card-title">{post.title}</h2>
 					<p>{@html post.content.substring(0, 150)} ...</p>
 					<div class="card-actions mt-4 items-center justify-between">

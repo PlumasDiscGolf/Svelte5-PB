@@ -20,3 +20,10 @@ export function formatTime(date, locales = 'en') {
 export const serializeNonPOJOs = (obj) => {
 	return structuredClone(obj);
 };
+
+export const dateOptions = {
+	weekday: 'long',
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric'
+};

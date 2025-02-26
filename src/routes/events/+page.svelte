@@ -1,7 +1,8 @@
 <script lang="ts">
+	import moment from 'moment';
 	import { formatDate } from '$lib/utils';
 	import * as config from '$lib/config';
-	import { Icon, Clock, Calendar } from 'svelte-hero-icons';
+	import { Icon, Clock, Calendar, ClipboardDocumentCheck } from 'svelte-hero-icons';
 
 	let { data } = $props();
 </script>
@@ -26,16 +27,10 @@
 <div class="container mx-auto px-4 py-8">
 	<!-- Event Card -->
 	{#each data.upcomingEvents as event}
-		<div
-			class="card bg-base-100 lg:card-side mb-8 border border-gray-400 shadow-lg shadow-gray-400"
-		>
+		<div class="card mb-8 border border-gray-400 bg-base-100 shadow-lg shadow-gray-400 lg:card-side">
 			<figure class="lg:w-1/3">
 				{#if event.eventImage}
-					<img
-						src="https://pdg.pockethost.io/api/files/{event.collectionId}/{event.id}/{event.eventImage}?download=1}"
-						alt="Event banner"
-						class="h-full w-full object-cover"
-					/>
+					<img src="https://pdg.pockethost.io/api/files/{event.collectionId}/{event.id}/{event.eventImage}?download=1}" alt="Event banner" class="h-full w-full object-cover" />
 				{/if}
 			</figure>
 			<div class="card-body lg:w-2/3">
@@ -47,14 +42,20 @@
 				<h2 class="card-title text-2xl">{event.name}</h2>
 				<div class="prose flex items-center gap-2 text-sm">
 					<Icon src={Calendar} class="size-5" />
-					{#if formatDate(event.startDateTime) == formatDate(event.endDateTime) || !event.endDateTime}
-						<span>{formatDate(event.startDateTime)}</span>
+					{#if moment(event.startDateTime).format('MMMM Do YYYY') == moment(event.endDateTime).format('MMMM Do YYYY') || !event.endDateTime}
+						<span>{moment(event.startDateTime).format('MMMM Do YYYY, h:mm A')}</span>
 					{:else}
-						<span>{formatDate(event.startDateTime)}</span>
+						<span>{moment(event.startDateTime).format('MMMM Do YYYY')}</span>
 						<span class="mx-1">-</span>
-						<span>{formatDate(event.endDateTime)}</span>
+						<span>{moment(event.endDateTime).format('MMMM Do YYYY')}</span>
 					{/if}
 				</div>
+				{#if event.checkInTime}
+					<div class="prose flex items-center gap-2 text-sm">
+						<Icon src={ClipboardDocumentCheck} class="size-5" />
+						<span>Check-In begins at {moment(event.checkInTime).format('h:mm A')}</span>
+					</div>
+				{/if}
 				<p>{@html event.description.substring(0, 450)} ...</p>
 				<div class="card-actions mt-4 items-center justify-between">
 					<a href="/events/{event.id}" class="btn btn-info">More Info</a>
@@ -83,16 +84,10 @@
 <div class="container mx-auto px-4 py-8">
 	<!-- Event Card -->
 	{#each data.pastEvents as event}
-		<div
-			class="card bg-base-100 lg:card-side mb-8 border border-gray-400 shadow-lg shadow-gray-400"
-		>
+		<div class="card mb-8 border border-gray-400 bg-base-100 shadow-lg shadow-gray-400 lg:card-side">
 			<figure class="lg:w-1/3">
 				{#if event.eventImage}
-					<img
-						src="http://pdg.pockethost.io/api/files/{event.collectionId}/{event.id}/{event.eventImage}?download=1}"
-						alt="Event banner"
-						class="h-full w-full object-cover"
-					/>
+					<img src="http://pdg.pockethost.io/api/files/{event.collectionId}/{event.id}/{event.eventImage}?download=1}" alt="Event banner" class="h-full w-full object-cover" />
 				{/if}
 			</figure>
 			<div class="card-body lg:w-2/3">
@@ -104,14 +99,20 @@
 				<h2 class="card-title text-2xl">{event.name}</h2>
 				<div class="prose flex items-center gap-2 text-sm">
 					<Icon src={Calendar} class="size-5" />
-					{#if formatDate(event.startDateTime) == formatDate(event.endDateTime) || !event.endDateTime}
-						<span>{formatDate(event.startDateTime)}</span>
+					{#if moment(event.startDateTime).format('MMMM Do YYYY') == moment(event.endDateTime).format('MMMM Do YYYY') || !event.endDateTime}
+						<span>{moment(event.startDateTime).format('MMMM Do YYYY, h:mm A')}</span>
 					{:else}
-						<span>{formatDate(event.startDateTime)}</span>
+						<span>{moment(event.startDateTime).format('MMMM Do YYYY')}</span>
 						<span class="mx-1">-</span>
-						<span>{formatDate(event.endDateTime)}</span>
+						<span>{moment(event.endDateTime).format('MMMM Do YYYY')}</span>
 					{/if}
 				</div>
+				{#if event.checkInTime}
+					<div class="prose flex items-center gap-2 text-sm">
+						<Icon src={ClipboardDocumentCheck} class="size-5" />
+						<span>Check-In begins at {moment(event.checkInTime).format('h:mm A')}</span>
+					</div>
+				{/if}
 				<p>{@html event.description.substring(0, 450)} ...</p>
 				<div class="card-actions mt-4 items-center justify-between">
 					<a href="/events/{event.id}" class="btn btn-info">More Info</a>
