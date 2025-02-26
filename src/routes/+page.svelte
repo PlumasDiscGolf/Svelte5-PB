@@ -1,6 +1,5 @@
 <script>
 	import moment from 'moment'
-	import { dateOptions } from '$lib/utils';
 	import * as config from '$lib/config';
 
 	let { data } = $props();
