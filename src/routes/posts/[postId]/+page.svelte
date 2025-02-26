@@ -9,7 +9,7 @@
 <div class="hero bg-base-200">
 	<div class="hero-content py-12 text-center">
 		<div class="max-w-lg">
-			<h1 class="text-5xl font-bold">{data.post.title}</h1>
+			<h1 class="text-5xl font-bold">{post.title}</h1>
 		</div>
 	</div>
 </div>
