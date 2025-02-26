@@ -5,7 +5,6 @@ export type Post = {
 	slug: string;
 	content: string;
 	date: string;
-	categories: string;
 	published: boolean;
 };
 
