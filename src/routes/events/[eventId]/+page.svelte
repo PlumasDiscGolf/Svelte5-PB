@@ -62,7 +62,7 @@
 						{/if}
 					</p>
 					{#if event.checkInTime}
-						<p class="text-base-content/70">Check-In begins at {formatTime(event.checkInTime)}</p>
+						<p class="text-base-content/70">Check-In begins at {moment(event.checkInTime).format('h:mm A')}</p>
 					{/if}
 				</div>
 				<div class="mb-4 w-full">
@@ -114,7 +114,7 @@
 							<p class="text-base-content/70 text-sm">
 								Register Online
 								{#if event.registrationDeadline}
-									by {formatDate(event.registrationDeadline)}
+									by {moment(event.registrationDeadline).format('MMMM Do YYYY')}
 								{/if}
 							</p>
 						{/if}
