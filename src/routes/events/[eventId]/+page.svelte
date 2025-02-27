@@ -3,7 +3,6 @@
 	import moment from 'moment'
 	import { Icon, Calendar, MapPin, Trophy, UserPlus, CurrencyDollar } from 'svelte-hero-icons';
 	import * as config from '$lib/config';
-	import { formatDate, formatTime } from '$lib/utils';
 	let { data } = $props();
 
 	let event = data.event;
