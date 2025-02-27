@@ -1,6 +1,6 @@
 <script>
 	/** @type {import('./$types').PageData} */
-	import { formatDate } from '$lib/utils';
+	import moment from 'moment';
 	import * as config from '$lib/config';
 	let { data } = $props();
 
@@ -70,7 +70,7 @@
 			<tbody>
 				{#each data.boardMeetings.items as meeting}
 					<tr class="hover">
-						<th>{formatDate(meeting.meetingDateTime)}</th>
+						<th>{moment(meeting.meetingDateTime).format('MMMM Do YYYY')}</th>
 						<td
 							><a href="http://pdg.pockethost.io/api/files/{meeting.collectionId}/{meeting.id}/{meeting.agendaFile}?download=1}" target="_blank" class="btn btn-primary btn-sm">Agenda</a
 							></td
