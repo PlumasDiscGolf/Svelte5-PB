@@ -116,11 +116,6 @@
 				<p>{@html event.description.substring(0, 450)} ...</p>
 				<div class="card-actions mt-4 items-center justify-between">
 					<a href="/events/{event.id}" class="btn btn-info">More Info</a>
-					{#if event.registrationURL}
-						<a href={event.registrationURL} class="btn btn-primary" target="_blank">
-							Register Now
-						</a>
-					{/if}
 					{#if event.resultsPosted === true}
 						<button class="btn btn-warning">Results</button>
 					{/if}
