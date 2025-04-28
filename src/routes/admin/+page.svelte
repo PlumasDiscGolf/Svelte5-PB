@@ -1,3 +1,21 @@
+<script>
+	// Define tabs data
+	const tabs = [
+		{ id: 'tab1', label: 'Events' },
+		{ id: 'tab2', label: 'Course' },
+		{ id: 'tab3', label: 'Posts' },
+		{ id: 'tab4', label: 'Board' }
+	];
+
+	// Track active tab
+	let activeTabId = $state('tab3');
+
+	// Function to set active tab
+	function setActiveTab(tabId) {
+		activeTabId = tabId;
+	}
+</script>
+
 <div class="hero bg-base-200">
 	<div class="hero-content py-12 text-center">
 		<div class="max-w-md">
@@ -73,14 +91,15 @@
 
 			<!-- Tab Navigation -->
 			<div class="tabs-boxed tabs bg-base-200 p-2">
-				<button class="tab tab-active">Events</button>
-				<button class="tab">Courses</button>
-				<button class="tab">Posts</button>
-				<button class="tab">Board</button>
+				{#each tabs as tab}
+					<button class="tab {activeTabId === tab.id ? 'tab-active' : ''}" on:click={() => setActiveTab(tab.id)}>
+						{tab.label}
+					</button>
+				{/each}
 			</div>
 
-			<!-- Content Area -->
-			<div class="p-4">
+			<!-- EventsContent Area -->
+			<div class="p-4 {activeTabId === tabs[0].id ? '' : 'hidden'}">
 				<!-- Add New Button -->
 				<div class="mb-4 flex justify-end">
 					<button class="btn btn-primary flex items-center gap-2">
@@ -150,7 +169,7 @@
 			</div>
 
 			<!-- Event Edit Form (hidden initially) -->
-			<div class="p-4">
+			<div class="hidden p-4">
 				<div class="card bg-base-200 shadow-md">
 					<div class="card-body">
 						<h3 class="card-title mb-4 text-xl">Edit Event</h3>
@@ -220,7 +239,7 @@
 			</div>
 
 			<!-- Courses List (hidden initially) -->
-			<div class="p-4">
+			<div class="p-4  {activeTabId === tabs[1].id ? '' : 'hidden'}">
 				<div class="overflow-x-auto">
 					<table class="table table-zebra w-full">
 						<thead>
@@ -278,7 +297,7 @@
 			</div>
 
 			<!-- Posts List (hidden initially) -->
-			<div class="p-4">
+			<div class="p-4  {activeTabId === tabs[2].id ? '' : 'hidden'}">
 				<div class="overflow-x-auto">
 					<table class="table table-zebra w-full">
 						<thead>
@@ -346,7 +365,7 @@
 			</div>
 
 			<!-- Board Management (hidden initially) -->
-			<div class="p-4">
+			<div class="p-4  {activeTabId === tabs[3].id ? '' : 'hidden'}">
 				<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 					<!-- Board Members -->
 					<div>
@@ -484,7 +503,7 @@
 </div>
 
 <!-- Board Member Edit Form (hidden initially) -->
-<div class="p-4">
+<div class="hidden p-4">
 	<div class="card bg-base-200 shadow-md">
 		<div class="card-body">
 			<h3 class="card-title mb-4 text-xl">Edit Board Member</h3>
@@ -539,7 +558,7 @@
 </div>
 
 <!-- Meeting Edit Form (hidden initially) -->
-<div class="p-4">
+<div class="hidden p-4">
 	<div class="card bg-base-200 shadow-md">
 		<div class="card-body">
 			<h3 class="card-title mb-4 text-xl">Edit Board Meeting</h3>
@@ -582,7 +601,7 @@
 </div>
 
 <!-- Course Edit Form (hidden initially) -->
-<div class="p-4">
+<div class="hidden p-4">
 	<div class="card bg-base-200 shadow-md">
 		<div class="card-body">
 			<h3 class="card-title mb-4 text-xl">Edit Course</h3>
@@ -655,7 +674,7 @@
 </div>
 
 <!-- Post Edit Form (hidden initially) -->
-<div class="p-4">
+<div class="hidden p-4">
 	<div class="card bg-base-200 shadow-md">
 		<div class="card-body">
 			<h3 class="card-title mb-4 text-xl">Edit Post</h3>
