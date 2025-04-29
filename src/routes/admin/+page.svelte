@@ -1,19 +1,22 @@
 <script>
+	import moment from 'moment';
+	import { Icon, PencilSquare, Trash, CheckCircle, XCircle, PlusCircle, ArrowRightStartOnRectangle } from 'svelte-hero-icons';
 	// Define tabs data
 	const tabs = [
 		{ id: 'tab1', label: 'Events' },
-		{ id: 'tab2', label: 'Course' },
+		{ id: 'tab2', label: 'Courses' },
 		{ id: 'tab3', label: 'Posts' },
 		{ id: 'tab4', label: 'Board' }
 	];
 
 	// Track active tab
-	let activeTabId = $state('tab3');
+	let activeTabId = $state('tab1');
 
 	// Function to set active tab
-	function setActiveTab(tabId) {
+	let setActiveTab = (tabId) => {
 		activeTabId = tabId;
-	}
+	};
+	let { data } = $props();
 </script>
 
 <div class="hero bg-base-200">
@@ -24,54 +27,17 @@
 	</div>
 </div>
 
-<!-- Login Form -->
-<!-- <div class="mt-12 flex justify-center">
-	<div class="card w-full max-w-md bg-base-100 shadow-lg shadow-gray-400">
-		<div class="card-body">
-			<h2 class="card-title mb-4 flex justify-center text-2xl">Login to Admin Panel</h2>
-
-			<div class="alert alert-error mb-4 hidden">
-				<span>Invalid username or password</span>
-			</div>
-
-			<form class="space-y-4">
-				<div class="form-control">
-					<label class="label" for="username">
-						<span class="label-text">Username</span>
-					</label>
-					<input type="text" id="username" class="input input-bordered" required />
-				</div>
-
-				<div class="form-control">
-					<label class="label" for="password">
-						<span class="label-text">Password</span>
-					</label>
-					<input type="password" id="password" class="input input-bordered" required />
-				</div>
-
-				<div class="form-control mt-6">
-					<button type="submit" class="btn btn-primary"> Login </button>
-				</div>
-			</form>
-		</div>
-	</div>
-</div> -->
-
 <!-- Admin Dashboard (hidden initially) -->
 <div class="container mx-auto px-4 py-8">
 	<!-- Success Message -->
 	<div class="alert alert-success mb-4 hidden">
-		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-		</svg>
+		<Icon src={CheckCircle} class="h-7 w-7 justify-self-end"></Icon>
 		<span>Item saved successfully!</span>
 	</div>
 
 	<!-- Error Message -->
 	<div class="alert alert-error mb-4 hidden">
-		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-		</svg>
+		<Icon src={XCircle} class="h-7 w-7 justify-self-end"></Icon>
 		<span>Error! Unable to complete operation.</span>
 	</div>
 
@@ -82,30 +48,26 @@
 			<div class="flex items-center justify-between rounded-t-xl bg-neutral p-4 text-neutral-content">
 				<h2 class="text-xl font-bold">Plumas Disc Golf Admin</h2>
 				<button class="btn btn-error btn-sm flex items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-					</svg>
+					<Icon src={ArrowRightStartOnRectangle} class="h-5 w-5 justify-self-end"></Icon>
 					Logout
 				</button>
 			</div>
 
 			<!-- Tab Navigation -->
-			<div class="tabs-boxed tabs bg-base-200 p-2">
+			<div class="tabs-boxed tabs bg-base-200 p-1 mx-2">
 				{#each tabs as tab}
-					<button class="tab {activeTabId === tab.id ? 'tab-active' : ''}" on:click={() => setActiveTab(tab.id)}>
+					<button class="tab {activeTabId === tab.id ? 'tab-active' : ''}" onclick={() => setActiveTab(tab.id)}>
 						{tab.label}
 					</button>
 				{/each}
 			</div>
 
-			<!-- EventsContent Area -->
-			<div class="p-4 {activeTabId === tabs[0].id ? '' : 'hidden'}">
+			<!-- Events Content Area -->
+			<div class="p-2 {activeTabId === tabs[0].id ? '' : 'hidden'}">
 				<!-- Add New Button -->
 				<div class="mb-4 flex justify-end">
 					<button class="btn btn-primary flex items-center gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-						</svg>
+						<Icon src={PlusCircle} class="h-6 w-6 justify-self-end"></Icon>
 						Add New Event
 					</button>
 				</div>
@@ -123,123 +85,33 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>Bag Tag League Opener</td>
-								<td>Apr 5, 2025</td>
-								<td>League</td>
-								<td>
-									<div class="badge badge-success">Yes</div>
-								</td>
-								<td class="flex gap-2">
-									<button class="btn btn-info btn-sm">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-										</svg>
-									</button>
-									<button class="btn btn-error btn-sm">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-										</svg>
-									</button>
-								</td>
-							</tr>
-							<tr>
-								<td>Plumas Series #1</td>
-								<td>Mar 22, 2025</td>
-								<td>Tournament</td>
-								<td>
-									<div class="badge badge-success">Yes</div>
-								</td>
-								<td class="flex gap-2">
-									<button class="btn btn-info btn-sm">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-										</svg>
-									</button>
-									<button class="btn btn-error btn-sm">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-										</svg>
-									</button>
-								</td>
-							</tr>
+							{#each data.events as event}
+								<tr>
+									<td>{event.name}</td>
+									<td>{moment(event.startDateTime).format('MMM Do, YYYY')}</td>
+									<td>{event.eventType}</td>
+									<td>
+										<!-- <div class="badge badge-success">Yes</div> -->
+									</td>
+									<td class="flex gap-2">
+										<button class="btn btn-info btn-sm">
+											<Icon src={PencilSquare} class="h-4 w-4 justify-self-end"></Icon>
+										</button>
+										<button class="btn btn-error btn-sm">
+											<Icon src={Trash} class="h-4 w-4 justify-self-end"></Icon>
+										</button>
+									</td>
+								</tr>
+							{/each}
 						</tbody>
 					</table>
 				</div>
 			</div>
 
-			<!-- Event Edit Form (hidden initially) -->
-			<div class="hidden p-4">
-				<div class="card bg-base-200 shadow-md">
-					<div class="card-body">
-						<h3 class="card-title mb-4 text-xl">Edit Event</h3>
-
-						<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-							<div class="form-control">
-								<label class="label">Name</label>
-								<input type="text" class="input input-bordered" value="Bag Tag League Opener" />
-							</div>
-
-							<div class="form-control">
-								<label class="label">Event Type</label>
-								<select class="select select-bordered">
-									<option>Tournament</option>
-									<option selected>League</option>
-									<option>Clinic</option>
-									<option>Work Party</option>
-								</select>
-							</div>
-
-							<div class="form-control">
-								<label class="label">Start Date & Time</label>
-								<input type="datetime-local" class="input input-bordered" value="2025-04-05T10:00" />
-							</div>
-
-							<div class="form-control">
-								<label class="label">End Date & Time</label>
-								<input type="datetime-local" class="input input-bordered" value="2025-04-05T14:00" />
-							</div>
-
-							<div class="form-control md:col-span-2">
-								<label class="label">Description</label>
-								<textarea class="textarea textarea-bordered h-32">Season opener for the bag tag league</textarea>
-								<label class="label">
-									<span class="label-text-alt">HTML is supported</span>
-								</label>
-							</div>
-
-							<div class="form-control">
-								<label class="label cursor-pointer">
-									<span class="label-text">Published</span>
-									<input type="checkbox" class="toggle toggle-primary" checked />
-								</label>
-							</div>
-
-							<div class="form-control">
-								<label class="label">Event Image</label>
-								<div class="flex gap-2">
-									<input type="text" class="input input-bordered flex-grow" value="No file selected" readonly />
-									<button class="btn btn-secondary">Upload</button>
-								</div>
-							</div>
-						</div>
-
-						<!-- Form Buttons -->
-						<div class="mt-6 flex justify-end gap-2">
-							<button class="btn btn-ghost">Cancel</button>
-							<button class="btn btn-primary flex items-center gap-2">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-								</svg>
-								Save
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
+			
 
 			<!-- Courses List (hidden initially) -->
-			<div class="p-4  {activeTabId === tabs[1].id ? '' : 'hidden'}">
+			<div class="p-4 {activeTabId === tabs[1].id ? '' : 'hidden'}">
 				<div class="overflow-x-auto">
 					<table class="table table-zebra w-full">
 						<thead>
@@ -297,7 +169,14 @@
 			</div>
 
 			<!-- Posts List (hidden initially) -->
-			<div class="p-4  {activeTabId === tabs[2].id ? '' : 'hidden'}">
+			<div class="p-4 {activeTabId === tabs[2].id ? '' : 'hidden'}">
+				<!-- Add New Button -->
+				<div class="mb-4 flex justify-end">
+					<button class="btn btn-primary flex items-center gap-2">
+						<Icon src={PlusCircle} class="h-6 w-6 justify-self-end"></Icon>
+						Add New Post
+					</button>
+				</div>
 				<div class="overflow-x-auto">
 					<table class="table table-zebra w-full">
 						<thead>
@@ -365,7 +244,7 @@
 			</div>
 
 			<!-- Board Management (hidden initially) -->
-			<div class="p-4  {activeTabId === tabs[3].id ? '' : 'hidden'}">
+			<div class="p-4 {activeTabId === tabs[3].id ? '' : 'hidden'}">
 				<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 					<!-- Board Members -->
 					<div>
