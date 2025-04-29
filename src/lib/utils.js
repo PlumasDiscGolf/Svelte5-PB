@@ -25,3 +25,10 @@ export const dateOptions = {
 	month: 'long',
 	day: 'numeric'
 };
+
+export const preventDefault = (handler) => {
+	return (e) => {
+		e.preventDefault();
+		handler(e);
+	};
+};
