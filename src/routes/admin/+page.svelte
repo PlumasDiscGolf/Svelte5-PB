@@ -54,7 +54,7 @@
 			</div>
 
 			<!-- Tab Navigation -->
-			<div class="tabs-boxed tabs bg-base-200 p-1 mx-2">
+			<div class="tabs-boxed tabs mx-2 bg-base-200 p-1">
 				{#each tabs as tab}
 					<button class="tab {activeTabId === tab.id ? 'tab-active' : ''}" onclick={() => setActiveTab(tab.id)}>
 						{tab.label}
@@ -66,10 +66,12 @@
 			<div class="p-2 {activeTabId === tabs[0].id ? '' : 'hidden'}">
 				<!-- Add New Button -->
 				<div class="mb-4 flex justify-end">
-					<button class="btn btn-primary flex items-center gap-2">
-						<Icon src={PlusCircle} class="h-6 w-6 justify-self-end"></Icon>
-						Add New Event
-					</button>
+					<a href="/admin/events/new">
+						<button class="btn btn-secondary btn-sm flex items-center gap-2">
+							<Icon src={PlusCircle} class="h-6 w-6"></Icon>
+							Add New Event
+						</button>
+					</a>
 				</div>
 
 				<!-- Events List -->
@@ -108,10 +110,17 @@
 				</div>
 			</div>
 
-			
-
 			<!-- Courses List (hidden initially) -->
 			<div class="p-4 {activeTabId === tabs[1].id ? '' : 'hidden'}">
+				<!-- Add New Button -->
+				<div class="mb-4 flex justify-end">
+					<a href="/admin/courses/new">
+						<button class="btn btn-secondary btn-sm flex items-center gap-2">
+							<Icon src={PlusCircle} class="h-6 w-6"></Icon>
+							Add New Course
+						</button>
+					</a>
+				</div>
 				<div class="overflow-x-auto">
 					<table class="table table-zebra w-full">
 						<thead>
@@ -133,14 +142,10 @@
 								<td>Quincy, CA</td>
 								<td class="flex gap-2">
 									<button class="btn btn-info btn-sm">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-										</svg>
+										<Icon src={PencilSquare} class="h-4 w-4 justify-self-end"></Icon>
 									</button>
 									<button class="btn btn-error btn-sm">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-										</svg>
+										<Icon src={Trash} class="h-4 w-4 justify-self-end"></Icon>
 									</button>
 								</td>
 							</tr>
@@ -152,14 +157,10 @@
 								<td>Quincy, CA</td>
 								<td class="flex gap-2">
 									<button class="btn btn-info btn-sm">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-										</svg>
+										<Icon src={PencilSquare} class="h-4 w-4 justify-self-end"></Icon>
 									</button>
 									<button class="btn btn-error btn-sm">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-										</svg>
+										<Icon src={Trash} class="h-4 w-4 justify-self-end"></Icon>
 									</button>
 								</td>
 							</tr>
@@ -172,10 +173,12 @@
 			<div class="p-4 {activeTabId === tabs[2].id ? '' : 'hidden'}">
 				<!-- Add New Button -->
 				<div class="mb-4 flex justify-end">
-					<button class="btn btn-primary flex items-center gap-2">
-						<Icon src={PlusCircle} class="h-6 w-6 justify-self-end"></Icon>
-						Add New Post
-					</button>
+					<a href="/admin/posts/new">
+						<button class="btn btn-secondary btn-sm flex items-center gap-2">
+							<Icon src={PlusCircle} class="h-6 w-6"></Icon>
+							Add New Post
+						</button>
+					</a>
 				</div>
 				<div class="overflow-x-auto">
 					<table class="table table-zebra w-full">
@@ -203,14 +206,10 @@
 								</td>
 								<td class="flex gap-2">
 									<button class="btn btn-info btn-sm">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-										</svg>
+										<Icon src={PencilSquare} class="h-4 w-4 justify-self-end"></Icon>
 									</button>
 									<button class="btn btn-error btn-sm">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-										</svg>
+										<Icon src={Trash} class="h-4 w-4 justify-self-end"></Icon>
 									</button>
 								</td>
 							</tr>
@@ -227,14 +226,10 @@
 								</td>
 								<td class="flex gap-2">
 									<button class="btn btn-info btn-sm">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-										</svg>
+										<Icon src={PencilSquare} class="h-4 w-4 justify-self-end"></Icon>
 									</button>
 									<button class="btn btn-error btn-sm">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-										</svg>
+										<Icon src={Trash} class="h-4 w-4 justify-self-end"></Icon>
 									</button>
 								</td>
 							</tr>
@@ -245,10 +240,18 @@
 
 			<!-- Board Management (hidden initially) -->
 			<div class="p-4 {activeTabId === tabs[3].id ? '' : 'hidden'}">
-				<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+				<div class="grid gap-6 md:grid-cols-2">
 					<!-- Board Members -->
 					<div>
-						<h3 class="mb-4 text-xl font-bold">Board Members</h3>
+						<div class="mt-4 flex justify-between">
+							<h3 class="mb-4 text-xl font-bold">Board Members</h3>
+							<a href="/admin/board/member/new">
+								<button class="btn btn-secondary btn-sm flex items-center gap-2">
+									<Icon src={PlusCircle} class="h-6 w-6"></Icon>
+									Add New Member
+								</button>
+							</a>
+						</div>
 						<table class="table table-zebra w-full">
 							<thead>
 								<tr>
@@ -267,14 +270,10 @@
 									</td>
 									<td class="flex gap-2">
 										<button class="btn btn-info btn-sm">
-											<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-												<path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-											</svg>
+											<Icon src={PencilSquare} class="h-4 w-4 justify-self-end"></Icon>
 										</button>
 										<button class="btn btn-error btn-sm">
-											<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-												<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-											</svg>
+											<Icon src={Trash} class="h-4 w-4 justify-self-end"></Icon>
 										</button>
 									</td>
 								</tr>
@@ -286,32 +285,28 @@
 									</td>
 									<td class="flex gap-2">
 										<button class="btn btn-info btn-sm">
-											<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-												<path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-											</svg>
+											<Icon src={PencilSquare} class="h-4 w-4 justify-self-end"></Icon>
 										</button>
 										<button class="btn btn-error btn-sm">
-											<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-												<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-											</svg>
+											<Icon src={Trash} class="h-4 w-4 justify-self-end"></Icon>
 										</button>
 									</td>
 								</tr>
 							</tbody>
 						</table>
-						<div class="mt-4">
-							<button class="btn btn-secondary btn-sm flex items-center gap-2">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-								</svg>
-								Add New Member
-							</button>
-						</div>
 					</div>
 
 					<!-- Board Meetings -->
 					<div>
-						<h3 class="mb-4 text-xl font-bold">Board Meetings</h3>
+						<div class="mt-4 flex justify-between">
+							<h3 class="mb-4 text-xl font-bold">Board Meetings</h3>
+							<a href="/admin/board/meeting/new">
+								<button class="btn btn-secondary btn-sm flex items-center gap-2">
+									<Icon src={PlusCircle} class="h-6 w-6"></Icon>
+									Add New Meeting
+								</button>
+							</a>
+						</div>
 						<table class="table table-zebra w-full">
 							<thead>
 								<tr>
@@ -329,14 +324,10 @@
 									</td>
 									<td class="flex gap-2">
 										<button class="btn btn-info btn-sm">
-											<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-												<path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-											</svg>
+											<Icon src={PencilSquare} class="h-4 w-4 justify-self-end"></Icon>
 										</button>
 										<button class="btn btn-error btn-sm">
-											<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-												<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-											</svg>
+											<Icon src={Trash} class="h-4 w-4 justify-self-end"></Icon>
 										</button>
 									</td>
 								</tr>
@@ -348,27 +339,15 @@
 									</td>
 									<td class="flex gap-2">
 										<button class="btn btn-info btn-sm">
-											<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-												<path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-											</svg>
+											<Icon src={PencilSquare} class="h-4 w-4 justify-self-end"></Icon>
 										</button>
 										<button class="btn btn-error btn-sm">
-											<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-												<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-											</svg>
+											<Icon src={Trash} class="h-4 w-4 justify-self-end"></Icon>
 										</button>
 									</td>
 								</tr>
 							</tbody>
 						</table>
-						<div class="mt-4">
-							<button class="btn btn-secondary btn-sm flex items-center gap-2">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-								</svg>
-								Add New Meeting
-							</button>
-						</div>
 					</div>
 				</div>
 			</div>
