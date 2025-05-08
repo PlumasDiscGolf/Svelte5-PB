@@ -4,41 +4,44 @@
     let { data }: { data: PageData } = $props();
 </script>
 
-<!-- Post Edit Form (hidden initially) -->
+<!-- Board Member Edit Form (hidden initially) -->
 <div class="hidden p-4">
 	<div class="card bg-base-200 shadow-md">
 		<div class="card-body">
-			<h3 class="card-title mb-4 text-xl">Edit Post</h3>
+			<h3 class="card-title mb-4 text-xl">Edit Board Member</h3>
 
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-				<div class="form-control md:col-span-2">
-					<label class="label">Title</label>
-					<input type="text" class="input input-bordered" value="New Course Update" />
+				<div class="form-control">
+					<label class="label">Name</label>
+					<input type="text" class="input input-bordered" value="Jane Smith" />
 				</div>
 
 				<div class="form-control">
-					<label class="label">Publish Date</label>
-					<input type="datetime-local" class="input input-bordered" value="2025-02-15T08:00" />
-				</div>
-
-				<div class="form-control">
-					<label class="label cursor-pointer">
-						<span class="label-text">Published</span>
-						<input type="checkbox" class="toggle toggle-primary" checked />
-					</label>
+					<label class="label">Role</label>
+					<input type="text" class="input input-bordered" value="President" />
 				</div>
 
 				<div class="form-control md:col-span-2">
-					<label class="label">Content</label>
-					<textarea class="textarea textarea-bordered h-64"><p>Progress on our new Cascades course is coming along nicely!</p></textarea>
+					<label class="label">Bio</label>
+					<textarea class="textarea textarea-bordered h-32"><p>Jane has been an active member since 2020.</p></textarea>
 					<label class="label">
 						<span class="label-text-alt">HTML is supported</span>
 					</label>
 				</div>
 
-				<div class="form-control md:col-span-2">
-					<label class="label">Categories (comma separated)</label>
-					<input type="text" class="input input-bordered" value="site-update, pioneer-dgc" />
+				<div class="form-control">
+					<label class="label cursor-pointer">
+						<span class="label-text">Active</span>
+						<input type="checkbox" class="toggle toggle-primary" checked />
+					</label>
+				</div>
+
+				<div class="form-control">
+					<label class="label">Member Image</label>
+					<div class="flex gap-2">
+						<input type="text" class="input input-bordered flex-grow" value="member_image.jpg" readonly />
+						<button class="btn btn-secondary">Upload</button>
+					</div>
 				</div>
 			</div>
 
