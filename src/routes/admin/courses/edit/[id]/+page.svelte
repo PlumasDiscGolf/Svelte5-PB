@@ -1,77 +1,89 @@
-<script lang="ts">
-    import type { PageData } from './$types';
+<script>
+    import { enhance } from '$app/forms';
+    import { Icon, CheckCircle, XCircle, ArrowUturnLeft } from 'svelte-hero-icons';
 
-    let { data }: { data: PageData } = $props();
+    let { data, form } = $props(); // data.course from load, form from action
+
+    let courseName = $state(form?.courseName || data.course?.name || '');
+    let courseNumberOfHoles = $state(form?.courseNumberOfHoles === undefined ? (data.course?.numberOfHoles === undefined ? 18 : data.course.numberOfHoles) : form.courseNumberOfHoles);
+    let coursePar = $state(form?.coursePar === undefined ? (data.course?.par === undefined ? 54 : data.course.par) : form.coursePar);
+    let courseLengthInFeet = $state(form?.courseLengthInFeet === undefined ? (data.course?.lengthInFeet === undefined ? 0 : data.course.lengthInFeet) : form.courseLengthInFeet);
+    let courseLocation = $state(form?.courseLocation || data.course?.location || '');
+    let courseDescription = $state(form?.courseDescription || data.course?.description || '');
+
+    let isSaving = $state(false);
 </script>
-<!-- Course Edit Form (hidden initially) -->
-<div class="hidden p-4">
-	<div class="card bg-base-200 shadow-md">
-		<div class="card-body">
-			<h3 class="card-title mb-4 text-xl">Edit Course</h3>
 
-			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-				<div class="form-control">
-					<label class="label">Name</label>
-					<input type="text" class="input input-bordered" value="Pioneer Disc Golf Course" />
-				</div>
+<div class="container mx-auto px-4 py-8 max-w-3xl">
+    <div class="mb-6 flex items-center justify-between">
+        <h1 class="text-3xl font-bold text-base-content">Edit Course: {data.course?.name || 'Loading...'}</h1>
+         <a href="/admin?tab=tab2" class="btn btn-ghost btn-sm">
+            <Icon src={ArrowUturnLeft} class="h-5 w-5" />
+            Back to Admin
+        </a>
+    </div>
 
-				<div class="form-control">
-					<label class="label">Number of Holes</label>
-					<input type="number" class="input input-bordered" value="9" />
-				</div>
+    {#if form?.error}
+        <div class="alert alert-error mb-4 shadow-md">
+            <div><Icon src={XCircle} class="h-6 w-6 mr-2 shrink-0"></Icon><span>{form.error}</span></div>
+        </div>
+    {/if}
+    {#if form?.fieldErrors}
+        <div class="alert alert-warning mb-4 shadow-md">
+            <ul class="list-disc pl-5">
+                {#each Object.entries(form.fieldErrors) as [field, errorMsg]}
+                     <li><strong>{field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</strong> {errorMsg}</li>
+                {/each}
+            </ul>
+        </div>
+    {/if}
 
-				<div class="form-control">
-					<label class="label">Par</label>
-					<input type="number" class="input input-bordered" value="27" />
-				</div>
+    <form method="POST" action="?/updateCourse" use:enhance={() => {
+        isSaving = true;
+        return async ({ update, result }) => {
+            await update({ reset: false }); // Don't reset on error, SvelteKit handles redirect on success
+            isSaving = false;
+        };
+    }} class="card bg-base-200 shadow-xl">
+        <div class="card-body space-y-4">
+            <div class="form-control">
+                <label class="label" for="editCourseNameInput"><span class="label-text">Course Name*</span></label>
+                <input name="name" type="text" id="editCourseNameInput" class="input input-bordered w-full" bind:value={courseName} required />
+            </div>
 
-				<div class="form-control">
-					<label class="label">Length (in feet)</label>
-					<input type="number" class="input input-bordered" value="2340" />
-				</div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="form-control">
+                    <label class="label" for="editCourseHolesInput"><span class="label-text">Number of Holes*</span></label>
+                    <input name="numberOfHoles" type="number" id="editCourseHolesInput" class="input input-bordered w-full" bind:value={courseNumberOfHoles} required />
+                </div>
+                <div class="form-control">
+                    <label class="label" for="editCourseParInput"><span class="label-text">Course Par*</span></label>
+                    <input name="par" type="number" id="editCourseParInput" class="input input-bordered w-full" bind:value={coursePar} required />
+                </div>
+                <div class="form-control">
+                    <label class="label" for="editCourseLengthInput"><span class="label-text">Length (ft)</span></label>
+                    <input name="lengthInFeet" type="number" id="editCourseLengthInput" class="input input-bordered w-full" bind:value={courseLengthInFeet} />
+                </div>
+            </div>
 
-				<div class="form-control">
-					<label class="label">City</label>
-					<input type="text" class="input input-bordered" value="Quincy" />
-				</div>
+            <div class="form-control">
+                <label class="label" for="editCourseLocationInput"><span class="label-text">Location/Town*</span></label>
+                <input name="location" type="text" id="editCourseLocationInput" class="input input-bordered w-full" bind:value={courseLocation} required />
+            </div>
 
-				<div class="form-control">
-					<label class="label">State</label>
-					<input type="text" class="input input-bordered" value="CA" />
-				</div>
-
-				<div class="form-control md:col-span-2">
-					<label class="label">Description</label>
-					<textarea class="textarea textarea-bordered h-32">Pioneer Disc Golf Course is the flagship course of Plumas Disc Golf, offering a fun and accessible experience for players of all levels.</textarea>
-					<label class="label">
-						<span class="label-text-alt">HTML is supported</span>
-					</label>
-				</div>
-
-				<div class="form-control md:col-span-2">
-					<label class="label">Tags (comma separated)</label>
-					<input type="text" class="input input-bordered" value="Beginner Friendly, Technical" />
-				</div>
-
-				<div class="form-control">
-					<label class="label">Course Image</label>
-					<div class="flex gap-2">
-						<input type="text" class="input input-bordered flex-grow" value="pioneer.jpg" readonly />
-						<button class="btn btn-secondary">Upload</button>
-					</div>
-				</div>
-			</div>
-
-			<!-- Form Buttons -->
-			<div class="mt-6 flex justify-end gap-2">
-				<button class="btn btn-ghost">Cancel</button>
-				<button class="btn btn-primary flex items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-					</svg>
-					Save
-				</button>
-			</div>
-		</div>
-	</div>
+             <div class="form-control">
+                <label class="label" for="editCourseDescriptionTextarea"><span class="label-text">Description</span></label>
+                <textarea name="description" id="editCourseDescriptionTextarea" class="textarea textarea-bordered h-24 w-full" bind:value={courseDescription}></textarea>
+            </div>
+            
+            <div class="card-actions justify-end mt-6">
+                <a href="/admin?tab=tab2" class="btn btn-ghost" disabled={isSaving}>Cancel</a>
+                <button type="submit" class="btn btn-primary flex items-center gap-1.5" disabled={isSaving}>
+                    {#if isSaving} <span class="loading loading-spinner loading-xs"></span> {/if}
+                    <Icon src={CheckCircle} class="h-5 w-5" />
+                    Update Course
+                </button>
+            </div>
+        </div>
+    </form>
 </div>

@@ -1,18 +1,44 @@
-export function formatDate(date, dateStyle = 'medium', locales = 'en') {
-	// Safari is mad about dashes in the date
-	const dateToFormat = new Date(date.replaceAll('-', '/'));
-	const dateFormatter = new Intl.DateTimeFormat(locales, { dateStyle });
-	return dateFormatter.format(dateToFormat);
+import moment from 'moment';
+
+/**
+ * Formats a date string from YYYY-MM-DD or YYYY-MM-DDTHH:mm
+ * to a UTC ISO string for PocketBase.
+ * Treats input as local time.
+ * @param {string | undefined | null} inputDateTime
+ * @returns {string | null} UTC ISO string or null if input is invalid/empty
+ */
+export function formatInputDateToPocketBase(inputDateTime) {
+	if (!inputDateTime) return null;
+	// Moment can parse both 'YYYY-MM-DD' and 'YYYY-MM-DDTHH:mm' correctly
+	// It will assume local time if no timezone info is present.
+	const m = moment(inputDateTime);
+	if (!m.isValid()) {
+		return null; // Or throw an error
+	}
+	return m.toISOString(); // Converts to UTC and formats
 }
 
-export function formatTime(date, locales = 'en') {
-	const timeToFormat = new Date(date.replaceAll('-', '/'));
-	const timeFormatter = new Intl.DateTimeFormat(locales, {
-		hour: 'numeric',
-		minute: '2-digit',
-		hour12: true
-	});
-	return timeFormatter.format(timeToFormat);
+/**
+ * Formats a UTC ISO string from PocketBase to YYYY-MM-DDTHH:mm
+ * for HTML datetime-local input.
+ * @param {string | undefined | null} pbDateTime
+ * @returns {string} Formatted local datetime string or empty string
+ */
+export function formatPocketBaseDateToLocalInput(pbDateTime) {
+	if (!pbDateTime) return '';
+	// Moment parses ISO string and converts to local time by default for formatting
+	return moment(pbDateTime).format('YYYY-MM-DDTHH:mm');
+}
+
+/**
+ * Formats a UTC ISO string from PocketBase to YYYY-MM-DD
+ * for HTML date input.
+ * @param {string | undefined | null} pbDateTime
+ * @returns {string} Formatted local date string or empty string
+ */
+export function formatPocketBaseDateToDateInput(pbDateTime) {
+	if (!pbDateTime) return '';
+	return moment(pbDateTime).format('YYYY-MM-DD');
 }
 
 export const serializeNonPOJOs = (obj) => {

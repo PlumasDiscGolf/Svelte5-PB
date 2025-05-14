@@ -1,75 +1,144 @@
-<script lang="ts">
-    import type { PageData } from './$types';
+<script>
+    import { enhance } from '$app/forms';
+    import { Icon, CheckCircle, XCircle, ArrowUturnLeft } from 'svelte-hero-icons';
+    import moment from 'moment'; // Already imported, but good to note for context
 
-    let { data }: { data: PageData } = $props();
+    // data.event comes from the load function in +page.server.js
+    // form prop contains feedback from the server action
+    let { data, form } = $props();
+
+    // Initialize state with loaded event data or form data (if action failed)
+    let eventName = $state(form?.eventName || data.event?.name || '');
+    let eventType = $state(form?.eventType || data.event?.eventType || 'League');
+    
+    // Helper to format for datetime-local input
+    function formatForInput(isoString) {
+        if (!isoString) return '';
+        return moment(isoString).format('YYYY-MM-DDTHH:mm');
+    }
+
+    let eventStartDateTime = $state(form?.eventStartDateTime || formatForInput(data.event?.startDateTime));
+    let eventEndDateTime = $state(form?.eventEndDateTime || formatForInput(data.event?.endDateTime));
+    let eventDescription = $state(form?.eventDescription || data.event?.description || '');
+    let eventPublished = $state(form?.eventPublished === undefined ? (data.event?.published === undefined ? true : data.event.published) : form.eventPublished);
+    
+    let eventImageFile = $state(null);
+    let imagePreviewUrl = $state(
+        (data.event?.eventImage && data.event?.id && data.event?.collectionId) ? 
+        `https://pdg.pockethost.io/api/files/${data.event.collectionId}/${data.event.id}/${data.event.eventImage}?thumb=200x200` : ''
+    ); // Construct initial image preview URL
+
+    let isSaving = $state(false);
+
+    function handleFileSelect(e) {
+        const file = e.target.files?.[0];
+        if (file) {
+            eventImageFile = file;
+            imagePreviewUrl = URL.createObjectURL(file);
+        } else {
+            eventImageFile = null;
+            // If file cleared, revert to original or clear preview
+            imagePreviewUrl = (data.event?.eventImage && data.event?.id && data.event?.collectionId) ? 
+                `https://pdg.pockethost.io/api/files/${data.event.collectionId}/${data.event.id}/${data.event.eventImage}?thumb=200x200` : '';
+        }
+    }
+
+    // To display existing file name if no new one chosen for edit
+    let existingFileName = $state(data.event?.eventImage || '');
+
 </script>
 
-<!-- Event Edit Form -->
-			<div class="p-4">
-				<div class="card bg-base-200 shadow-md">
-					<div class="card-body">
-						<h3 class="card-title mb-4 text-xl">Edit Event</h3>
+<div class="container mx-auto px-4 py-8 max-w-3xl">
+    <div class="mb-6 flex items-center justify-between">
+        <h1 class="text-3xl font-bold text-base-content">Edit Event: {data.event?.name || 'Loading...'}</h1>
+         <a href="/admin" class="btn btn-ghost btn-sm">
+            <Icon src={ArrowUturnLeft} class="h-5 w-5" />
+            Back to Admin
+        </a>
+    </div>
 
-						<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-							<div class="form-control">
-								<label class="label" for="eventName">Name</label>
-								<input type="text" id="eventName" class="input input-bordered" value="Bag Tag League Opener" />
-							</div>
+    {#if form?.error}
+        <div class="alert alert-error mb-4 shadow-md">
+            <div><Icon src={XCircle} class="h-6 w-6 mr-2 shrink-0"></Icon><span>{form.error}</span></div>
+        </div>
+    {/if}
+    {#if form?.fieldErrors}
+        <div class="alert alert-warning mb-4 shadow-md">
+            <ul class="list-disc pl-5">
+                {#each Object.entries(form.fieldErrors) as [field, error]}
+                    <li><strong>{field}:</strong> {error}</li>
+                {/each}
+            </ul>
+        </div>
+    {/if}
 
-							<div class="form-control">
-								<label class="label">Event Type</label>
-								<select class="select select-bordered">
-									<option>Tournament</option>
-									<option selected>League</option>
-									<option>Clinic</option>
-									<option>Work Party</option>
-								</select>
-							</div>
-
-							<div class="form-control">
-								<label class="label">Start Date & Time</label>
-								<input type="datetime-local" class="input input-bordered" value="2025-04-05T10:00" />
-							</div>
-
-							<div class="form-control">
-								<label class="label">End Date & Time</label>
-								<input type="datetime-local" class="input input-bordered" value="2025-04-05T14:00" />
-							</div>
-
-							<div class="form-control md:col-span-2">
-								<label class="label">Description</label>
-								<textarea class="textarea textarea-bordered h-32">Season opener for the bag tag league</textarea>
-								<label class="label">
-									<span class="label-text-alt">HTML is supported</span>
-								</label>
-							</div>
-
-							<div class="form-control">
-								<label class="label cursor-pointer">
-									<span class="label-text">Published</span>
-									<input type="checkbox" class="toggle toggle-primary" checked />
-								</label>
-							</div>
-
-							<div class="form-control">
-								<label class="label">Event Image</label>
-								<div class="flex gap-2">
-									<input type="text" class="input input-bordered flex-grow" value="No file selected" readonly />
-									<button class="btn btn-secondary">Upload</button>
-								</div>
-							</div>
-						</div>
-
-						<!-- Form Buttons -->
-						<div class="mt-6 flex justify-end gap-2">
-							<button class="btn btn-ghost">Cancel</button>
-							<button class="btn btn-primary flex items-center gap-2">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-								</svg>
-								Save
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
+    <form method="POST" action="?/updateEvent" use:enhance={() => {
+        isSaving = true;
+        return async ({ update, result }) => {
+            await update({ reset: false }); // Don't reset form fields on error so user can correct
+            isSaving = false;
+            if (result.type === 'redirect') {
+                // Form will clear on redirect
+            } else if (form?.fieldErrors || form?.error) {
+                // Retain values for correction
+            } else if (result.type === 'success') {
+                // Values should be updated from new `data` prop if needed, or clear form if staying on page
+                // However, action redirects on success
+            }
+        };
+    }} enctype="multipart/form-data" class="card bg-base-200 shadow-xl">
+        <div class="card-body space-y-4">
+             <div class="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2">
+                <input type="hidden" name="eventId" value={data.event?.id} /> <div class="form-control">
+                    <label class="label" for="editEventNameInput"><span class="label-text">Event Name*</span></label>
+                    <input name="name" type="text" id="editEventNameInput" class="input input-bordered w-full" bind:value={eventName} required />
+                </div>
+                <div class="form-control">
+                    <label class="label" for="editEventTypeSelect"><span class="label-text">Event Type</span></label>
+                    <select name="eventType" id="editEventTypeSelect" class="select select-bordered w-full" bind:value={eventType}>
+                        <option>Tournament</option><option>League</option><option>Clinic</option><option>Work Party</option><option>Meeting</option><option>Other</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label class="label" for="editEventStartDateTimeInput"><span class="label-text">Start Date & Time*</span></label>
+                    <input name="startDateTime" type="datetime-local" id="editEventStartDateTimeInput" class="input input-bordered w-full" bind:value={eventStartDateTime} required />
+                </div>
+                <div class="form-control">
+                    <label class="label" for="editEventEndDateTimeInput"><span class="label-text">End Date & Time</span><span class="label-text-alt">(Optional)</span></label>
+                    <input name="endDateTime" type="datetime-local" id="editEventEndDateTimeInput" class="input input-bordered w-full" bind:value={eventEndDateTime} />
+                </div>
+                <div class="form-control md:col-span-2">
+                    <label class="label" for="editEventDescriptionTextarea"><span class="label-text">Description</span></label>
+                    <textarea name="description" id="editEventDescriptionTextarea" class="textarea textarea-bordered h-24 w-full" bind:value={eventDescription}></textarea>
+                </div>
+                <div class="form-control items-start md:col-span-2">
+                     <label class="label cursor-pointer gap-4 py-1"> 
+                        <span class="label-text">Published</span>
+                        <input type="hidden" name="published" value={eventPublished ? 'on' : 'off'} />
+                        <input type="checkbox" id="editEventPublishedToggle" class="toggle toggle-primary" bind:checked={eventPublished} />
+                    </label>
+                </div>
+                <div class="form-control md:col-span-2">
+                    <label class="label" for="editEventImageInput"><span class="label-text">Event Image</span><span class="label-text-alt">(Optional - new image will replace old)</span></label>
+                    {#if imagePreviewUrl}
+                        <div class="mb-2"><img src={imagePreviewUrl} alt="Image preview" class="max-h-32 w-auto rounded border object-contain"/></div>
+                    {:else if existingFileName}
+                        <p class="text-xs mb-1">Current image: {existingFileName} (upload new to replace)</p>
+                    {/if}
+                    <input name="eventImage" type="file" id="editEventImageInput" class="file-input file-input-bordered file-input-sm w-full" onchange={handleFileSelect} accept="image/*" />
+                    <label class="label">
+                        <span class="label-text-alt">To remove image, upload nothing or use a 'remove image' feature (if implemented). Currently, not uploading a new image keeps the old one.</span>
+                    </label>
+                     <input type="hidden" name="deleteExistingImage" value="false" /> </div>
+            </div>
+            <div class="card-actions justify-end mt-6">
+                <a href="/admin" class="btn btn-ghost" disabled={isSaving}>Cancel</a>
+                <button type="submit" class="btn btn-primary flex items-center gap-1.5" disabled={isSaving}>
+                    {#if isSaving} <span class="loading loading-spinner loading-xs"></span> {/if}
+                    <Icon src={CheckCircle} class="h-5 w-5" />
+                    Update Event
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

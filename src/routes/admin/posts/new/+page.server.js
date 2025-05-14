@@ -1,37 +1,30 @@
-// src/routes/admin/posts/edit/[id]/+page.server.js
-import { error, fail, redirect } from '@sveltejs/kit';
+// src/routes/admin/posts/new/+page.server.js
+import { fail, redirect } from '@sveltejs/kit';
 import { formatInputDateToPocketBase } from '$lib/utils.js';
 
-export const load = async ({ locals, params }) => {
+export const load = async ({ locals }) => {
 	if (!locals.user) {
 		throw redirect(303, '/login');
 	}
-	try {
-		const post = await locals.pb.collection('posts').getOne(params.id);
-		return {
-			post: JSON.parse(JSON.stringify(post)) // Send as plain object
-		};
-	} catch (err) {
-		console.error('Error loading post for editing:', err);
-		if (err.status === 404) throw error(404, 'Post not found');
-		throw error(500, 'Failed to load post data.');
-	}
+	return {}; // No data to preload for a new post form
 };
 
 export const actions = {
-	updatePost: async ({ request, locals, params }) => {
-		if (!locals.user) return fail(401, { error: 'User not authenticated.' });
-		if (!params.id) return fail(400, { error: 'Post ID is missing.' });
+	createPost: async ({ request, locals }) => {
+		if (!locals.user) {
+			return fail(401, { error: 'User not authenticated.' });
+		}
 
 		const formData = await request.formData();
+
 		const title = formData.get('title')?.toString();
 		const publishedDateStr = formData.get('publishedDate')?.toString();
 		const categoriesStr = formData.get('categories')?.toString() || '';
 		const content = formData.get('content')?.toString();
 		const published = formData.get('published') === 'on';
-		const imageFile = formData.get('image');
-		const deleteExistingImage = formData.get('deleteExistingImage') === 'true';
+		const imageFile = formData.get('image'); // File object
 
+		// Server-side validation
 		const fieldErrors = {};
 		if (!title) fieldErrors.title = 'Title is required.';
 		if (!publishedDateStr) fieldErrors.publishedDate = 'Published Date is required.';
@@ -39,6 +32,7 @@ export const actions = {
 
 		const formattedPublishedDate = formatInputDateToPocketBase(publishedDateStr);
 		if (!formattedPublishedDate && publishedDateStr) {
+			// Error only if a date was provided but was invalid
 			fieldErrors.publishedDate = 'Published Date is invalid.';
 		}
 
@@ -54,29 +48,34 @@ export const actions = {
 			return fail(400, { ...currentValues, fieldErrors, error: 'Please correct the errors.' });
 		}
 
-		const dataToUpdate = new FormData();
-		dataToUpdate.append('title', title);
-		dataToUpdate.append('publishedDate', formattedPublishedDate);
+		// Prepare data for PocketBase
+		// Use FormData if including files, otherwise a plain object.
+		const dataToSave = new FormData();
+		dataToSave.append('title', title);
+		dataToSave.append('publishedDate', formattedPublishedDate); // Already validated and formatted
+
+		// Assuming 'categories' is a JSON field in PocketBase expecting an array of strings
 		const categoriesArray = categoriesStr
 			.split(',')
 			.map((cat) => cat.trim())
 			.filter((cat) => cat.length > 0);
-		categoriesArray.forEach((category) => dataToUpdate.append('categories', category));
-		dataToUpdate.append('content', content);
-		dataToUpdate.append('published', published);
+		categoriesArray.forEach((category) => {
+			dataToSave.append('categories', category); // PocketBase handles multiple same-key appends as an array for JSON fields
+		});
+		// If 'categories' is a simple text field, just do: dataToSave.append('categories', categoriesStr);
+
+		dataToSave.append('content', content);
+		dataToSave.append('published', published);
 
 		if (imageFile && imageFile.size > 0) {
-			dataToUpdate.append('image', imageFile);
-		} else if (deleteExistingImage) {
-			dataToUpdate.append('image', null); // Sending null for a file field deletes it in PB
+			dataToSave.append('image', imageFile); // Ensure 'image' is the file field name in PB
 		}
-		// If no new image and not deleting, don't append 'image', PB keeps old one.
 
 		try {
-			await locals.pb.collection('posts').update(params.id, dataToUpdate);
+			await locals.pb.collection('posts').create(dataToSave);
 		} catch (err) {
-			console.error('Error updating post:', err.response || err.originalError || err);
-			let errorMessage = 'Failed to update post.';
+			console.error('Error creating post:', err.response || err.originalError || err);
+			let errorMessage = 'Failed to create post.';
 			if (err.data?.data) {
 				errorMessage += ` Details: ${JSON.stringify(err.data.data)}`;
 			} else if (err.message) {
@@ -84,6 +83,7 @@ export const actions = {
 			}
 			return fail(500, { ...currentValues, error: errorMessage });
 		}
-		throw redirect(303, '/admin?tab=tab3&updated=post');
+
+		throw redirect(303, '/admin?tab=tab3&created=post');
 	}
 };

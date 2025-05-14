@@ -1,33 +1,21 @@
-// src/routes/admin/courses/edit/[id]/+page.server.js
-import { error, fail, redirect } from '@sveltejs/kit';
+// src/routes/admin/courses/new/+page.server.js
+import { fail, redirect } from '@sveltejs/kit';
 
-export const load = async ({ locals, params }) => {
+export const load = async ({ locals }) => {
 	if (!locals.user) {
 		throw redirect(303, '/login');
 	}
-	try {
-		const course = await locals.pb.collection('courses').getOne(params.id);
-		// Return a structuredClone or plain object
-		return {
-			course: JSON.parse(JSON.stringify(course))
-		};
-	} catch (err) {
-		console.error('Error loading course for editing:', err);
-		if (err.status === 404) throw error(404, 'Course not found');
-		throw error(500, 'Failed to load course data.');
-	}
+	return {}; // No data to preload for new course form
 };
 
 export const actions = {
-	updateCourse: async ({ request, locals, params }) => {
+	createCourse: async ({ request, locals }) => {
 		if (!locals.user) {
-			return fail(401, { error: 'User not authenticated.' });
-		}
-		if (!params.id) {
-			return fail(400, { error: 'Course ID is missing.' });
+			return fail(401, { createError: 'User not authenticated.' });
 		}
 
 		const formData = await request.formData();
+
 		const name = formData.get('name')?.toString();
 		const numberOfHolesStr = formData.get('numberOfHoles')?.toString();
 		const parStr = formData.get('par')?.toString();
@@ -35,6 +23,7 @@ export const actions = {
 		const location = formData.get('location')?.toString();
 		const description = formData.get('description')?.toString() || '';
 
+		// Server-side validation
 		const fieldErrors = {};
 		if (!name) fieldErrors.name = 'Course Name is required.';
 		if (!numberOfHolesStr) fieldErrors.numberOfHoles = 'Number of Holes is required.';
@@ -43,7 +32,7 @@ export const actions = {
 
 		const numberOfHoles = parseInt(numberOfHolesStr);
 		const par = parseInt(parStr);
-		const lengthInFeet = lengthInFeetStr ? parseInt(lengthInFeetStr) : null;
+		const lengthInFeet = lengthInFeetStr ? parseInt(lengthInFeetStr) : null; // Handle optional length
 
 		if (isNaN(numberOfHoles) && numberOfHolesStr) fieldErrors.numberOfHoles = 'Number of Holes must be a number.';
 		if (isNaN(par) && parStr) fieldErrors.par = 'Par must be a number.';
@@ -51,7 +40,7 @@ export const actions = {
 
 		const currentValues = {
 			courseName: name,
-			courseNumberOfHoles: numberOfHolesStr,
+			courseNumberOfHoles: numberOfHolesStr, // Send back string for prefill
 			coursePar: parStr,
 			courseLengthInFeet: lengthInFeetStr,
 			courseLocation: location,
@@ -62,7 +51,7 @@ export const actions = {
 			return fail(400, { ...currentValues, fieldErrors, error: 'Please correct the errors.' });
 		}
 
-		const dataToUpdate = {
+		const dataToSave = {
 			name,
 			numberOfHoles,
 			par,
@@ -70,17 +59,16 @@ export const actions = {
 			description
 		};
 		if (lengthInFeet !== null) {
-			dataToUpdate.lengthInFeet = lengthInFeet;
-		} else {
-			// If you want to explicitly set lengthInFeet to null in PocketBase if it's empty:
-			dataToUpdate.lengthInFeet = null; // Or use delete dataToUpdate.lengthInFeet if PB prefers field absence
+			// Only include length if provided and valid
+			dataToSave.lengthInFeet = lengthInFeet;
 		}
+		// Add other fields like 'image' if you implement file uploads
 
 		try {
-			await locals.pb.collection('courses').update(params.id, dataToUpdate);
+			await locals.pb.collection('courses').create(dataToSave);
 		} catch (err) {
-			console.error('Error updating course:', err.response || err.originalError || err);
-			let errorMessage = 'Failed to update course.';
+			console.error('Error creating course:', err.response || err.originalError || err);
+			let errorMessage = 'Failed to create course.';
 			if (err.data?.data) {
 				errorMessage += ` Details: ${JSON.stringify(err.data.data)}`;
 			} else if (err.message) {
@@ -88,6 +76,8 @@ export const actions = {
 			}
 			return fail(500, { ...currentValues, error: errorMessage });
 		}
-		throw redirect(303, '/admin?tab=tab2&updated=course');
+
+		// Redirect to the admin page (courses tab) after successful creation
+		throw redirect(303, '/admin?tab=tab2&created=course');
 	}
 };

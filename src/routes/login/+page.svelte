@@ -1,46 +1,69 @@
-<script lang="ts">
-    import type { PageData } from './$types';
+<script>
+    import { enhance } from '$app/forms';
+    import { Icon, XCircle } from 'svelte-hero-icons'; // Assuming you want an icon for errors
+    // No need for preventDefault import if using SvelteKit actions correctly
 
-    let { data }: { data: PageData } = $props();
+    let { form } = $props(); // For receiving errors from the server action
+
+    let loginEmail = $state(form?.email || ''); // Pre-fill email on error
+    let loginPassword = $state('');
+    let loginInProgress = $state(false);
+
+    // Clear password if form had an error and email was prefilled
+    $effect(() => {
+        if (form?.loginError && form?.email) {
+            loginPassword = '';
+        }
+    });
 </script>
 
-<div class="hero bg-base-200">
-	<div class="hero-content py-12 text-center">
-		<div class="max-w-md">
-			<h1 class="text-5xl font-bold">Login</h1>
-		</div>
-	</div>
-</div>
+<div class="container mx-auto px-4 py-16 flex justify-center items-center min-h-screen">
+    <div class="card w-full max-w-md bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h1 class="text-3xl font-bold text-center mb-6 text-base-content">Admin Login</h1>
 
-<!-- Login Form -->
-<div class="mt-12 flex justify-center">
-	<div class="card w-full max-w-md bg-base-100 shadow-lg shadow-gray-400">
-		<div class="card-body">
-			<h2 class="card-title mb-4 flex justify-center text-2xl">Login to Admin Panel</h2>
+            {#if form?.loginError}
+                <div class="alert alert-error mb-4 text-sm p-3 shadow-lg">
+                    <div>
+                        <Icon src={XCircle} class="h-5 w-5"></Icon>
+                        <span>{form.loginError}</span>
+                    </div>
+                    </div>
+            {/if}
 
-			<div class="alert alert-error mb-4 hidden">
-				<span>Invalid username or password</span>
-			</div>
-
-			<form class="space-y-4">
-				<div class="form-control">
-					<label class="label" for="username">
-						<span class="label-text">Username</span>
-					</label>
-					<input type="text" id="username" class="input input-bordered" required />
-				</div>
-
-				<div class="form-control">
-					<label class="label" for="password">
-						<span class="label-text">Password</span>
-					</label>
-					<input type="password" id="password" class="input input-bordered" required />
-				</div>
-
-				<div class="form-control mt-6">
-					<button type="submit" class="btn btn-primary"> Login </button>
-				</div>
-			</form>
-		</div>
-	</div>
+            <form method="POST" action="?/login" use:enhance={() => {
+                loginInProgress = true;
+                return async ({ update }) => {
+                    await update({ reset: false }); // reset:false to keep bound values unless action returns new ones
+                    loginInProgress = false;
+                    // If login successful, action will redirect, so this page won't show updated form values.
+                    // If error, `form` prop updates, and password should be cleared.
+                    if (form?.loginError) {
+                        loginPassword = ''; // Always clear password on error
+                    }
+                };
+            }} class="space-y-4">
+                <div class="form-control">
+                    <label class="label" for="loginEmailInput">
+                        <span class="label-text">Email</span>
+                    </label>
+                    <input name="email" type="email" id="loginEmailInput" placeholder="admin@example.com" class="input input-bordered w-full" bind:value={loginEmail} required />
+                </div>
+                <div class="form-control">
+                    <label class="label" for="loginPasswordInput">
+                        <span class="label-text">Password</span>
+                    </label>
+                    <input name="password" type="password" id="loginPasswordInput" placeholder="••••••••" class="input input-bordered w-full" bind:value={loginPassword} required />
+                </div>
+                <div class="form-control mt-6">
+                    <button type="submit" class="btn btn-primary w-full" disabled={loginInProgress}>
+                        {#if loginInProgress}
+                            <span class="loading loading-spinner loading-sm"></span>
+                        {/if}
+                        Login
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

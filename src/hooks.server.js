@@ -1,7 +1,6 @@
 // src/hooks.server.js
 import PocketBase from 'pocketbase';
 
-/** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
 	console.log(`[HOOKS] Request START: ${event.url.pathname}`);
 	event.locals.pb = new PocketBase('https://pdg.pockethost.io/');
