@@ -103,7 +103,6 @@
 		try {
 			await pb_client.collection(collectionName).delete(itemId);
 			successAlertMessage = `${itemTypeName} "${itemName}" deleted successfully.`;
-			// Invalidate data for the specific active section or all for simplicity
 			await invalidateAll();
 			setTimeout(() => clearAlerts(), 3000);
 		} catch (err) {
@@ -116,19 +115,6 @@
 				errorAlertMessage += ` Details: ${detailedErrors}`;
 			}
 		}
-	}
-
-	// Helper function to build pagination links dynamically
-	function getPaginationLink(sectionId, targetPage) {
-		const sectionConfig = adminSections.find((s) => s.id === sectionId && !s.subSections) || adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === sectionId);
-		if (!sectionConfig) return '#'; // Should not happen
-
-		const queryParamKey = `${sectionConfig.dataKey.replace('Data', '')}Page`; // e.g., eventsPage, coursesPage
-
-		const currentUrl = new URL($page.url.href);
-		currentUrl.searchParams.set(queryParamKey, targetPage.toString());
-		currentUrl.hash = sectionId; // Preserve current active section in hash
-		return currentUrl.pathname + currentUrl.search + currentUrl.hash;
 	}
 </script>
 
@@ -151,9 +137,6 @@
 	<div class="hero-content text-center">
 		<div class="max-w-md">
 			<h1 class="text-4xl font-bold">Admin Panel</h1>
-			{#if data.user}
-				<p class="pt-1 text-sm text-base-content/80">Logged in as: {data.user.email}</p>
-			{/if}
 		</div>
 	</div>
 </div>
@@ -187,63 +170,49 @@
 				</div>
 
 				<div class="p-4 {activeSectionId === 'events' ? '' : 'hidden'}">
-					{#if true}
-						{@const sectionConfig = adminSections.find((s) => s.id === 'events')}
-						<div class="mb-4 flex justify-end">
-							<a href={sectionConfig?.addNewUrl} class="btn btn-secondary btn-sm flex items-center gap-2">
-								<Icon src={PlusCircle} class="h-6 w-6"></Icon>Add New Event
-							</a>
-						</div>
-						<div class="overflow-x-auto">
-							<table class="table table-zebra w-full">
-								<thead><tr><th>Name</th><th>Date</th><th>Type</th><th>Published</th><th>Actions</th></tr></thead>
-								<tbody>
-									{#if data.eventsData && data.eventsData.items && data.eventsData.items.length > 0}
-										{#each data.eventsData.items as item (item.id)}
-											<tr>
-												<td>{item.name}</td>
-												<td>{moment(item.startDateTime).format('MMM Do, YY h:mm A')}</td>
-												<td>{item.eventType}</td>
-												<td>{item.published ? 'Yes' : 'No'}</td>
-												<td class="flex gap-2">
-													<a href="{sectionConfig?.editUrlBase}/{item.id}" title="Edit Event" class="btn btn-square btn-info btn-sm">
-														<Icon src={PencilSquare} class="h-4 w-4"></Icon>
-													</a>
-													<button title="Delete Event" class="btn btn-square btn-error btn-sm" onclick={() => deleteItem(sectionConfig?.collectionName, item.id, item.name, sectionConfig?.singularName)}>
-														<Icon src={Trash} class="h-4 w-4"></Icon>
-													</button>
-												</td>
-											</tr>
-										{/each}
-									{:else}<tr><td colspan="5" class="p-4 text-center">No events found.</td></tr>{/if}
-								</tbody>
-							</table>
-						</div>
-						{#if data.eventsData && data.eventsData.totalPages > 1}
-							<div class="join mt-4 flex justify-center">
-								<a href={getPaginationLink('events', data.eventsData.page - 1)} class="btn join-item btn-sm {data.eventsData.page <= 1 ? 'btn-disabled' : ''}" aria-disabled={data.eventsData.page <= 1}><Icon src={ChevronLeft} class="h-4 w-4" /> Prev</a>
-								{#each Array(data.eventsData.totalPages) as _, i}{@const pageNum = i + 1}<a href={getPaginationLink('events', pageNum)} class="btn join-item btn-sm {pageNum === data.eventsData.page ? 'btn-primary btn-active' : ''}">{pageNum}</a>{/each}
-								<a href={getPaginationLink('events', data.eventsData.page + 1)} class="btn join-item btn-sm {data.eventsData.page >= data.eventsData.totalPages ? 'btn-disabled' : ''}" aria-disabled={data.eventsData.page >= data.eventsData.totalPages}>Next <Icon src={ChevronRight} class="h-4 w-4" /></a>
-							</div>
-							<p class="mt-2 text-center text-xs">Page {data.eventsData.page} of {data.eventsData.totalPages} (Total: {data.eventsData.totalItems} events)</p>
-						{/if}
-					{/if}
-				</div>
-				{#if data.eventsData && data.eventsData.totalPages > 1}
-					<div class="join mt-4 flex justify-center">
-						<a href={getPaginationLink('events', data.eventsData.page - 1)} class="btn join-item btn-sm {data.eventsData.page <= 1 ? 'btn-disabled' : ''}" aria-disabled={data.eventsData.page <= 1}><Icon src={ChevronLeft} class="h-4 w-4" /> Prev</a>
-						{#each Array(data.eventsData.totalPages) as _, i}{@const pageNum = i + 1}<a href={getPaginationLink('events', pageNum)} class="btn join-item btn-sm {pageNum === data.eventsData.page ? 'btn-primary btn-active' : ''}">{pageNum}</a>{/each}
-						<a href={getPaginationLink('events', data.eventsData.page + 1)} class="btn join-item btn-sm {data.eventsData.page >= data.eventsData.totalPages ? 'btn-disabled' : ''}" aria-disabled={data.eventsData.page >= data.eventsData.totalPages}>Next <Icon src={ChevronRight} class="h-4 w-4" /></a>
-					</div>
-					<p class="mt-2 text-center text-xs">Page {data.eventsData.page} of {data.eventsData.totalPages} (Total: {data.eventsData.totalItems} events)</p>
-				{/if}
-			</div>
-
-			<div class="p-4 {activeSectionId === 'courses' ? '' : 'hidden'}">
-				{#if true}
-					{@const sectionConfig = adminSections.find((s) => s.id === 'courses')}
 					<div class="mb-4 flex justify-end">
-						<a href={sectionConfig?.addNewUrl} class="btn btn-secondary btn-sm flex items-center gap-2">
+						<a href={adminSections.find((s) => s.id === 'events')?.addNewUrl} class="btn btn-secondary btn-sm flex items-center gap-2">
+							<Icon src={PlusCircle} class="h-6 w-6"></Icon>Add New Event
+						</a>
+					</div>
+					<div class="overflow-x-auto">
+						<table class="table table-zebra w-full">
+							<thead><tr><th>Name</th><th>Date</th><th>Type</th><th>Actions</th></tr></thead>
+							<tbody>
+								{#if data.events && data.events.length > 0}
+									{#each data.events as item (item.id)}
+										<tr>
+											<td>{item.name}</td>
+											{#if item.endDateTime && !moment(item.startDateTime).isSame(moment(item.endDateTime), 'day')}
+												<td>
+													{moment(item.startDateTime).format('MMM Do, YYYY')} - {moment(item.endDateTime).format('MMM Do, YYYY')}
+												</td>
+											{:else}
+												<td>
+													{moment(item.startDateTime).format('MMM Do, YYYY')}
+												</td>
+											{/if}
+											<td>{item.eventType}</td>
+
+											<td class="flex gap-2">
+												<a href="{adminSections.find((s) => s.id === 'events')?.editUrlBase}/{item.id}" title="Edit Event" class="btn btn-square btn-info btn-sm">
+													<Icon src={PencilSquare} class="h-4 w-4"></Icon>
+												</a>
+												<button title="Delete Event" class="btn btn-square btn-error btn-sm" onclick={() => deleteItem('events', item.id, item.name, 'Event')}>
+													<Icon src={Trash} class="h-4 w-4"></Icon>
+												</button>
+											</td>
+										</tr>
+									{/each}
+								{:else}<tr><td colspan="5" class="p-4 text-center">No events found.</td></tr>{/if}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="p-4 {activeSectionId === 'courses' ? '' : 'hidden'}">
+					<div class="mb-4 flex justify-end">
+						<a href={adminSections.find((s) => s.id === 'courses')?.addNewUrl} class="btn btn-secondary btn-sm flex items-center gap-2">
 							<Icon src={PlusCircle} class="h-6 w-6"></Icon>Add New Course
 						</a>
 					</div>
@@ -251,15 +220,15 @@
 						<table class="table table-zebra w-full">
 							<thead><tr><th>Name</th><th>Holes</th><th>Par</th><th>Location</th><th>Actions</th></tr></thead>
 							<tbody>
-								{#if data.coursesData && data.coursesData.items && data.coursesData.items.length > 0}
-									{#each data.coursesData.items as item (item.id)}
+								{#if data.courses && data.courses.length > 0}
+									{#each data.courses as item (item.id)}
 										<tr>
 											<td>{item.name}</td><td>{item.numberOfHoles}</td><td>{item.par}</td><td>{item.location}</td>
 											<td class="flex gap-2">
-												<a href="{sectionConfig?.editUrlBase}/{item.id}" title="Edit Course" class="btn btn-square btn-info btn-sm">
+												<a href="{adminSections.find((s) => s.id === 'courses')?.editUrlBase}/{item.id}" title="Edit Course" class="btn btn-square btn-info btn-sm">
 													<Icon src={PencilSquare} class="h-4 w-4"></Icon>
 												</a>
-												<button title="Delete Course" class="btn btn-square btn-error btn-sm" onclick={() => deleteItem(sectionConfig?.collectionName, item.id, item.name, sectionConfig?.singularName)}>
+												<button title="Delete Course" class="btn btn-square btn-error btn-sm" onclick={() => deleteItem('courses', item.id, item.name, 'Course')}>
 													<Icon src={Trash} class="h-4 w-4"></Icon>
 												</button>
 											</td>
@@ -269,22 +238,11 @@
 							</tbody>
 						</table>
 					</div>
-					{#if data.coursesData && data.coursesData.totalPages > 1}
-						<div class="join mt-4 flex justify-center">
-							<a href={getPaginationLink('courses', data.coursesData.page - 1)} class="btn join-item btn-sm {data.coursesData.page <= 1 ? 'btn-disabled' : ''}"><Icon src={ChevronLeft} class="h-4 w-4" /> Prev</a>
-							{#each Array(data.coursesData.totalPages) as _, i}{@const pageNum = i + 1}<a href={getPaginationLink('courses', pageNum)} class="btn join-item btn-sm {pageNum === data.coursesData.page ? 'btn-primary btn-active' : ''}">{pageNum}</a>{/each}
-							<a href={getPaginationLink('courses', data.coursesData.page + 1)} class="btn join-item btn-sm {data.coursesData.page >= data.coursesData.totalPages ? 'btn-disabled' : ''}">Next <Icon src={ChevronRight} class="h-4 w-4" /></a>
-						</div>
-						<p class="mt-2 text-center text-xs">Page {data.coursesData.page} of {data.coursesData.totalPages} (Total: {data.coursesData.totalItems} courses)</p>
-					{/if}
-				{/if}
-			</div>
+				</div>
 
-			<div class="p-4 {activeSectionId === 'posts' ? '' : 'hidden'}">
-				{#if true}
-					{@const sectionConfig = adminSections.find((s) => s.id === 'posts')}
+				<div class="p-4 {activeSectionId === 'posts' ? '' : 'hidden'}">
 					<div class="mb-4 flex justify-end">
-						<a href={sectionConfig?.addNewUrl} class="btn btn-secondary btn-sm flex items-center gap-2">
+						<a href={adminSections.find((s) => s.id === 'posts')?.addNewUrl} class="btn btn-secondary btn-sm flex items-center gap-2">
 							<Icon src={PlusCircle} class="h-6 w-6"></Icon>Add New Post
 						</a>
 					</div>
@@ -292,18 +250,18 @@
 						<table class="table table-zebra w-full">
 							<thead><tr><th>Title</th><th>Date</th><th>Categories</th><th>Published</th><th>Actions</th></tr></thead>
 							<tbody>
-								{#if data.postsData && data.postsData.items && data.postsData.items.length > 0}
-									{#each data.postsData.items as item (item.id)}
+								{#if data.posts && data.posts.length > 0}
+									{#each data.posts as item (item.id)}
 										<tr>
 											<td>{item.title}</td>
-											<td>{moment(item.publishedDate).format('MMM Do, YY')}</td>
+											<td>{moment(item.publishedDate).format('MMM Do, YYYY')}</td>
 											<td>{Array.isArray(item.categories) ? item.categories.join(', ') : item.categories}</td>
 											<td>{item.published ? 'Yes' : 'No'}</td>
 											<td class="flex gap-2">
-												<a href="{sectionConfig?.editUrlBase}/{item.id}" title="Edit Post" class="btn btn-square btn-info btn-sm">
+												<a href="{adminSections.find((s) => s.id === 'posts')?.editUrlBase}/{item.id}" title="Edit Post" class="btn btn-square btn-info btn-sm">
 													<Icon src={PencilSquare} class="h-4 w-4"></Icon>
 												</a>
-												<button title="Delete Post" class="btn btn-square btn-error btn-sm" onclick={() => deleteItem(sectionConfig?.collectionName, item.id, item.title, sectionConfig?.singularName)}>
+												<button title="Delete Post" class="btn btn-square btn-error btn-sm" onclick={() => deleteItem('posts', item.id, item.title, 'Post')}>
 													<Icon src={Trash} class="h-4 w-4"></Icon>
 												</button>
 											</td>
@@ -313,23 +271,12 @@
 							</tbody>
 						</table>
 					</div>
-					{#if data.postsData && data.postsData.totalPages > 1}
-						<div class="join mt-4 flex justify-center">
-							<a href={getPaginationLink('posts', data.postsData.page - 1)} class="btn join-item btn-sm {data.postsData.page <= 1 ? 'btn-disabled' : ''}"><Icon src={ChevronLeft} class="h-4 w-4" /> Prev</a>
-							{#each Array(data.postsData.totalPages) as _, i}{@const pageNum = i + 1}<a href={getPaginationLink('posts', pageNum)} class="btn join-item btn-sm {pageNum === data.postsData.page ? 'btn-primary btn-active' : ''}">{pageNum}</a>{/each}
-							<a href={getPaginationLink('posts', data.postsData.page + 1)} class="btn join-item btn-sm {data.postsData.page >= data.postsData.totalPages ? 'btn-disabled' : ''}">Next <Icon src={ChevronRight} class="h-4 w-4" /></a>
-						</div>
-						<p class="mt-2 text-center text-xs">Page {data.postsData.page} of {data.postsData.totalPages} (Total: {data.postsData.totalItems} posts)</p>
-					{/if}
-				{/if}
-			</div>
+				</div>
 
-			<div class="p-4 {activeSectionId === 'boardMembers' ? '' : 'hidden'}">
-				{#if true}
-					{@const sectionConfig = adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === 'boardMembers')}
+				<div class="p-4 {activeSectionId === 'boardMembers' ? '' : 'hidden'}">
 					<div class="mb-2 flex items-center justify-between">
 						<h3 class="text-lg font-semibold">Board Members</h3>
-						<a href={sectionConfig?.addNewUrl} class="btn btn-secondary btn-xs flex items-center gap-1">
+						<a href={adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === 'boardMembers')?.addNewUrl} class="btn btn-secondary btn-xs flex items-center gap-1">
 							<Icon src={PlusCircle} class="h-4 w-4"></Icon> Add Member
 						</a>
 					</div>
@@ -337,16 +284,16 @@
 						<table class="table table-zebra table-sm w-full">
 							<thead><tr><th>Name</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
 							<tbody>
-								{#if data.boardMembersData && data.boardMembersData.items && data.boardMembersData.items.length > 0}
-									{#each data.boardMembersData.items as item (item.id)}
+								{#if data.boardMembers && data.boardMembers.length > 0}
+									{#each data.boardMembers as item (item.id)}
 										<tr>
 											<td>{item.name}</td><td>{item.role}</td>
 											<td><div class="badge {item.active ? 'badge-success' : 'badge-ghost'} badge-sm">{item.active ? 'Active' : 'Inactive'}</div></td>
 											<td class="flex gap-1">
-												<a href="{sectionConfig?.editUrlBase}/{item.id}" title="Edit Member" class="btn btn-square btn-info btn-xs">
+												<a href="{adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === 'boardMembers')?.editUrlBase}/{item.id}" title="Edit Member" class="btn btn-square btn-info btn-xs">
 													<Icon src={PencilSquare} class="h-3 w-3"></Icon>
 												</a>
-												<button title="Delete Member" class="btn btn-square btn-error btn-xs" onclick={() => deleteItem(sectionConfig?.collectionName, item.id, item.name, sectionConfig?.singularName)}>
+												<button title="Delete Member" class="btn btn-square btn-error btn-xs" onclick={() => deleteItem('boardMembers', item.id, item.name, 'Board Member')}>
 													<Icon src={Trash} class="h-3 w-3"></Icon>
 												</button>
 											</td>
@@ -356,23 +303,12 @@
 							</tbody>
 						</table>
 					</div>
-					{#if data.boardMembersData && data.boardMembersData.totalPages > 1}
-						<div class="join mt-4 flex justify-center">
-							<a href={getPaginationLink('boardMembers', data.boardMembersData.page - 1)} class="btn join-item btn-sm {data.boardMembersData.page <= 1 ? 'btn-disabled' : ''}"><Icon src={ChevronLeft} class="h-4 w-4" /> Prev</a>
-							{#each Array(data.boardMembersData.totalPages) as _, i}{@const pageNum = i + 1}<a href={getPaginationLink('boardMembers', pageNum)} class="btn join-item btn-sm {pageNum === data.boardMembersData.page ? 'btn-primary btn-active' : ''}">{pageNum}</a>{/each}
-							<a href={getPaginationLink('boardMembers', data.boardMembersData.page + 1)} class="btn join-item btn-sm {data.boardMembersData.page >= data.boardMembersData.totalPages ? 'btn-disabled' : ''}">Next <Icon src={ChevronRight} class="h-4 w-4" /></a>
-						</div>
-						<p class="mt-2 text-center text-xs">Page {data.boardMembersData.page} of {data.boardMembersData.totalPages} (Total: {data.boardMembersData.totalItems} members)</p>
-					{/if}
-				{/if}
-			</div>
+				</div>
 
-			<div class="p-4 {activeSectionId === 'boardMeetings' ? '' : 'hidden'}">
-				{#if true}
-					{@const sectionConfig = adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === 'boardMeetings')}
+				<div class="p-4 {activeSectionId === 'boardMeetings' ? '' : 'hidden'}">
 					<div class="mb-2 flex items-center justify-between">
 						<h3 class="text-lg font-semibold">Board Meetings</h3>
-						<a href={sectionConfig?.addNewUrl} class="btn btn-secondary btn-xs flex items-center gap-1">
+						<a href={adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === 'boardMeetings')?.addNewUrl} class="btn btn-secondary btn-xs flex items-center gap-1">
 							<Icon src={PlusCircle} class="h-4 w-4"></Icon> Add Meeting
 						</a>
 					</div>
@@ -380,27 +316,27 @@
 						<table class="table table-zebra table-sm w-full">
 							<thead><tr><th>Date</th><th>Docs</th><th>Actions</th></tr></thead>
 							<tbody>
-								{#if data.boardMeetingsData && data.boardMeetingsData.items && data.boardMeetingsData.items.length > 0}
-									{#each data.boardMeetingsData.items as item (item.id)}
+								{#if data.boardMeetings && data.boardMeetings.length > 0}
+									{#each data.boardMeetings as item (item.id)}
 										<tr>
-											<td>{moment(item.meetingDateTime).format('MMM Do, YY h:mm A')}</td>
+											<td>{moment(item.meetingDateTime).format('MMM Do, YYYY h:mm A')}</td>
 											<td>
 												{#if item.agendaFile}
-													<a href={pb_client.files.getUrl(item, item.agendaFile)} target="_blank" rel="noopener noreferrer" class="link-hover link link-info inline-flex items-center text-xs">
+													<a href={pb_client.files.getURL(item, item.agendaFile)} target="_blank" rel="noopener noreferrer" class="link-hover link link-info inline-flex items-center text-xs">
 														<Icon src={ArrowDownTray} class="mr-1 h-4 w-4" />Agenda
 													</a>
 												{/if}
 												{#if item.minutesFile}
-													<a href={pb_client.files.getUrl(item, item.minutesFile)} target="_blank" rel="noopener noreferrer" class="link-hover link link-info ml-2 inline-flex items-center text-xs">
+													<a href={pb_client.files.getURL(item, item.minutesFile)} target="_blank" rel="noopener noreferrer" class="link-hover link link-info ml-2 inline-flex items-center text-xs">
 														<Icon src={ArrowDownTray} class="mr-1 h-4 w-4" />Minutes
 													</a>
 												{/if}
 											</td>
 											<td class="flex gap-1">
-												<a href="{sectionConfig?.editUrlBase}/{item.id}" title="Edit Meeting" class="btn btn-square btn-info btn-xs">
+												<a href="{adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === 'boardMeetings')?.editUrlBase}/{item.id}" title="Edit Meeting" class="btn btn-square btn-info btn-xs">
 													<Icon src={PencilSquare} class="h-3 w-3"></Icon>
 												</a>
-												<button title="Delete Meeting" class="btn btn-square btn-error btn-xs" onclick={() => deleteItem(sectionConfig?.collectionName, item.id, moment(item.meetingDateTime).format('MMM Do, YY'), sectionConfig?.singularName)}>
+												<button title="Delete Meeting" class="btn btn-square btn-error btn-xs" onclick={() => deleteItem('boardMeetings', item.id, moment(item.meetingDateTime).format('MMM Do, YYYY'), 'Board Meeting')}>
 													<Icon src={Trash} class="h-3 w-3"></Icon>
 												</button>
 											</td>
@@ -410,87 +346,73 @@
 							</tbody>
 						</table>
 					</div>
-					{#if data.boardMeetingsData && data.boardMeetingsData.totalPages > 1}
-						<div class="join mt-4 flex justify-center">
-							<a href={getPaginationLink('boardMeetings', data.boardMeetingsData.page - 1)} class="btn join-item btn-sm {data.boardMeetingsData.page <= 1 ? 'btn-disabled' : ''}"><Icon src={ChevronLeft} class="h-4 w-4" /> Prev</a>
-							{#each Array(data.boardMeetingsData.totalPages) as _, i}{@const pageNum = i + 1}<a href={getPaginationLink('boardMeetings', pageNum)} class="btn join-item btn-sm {pageNum === data.boardMeetingsData.page ? 'btn-primary btn-active' : ''}">{pageNum}</a>{/each}
-							<a href={getPaginationLink('boardMeetings', data.boardMeetingsData.page + 1)} class="btn join-item btn-sm {data.boardMeetingsData.page >= data.boardMeetingsData.totalPages ? 'btn-disabled' : ''}">Next <Icon src={ChevronRight} class="h-4 w-4" /></a>
-						</div>
-						<p class="mt-2 text-center text-xs">Page {data.boardMeetingsData.page} of {data.boardMeetingsData.totalPages} (Total: {data.boardMeetingsData.totalItems} meetings)</p>
-					{/if}
-				{/if}
-			</div>
+				</div>
 
-			<div class="p-4 {activeSectionId === 'memberships' ? '' : 'hidden'}">
-				{#if true}
-					{@const sectionConfig = adminSections.find((s) => s.id === 'memberships')}
+				<div class="p-4 {activeSectionId === 'memberships' ? '' : 'hidden'}">
 					<div class="mb-4 flex items-center justify-between">
 						<h3 class="text-xl font-semibold">Manage Club Memberships</h3>
-						<a href={sectionConfig?.addNewUrl} class="btn btn-secondary btn-sm">
+						<a href={adminSections.find((s) => s.id === 'memberships')?.addNewUrl} class="btn btn-secondary btn-sm">
 							<Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Add Membership
 						</a>
 					</div>
-					<div class="mt-4 overflow-x-auto"><table class="table w-full"><thead><tr><th>Name</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead><tbody><tr><td colspan="4" class="p-4 text-center italic">No memberships yet. (Data source: `data.membershipsData`)</td></tr></tbody></table></div>
-				{/if}
-			</div>
-			<div class="p-4 {activeSectionId === 'volunteers' ? '' : 'hidden'}">
-				{#if true}
-					{@const sectionConfig = adminSections.find((s) => s.id === 'volunteers')}
+					<p class="text-base-content/70">Membership management interface, table, and filters will go here...</p>
+					<div class="mt-4 overflow-x-auto"><table class="table w-full"><thead><tr><th>Name</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead><tbody><tr><td colspan="4" class="p-4 text-center italic">No memberships yet.</td></tr></tbody></table></div>
+				</div>
+				<div class="p-4 {activeSectionId === 'volunteers' ? '' : 'hidden'}">
 					<div class="mb-4 flex items-center justify-between">
 						<h3 class="text-xl font-semibold">Manage Volunteers</h3>
-						<a href={sectionConfig?.addNewUrl} class="btn btn-secondary btn-sm">
+						<a href={adminSections.find((s) => s.id === 'volunteers')?.addNewUrl} class="btn btn-secondary btn-sm">
 							<Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Add Volunteer Record
 						</a>
 					</div>
-					<div class="mt-4 overflow-x-auto"><table class="table w-full"><thead><tr><th>Name</th><th>Event/Task</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="4" class="p-4 text-center italic">No volunteer records yet. (Data source: `data.volunteersData`)</td></tr></tbody></table></div>
-				{/if}
-			</div>
-			<div class="p-4 {activeSectionId === 'donations' ? '' : 'hidden'}">
-				{#if true}
-					{@const sectionConfig = adminSections.find((s) => s.id === 'donations')}
+					<p class="text-base-content/70">Volunteer tracking and assignment interface will go here...</p>
+					<div class="mt-4 overflow-x-auto"><table class="table w-full"><thead><tr><th>Name</th><th>Event/Task</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="4" class="p-4 text-center italic">No volunteer records yet.</td></tr></tbody></table></div>
+				</div>
+				<div class="p-4 {activeSectionId === 'donations' ? '' : 'hidden'}">
 					<div class="mb-4 flex items-center justify-between">
 						<h3 class="text-xl font-semibold">Manage Donations</h3>
-						<a href={sectionConfig?.addNewUrl} class="btn btn-secondary btn-sm">
+						<a href={adminSections.find((s) => s.id === 'donations')?.addNewUrl} class="btn btn-secondary btn-sm">
 							<Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Log Donation
 						</a>
 					</div>
-					<div class="mt-4 overflow-x-auto"><table class="table w-full"><thead><tr><th>Donor</th><th>Amount</th><th>Date</th><th>Type</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5" class="p-4 text-center italic">No donations yet. (Data source: `data.donationsData`)</td></tr></tbody></table></div>
-				{/if}
+					<p class="text-base-content/70">Donation tracking and management interface will go here...</p>
+					<div class="mt-4 overflow-x-auto"><table class="table w-full"><thead><tr><th>Donor</th><th>Amount</th><th>Date</th><th>Type</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5" class="p-4 text-center italic">No donations yet.</td></tr></tbody></table></div>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<div class="drawer-side">
-	<label for="admin-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-	<ul class="menu min-h-full w-60 bg-base-200 p-4 text-base-content md:w-64">
-		<li class="menu-title text-sm"><span>Admin Menu</span></li>
-		{#each adminSections as section (section.id)}
-			{#if section.subSections}
-				<li>
-					<details open={section.subSections.some((sub) => sub.id === activeSectionId)}>
-						<summary class:active={section.subSections.some((sub) => sub.id === activeSectionId)} class="text-base font-medium">
-							<Icon src={section.icon || CircleStack} class="h-5 w-5" />
+	<div class="drawer-side">
+		<label for="admin-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+		<ul class="menu min-h-full w-60 bg-base-200 p-4 text-base-content md:w-64">
+			<li class="menu-title text-sm"><span>Admin Menu</span></li>
+			{#each adminSections as section (section.id)}
+				{#if section.subSections}
+					<li>
+						<details open={section.subSections.some((sub) => sub.id === activeSectionId)}>
+							<summary class="text-base font-medium {section.subSections.some((sub) => sub.id === activeSectionId) ? 'active' : ''}">
+								<Icon src={section.icon || CircleStack} class="h-5 w-5" />
+								{section.label}
+							</summary>
+							<ul class="!pl-2">
+								{#each section.subSections as subSection (subSection.id)}
+									<li>
+										<a href="#{subSection.id}" class:active={activeSectionId === subSection.id} onclick={preventDefault(() => setActiveSection(subSection.id))}>
+											{subSection.label}
+										</a>
+									</li>
+								{/each}
+							</ul>
+						</details>
+					</li>
+				{:else}
+					<li>
+						<a href="#{section.id}" class:active={activeSectionId === section.id} onclick={preventDefault(() => setActiveSection(section.id))}>
+							<Icon src={section.icon || CircleStack} solid class="h-5 w-5" />
 							{section.label}
-						</summary>
-						<ul class="!pl-2">
-							{#each section.subSections as subSection (subSection.id)}
-								<li>
-									<a href="#{subSection.id}" class:active={activeSectionId === subSection.id} onclick={preventDefault(() => setActiveSection(subSection.id))}>
-										{subSection.label}
-									</a>
-								</li>
-							{/each}
-						</ul>
-					</details>
-				</li>
-			{:else}
-				<li>
-					<a href="#{section.id}" class:active={activeSectionId === section.id} onclick={preventDefault(() => setActiveSection(section.id))}>
-						<Icon src={section.icon || CircleStack} class="h-5 w-5" />
-						{section.label}
-					</a>
-				</li>
-			{/if}
-		{/each}
-	</ul>
+						</a>
+					</li>
+				{/if}
+			{/each}
+		</ul>
+	</div>
 </div>
