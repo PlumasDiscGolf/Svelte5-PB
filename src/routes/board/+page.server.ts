@@ -1,7 +1,7 @@
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ locals }) {
-	const boardMembers = await locals.pb.collection('boardMembers').getFullList();
-	const boardMeetings = await locals.pb.collection('boardMeetings').getList(1, 12, {
+	const boardMembers = await locals.pb.collection('board_members').getFullList();
+	const boardMeetings = await locals.pb.collection('board_meetings').getList(1, 12, {
 		sort: '-meetingDateTime'
 	});
 
