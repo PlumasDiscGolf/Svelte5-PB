@@ -133,7 +133,7 @@
 	{/if}
 </div>
 
-<div class="hero bg-base-200 py-10">
+<div class="hero bg-base-200 py-10 mb-4">
 	<div class="hero-content text-center">
 		<div class="max-w-md">
 			<h1 class="text-4xl font-bold">Admin Panel</h1>

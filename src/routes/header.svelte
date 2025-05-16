@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 	import {Icon, Bars3} from 'svelte-hero-icons'
 	import logoImg from '$lib/images/header_logo.png';
 </script>

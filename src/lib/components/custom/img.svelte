@@ -1,4 +1,4 @@
-<script lang="ts">
+<script >
 	type Props = {
 		src: string
 		alt: string

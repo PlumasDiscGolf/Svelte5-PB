@@ -1,4 +1,4 @@
-<script lang="ts">
+<script >
 	import moment from 'moment';
 	import { formatDate } from '$lib/utils.js';
 	import * as config from '$lib/config.js';

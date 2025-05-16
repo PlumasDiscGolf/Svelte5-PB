@@ -1,4 +1,4 @@
-<script lang="ts">
+<script >
 	import { Icon, Calendar, Map, InformationCircle, Sparkles, MapPin } from "svelte-hero-icons"
 	let { data } = $props();
 
