@@ -1,6 +1,6 @@
-<script >
+<script>
 	import moment from 'moment';
-	import { formatDate } from '$lib/utils.js';
+
 	import * as config from '$lib/config.js';
 	import { Icon, Clock, Calendar, ClipboardDocumentCheck } from 'svelte-hero-icons';
 

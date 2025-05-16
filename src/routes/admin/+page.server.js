@@ -14,8 +14,8 @@ export const load = async ({ locals }) => {
 	const events = await locals.pb.collection('events').getFullList({ sort: '-endDateTime' });
 	const courses = await locals.pb.collection('courses').getFullList({ sort: 'name' });
 	const posts = await locals.pb.collection('posts').getFullList({ sort: '-publishedDate' });
-	const boardMeetings = await locals.pb.collection('boardMeetings').getFullList({ sort: '-meetingDateTime' });
-	const boardMembers = await locals.pb.collection('boardMembers').getFullList({});
+	const boardMeetings = await locals.pb.collection('board_meetings').getFullList({ sort: '-meetingDateTime' });
+	const boardMembers = await locals.pb.collection('board_members').getFullList({ sort: "-sortOrder" });
 
 	// `user` object is already provided by `+layout.server.js` to `data.user`
 	return { events, courses, posts, boardMeetings, boardMembers };

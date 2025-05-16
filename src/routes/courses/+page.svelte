@@ -1,5 +1,5 @@
 <script >
-	import { formatDate } from '$lib/utils.js';
+	
 	import * as config from '$lib/config.js';
 
 	let { data } = $props();

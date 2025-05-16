@@ -288,7 +288,7 @@
 									{#each data.boardMembers as item (item.id)}
 										<tr>
 											<td>{item.name}</td><td>{item.role}</td>
-											<td><div class="badge {item.active ? 'badge-success' : 'badge-ghost'} badge-sm">{item.active ? 'Active' : 'Inactive'}</div></td>
+											<td><div class="badge {item.active ? 'badge-primary' : 'badge-neutral'} badge-sm">{item.active ? 'Active' : 'Inactive'}</div></td>
 											<td class="flex gap-1">
 												<a href="{adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === 'boardMembers')?.editUrlBase}/{item.id}" title="Edit Member" class="btn btn-square btn-info btn-xs">
 													<Icon src={PencilSquare} class="h-3 w-3"></Icon>
