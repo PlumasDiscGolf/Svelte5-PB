@@ -1,4 +1,4 @@
-<script lang="ts">
+<script >
 	import Header from './header.svelte';
 	import Footer from './footer.svelte';
 	import PageTransition from './transition.svelte';

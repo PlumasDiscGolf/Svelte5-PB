@@ -1,4 +1,4 @@
-<script lang="ts">
+<script >
 	import logoImg from '/images/header_logo.png';
 </script>
 
