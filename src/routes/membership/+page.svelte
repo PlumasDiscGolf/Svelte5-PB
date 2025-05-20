@@ -2,7 +2,6 @@
 	import * as config from '$lib/config.js';
 </script>
 
-
 <svelte:head>
 	<title>Membership Page - {config.title}</title>
 	<!-- Zeffy Script -->
