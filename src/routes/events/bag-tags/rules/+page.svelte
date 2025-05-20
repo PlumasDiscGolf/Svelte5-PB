@@ -1,9 +1,11 @@
-<script>
-	/** @type {import('./$types').PageData} */
+<script >
 	import * as config from '$lib/config';
+
 </script>
 
-<svelte:head><title>{config.title} - Bag Tags League</title></svelte:head>
+<svelte:head>
+	<title>Bag Tag League Rules - {config.title}</title>
+</svelte:head>
 
 <!-- Hero Section -->
 <div class="hero bg-base-200">

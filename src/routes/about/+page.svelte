@@ -1,7 +1,11 @@
-<script>
-	/** @type {import('./$types').PageData} */
-	// export let data;
+<script >
+	import * as config from '$lib/config';
+
 </script>
+
+<svelte:head>
+	<title>About - {config.title}</title>
+</svelte:head>
 
 <!-- Hero Section -->
 <div class="hero bg-base-200">

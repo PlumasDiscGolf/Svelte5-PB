@@ -1,5 +1,4 @@
 <script>
-	/** @type {import('./$types').PageData} */
 	import moment from 'moment'
 	import { Icon, Calendar, MapPin, Trophy, UserPlus, CurrencyDollar } from 'svelte-hero-icons';
 	import * as config from '$lib/config';

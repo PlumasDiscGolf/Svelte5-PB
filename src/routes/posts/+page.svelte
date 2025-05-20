@@ -1,12 +1,12 @@
-<script>
-	import moment from 'moment'
+<script >
+	import moment from 'moment';
 	import * as config from '$lib/config';
 
 	let { data } = $props();
 </script>
 
 <svelte:head>
-	<title>{config.title} - News</title>
+	<title>News - {config.title}</title>
 </svelte:head>
 
 <!-- Hero Section -->

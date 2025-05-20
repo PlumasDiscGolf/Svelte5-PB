@@ -1,10 +1,10 @@
-<script>
-	/** @type {import('./$types').PageData} */
+<script >
+
 	import * as config from '$lib/config';
 </script>
 
 <svelte:head>
-	<title>{config.title} - Plumas Series</title>
+	<title>Plumas Series - {config.title}</title>
 </svelte:head>
 
 <!-- Hero Section -->

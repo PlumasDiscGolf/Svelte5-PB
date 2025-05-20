@@ -1,6 +1,5 @@
-<script lang="ts">
+<script >
 	import moment from 'moment';
-	import { formatDate } from '$lib/utils';
 	import * as config from '$lib/config';
 	import { Icon, Clock, Calendar, ClipboardDocumentCheck } from 'svelte-hero-icons';
 
@@ -8,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>Events Page - {config.title}</title>
+	<title>Events - {config.title}</title>
 </svelte:head>
 
 <!-- Hero Section -->

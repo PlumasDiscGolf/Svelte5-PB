@@ -1,9 +1,13 @@
-<script lang="ts">
-	import type { PageData } from './$types';
+<script >
+	import * as config from '$lib/config';
 
-	let { data }: { data: PageData } = $props();
+	let { data } = $props();
 	let post = data.post
 </script>
+
+<svelte:head>
+	<title>{post.title} - {config.title}</title>
+</svelte:head>
 
 <!-- Hero Section -->
 <div class="hero bg-base-200">

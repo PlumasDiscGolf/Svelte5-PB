@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Membership Page - {config.title}</title>
+	<title>Membership - {config.title}</title>
 	<!-- Zeffy Script -->
 	<script src="https://zeffy-scripts.s3.ca-central-1.amazonaws.com/embed-form-script.min.js"></script>
 </svelte:head>
