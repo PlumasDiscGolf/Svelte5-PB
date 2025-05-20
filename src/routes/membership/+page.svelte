@@ -1,9 +1,11 @@
 <script>
-	/** @type {import('./$types').PageData} */
+	import * as config from '$lib/config.js';
 </script>
 
-<!-- Zeffy Script -->
+
 <svelte:head>
+	<title>Membership Page - {config.title}</title>
+	<!-- Zeffy Script -->
 	<script src="https://zeffy-scripts.s3.ca-central-1.amazonaws.com/embed-form-script.min.js"></script>
 </svelte:head>
 
