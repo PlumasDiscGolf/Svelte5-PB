@@ -22,7 +22,7 @@
 </div>
 
 <div class="grid">
-	<div class="m-auto max-w-[72ch] px-4">
+	<div class="m-auto mb-4 max-w-[72ch] px-4">
 		<p class="my-4 font-semibold">Becoming a Club Member is one of the best ways to support Plumas Disc Golf. Memberships are one of our primary fundraising sources each year. Thank you for your support!</p>
 		<p class="font-semibold">The Standard Membership includes:</p>
 		<ul class="ml-3">
@@ -37,7 +37,10 @@
 			class="btn btn-secondary p">Join Plumas Disc Golf</button
 		>
 	</div> -->
-	<div style="position:relative;overflow:hidden;height:500px;width:100%;padding-top:500px;">
-		<iframe title="Membership form powered by Zeffy" style="position: absolute; border: 0; top:0;left:0;bottom:0;right:0;width:100%;height:100%" src="https://www.zeffy.com/embed/ticketing/club-membership--2025" allowpaymentrequest allowTransparency="true"></iframe>
+
+	<div class="flex h-[32rem] flex-col">
+		<div style="position:relative;overflow:hidden;height:1200px;width:100%;padding-top:500px;">
+			<iframe title="Membership form powered by Zeffy" style="position: absolute; border: 0; top:0;left:0;bottom:0;right:0;width:100%;height:100%" src="https://www.zeffy.com/embed/ticketing/club-membership--2025" allowpaymentrequest allowTransparency="true"></iframe>
+		</div>
 	</div>
 </div>

@@ -2,11 +2,11 @@
 	
 </script>
 
-<footer class="grid md:grid-cols-3 footer sticky top-[100vh] bg-neutral p-4 text-neutral-content">
-	<aside class="pl-4">
+<footer class="grid md:grid-cols-4 footer sticky bottom-0 bg-neutral p-4 text-neutral-content -z-10">
+	<aside class="flex justify-center md:pl-4 w-full">
 		<img src='/images/header_logo.png' alt="Plumas Disc Golf's Logo" class="max-h-16 hover:scale-105" />
 	</aside>
-	<div class="mx-auto mt-8">
+	<div class="mx-auto mt-6 col-span-2">
 		<p>© {new Date().getFullYear()} Plumas Disc Golf - All right reserved</p>
 	</div>
 	<nav class="grid-flow-col gap-4 pr-8 md:place-self-center md:justify-self-end">

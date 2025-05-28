@@ -8,7 +8,7 @@
 
 <div class="min-h-screen">
 	<Header />
-	<main class="p-4">
+	<main class="p-4 bg-base-100">
 		<PageTransition url={data.url}>
 			{@render children?.()}
 		</PageTransition>

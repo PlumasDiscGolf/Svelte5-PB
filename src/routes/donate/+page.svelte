@@ -22,7 +22,7 @@
 	<p class="mx-auto my-4 max-w-[72ch] font-semibold text-secondary">If you are interested in making a donation to Plumas Disc Golf, thank you. Donations will help us maintain our current courses, create new courses in Plumas County, and support other projects. We are always working to better our community through the lens of disc golf, and your donation will help us acheive our goals. Thank you for your consideration.</p>
 </div>
 
-<div class="flex flex-col">
+<div class="flex flex-col max-h-[32rem]">
 	<!-- <div class="mt-4 flex w-full justify-center">
 		<button zeffy-form-link="https://www.zeffy.com/embed/donation-form/donate-to-plumas-disc-golf?modal=true" class="p btn btn-secondary">Donate to Plumas Disc Golf</button>
 	</div> -->
