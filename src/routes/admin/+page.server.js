@@ -1,7 +1,6 @@
 // src/routes/admin/+page.server.js
 import { redirect } from '@sveltejs/kit';
 
-/** @type {import('./$types').PageServerLoad} */
 export const load = async ({ locals }) => {
 	// Protect this route: if no user, redirect to login
 	if (!locals.user) {
