@@ -1,11 +1,12 @@
 <script >
-	import * as config from '$lib/config';
+	
+	import * as config from '$lib/config.js';
 
 	let { data } = $props();
 </script>
 
 <svelte:head>
-	<title>Courses - {config.title}</title>
+	<title>{config.title} - Courses Page</title>
 </svelte:head>
 
 <!-- Hero Section -->

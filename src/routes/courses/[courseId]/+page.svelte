@@ -1,14 +1,9 @@
-<script>
-	import * as config from '$lib/config';
-	import { Icon, InformationCircle, Sparkles, MapPin } from 'svelte-hero-icons';
+<script >
+	import { Icon, Calendar, Map, InformationCircle, Sparkles, MapPin } from "svelte-hero-icons"
 	let { data } = $props();
 
 	let course = data.course;
 </script>
-
-<svelte:head>
-	<title>{course.name} - {config.title}</title>
-</svelte:head>
 
 <!-- Hero Section -->
 <div class="hero relative min-h-[40vh]" style="background-image: url({`http://pdg.pockethost.io/api/files/${course.collectionId}/${course.id}/${course.image}?download=1`}})">
@@ -27,7 +22,7 @@
 		<div class="card bg-base-100 shadow-lg shadow-gray-400">
 			<div class="card-body">
 				<div class="flex items-center gap-2">
-					<Icon src={MapPin} class="size-6" />
+					<Icon src={MapPin} class="size-6"/>
 					<h3 class="card-title">Location</h3>
 				</div>
 				<p>{course.address}</p>
@@ -45,13 +40,13 @@
 		<div class="card bg-base-100 shadow-lg shadow-gray-400">
 			<div class="card-body">
 				<div class="flex items-center gap-2">
-					<Icon src={InformationCircle} class="size-6" />
+					<Icon src={InformationCircle} class="size-6"/>
 					<h3 class="card-title">Course Info</h3>
 				</div>
 				<ul class="space-y-1">
 					<li>Holes: {course.numberOfHoles}</li>
 					<li>Par: {course.par}</li>
-					<li>Length: {course.lengthInFeet} ft / {Math.floor(course.lengthInFeet / 3.28)} m</li>
+					<li>Length: {course.lengthInFeet} ft / {Math.floor(course.lengthInFeet/3.28)} m</li>
 				</ul>
 			</div>
 		</div>
@@ -60,7 +55,7 @@
 		<div class="card bg-base-100 shadow-lg shadow-gray-400">
 			<div class="card-body">
 				<div class="flex items-center gap-2">
-					<Icon src={Sparkles} class="size-6" />
+					<Icon src={Sparkles} class="size-6"/>
 					<h3 class="card-title">Course Type</h3>
 				</div>
 				<div class="">

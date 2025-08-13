@@ -1,13 +1,7 @@
-<script >
-	import * as config from '$lib/config';
-
+<script>
 	let { data } = $props();
 	let post = data.post
 </script>
-
-<svelte:head>
-	<title>{post.title} - {config.title}</title>
-</svelte:head>
 
 <!-- Hero Section -->
 <div class="hero bg-base-200">
