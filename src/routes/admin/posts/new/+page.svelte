@@ -1,18 +1,17 @@
 <script>
     import { enhance } from '$app/forms';
     import { Icon, CheckCircle, XCircle, ArrowUturnLeft } from 'svelte-hero-icons';
-    import moment from 'moment'; // For default date
+    import { format } from 'date-fns'; // Use date-fns
 
     let { form } = $props();
-
     let postTitle = $state(form?.postTitle || '');
-    let postPublishedDate = $state(form?.postPublishedDate || moment().format('YYYY-MM-DD')); // Default to today
-    let postCategories = $state(form?.postCategories || ''); // Comma-separated string
+    // Default to today using date-fns
+    let postPublishedDate = $state(form?.postPublishedDate || format(new Date(), 'yyyy-MM-dd'));
+    let postCategories = $state(form?.postCategories || '');
     let postContent = $state(form?.postContent || '');
     let postPublished = $state(form?.postPublished === undefined ? true : form.postPublished);
     let postImageFile = $state(null);
     let imagePreviewUrl = $state('');
-
     let isSaving = $state(false);
 
     function handleFileSelect(e) {
@@ -30,7 +29,7 @@
 <div class="container mx-auto px-4 py-8 max-w-3xl">
     <div class="mb-6 flex items-center justify-between">
         <h1 class="text-3xl font-bold text-base-content">Add New Post</h1>
-        <a href="/admin" class="btn btn-ghost btn-sm">
+        <a href="/admin#posts" class="btn btn-ghost btn-sm">
             <Icon src={ArrowUturnLeft} class="h-5 w-5" />
             Back to Admin
         </a>

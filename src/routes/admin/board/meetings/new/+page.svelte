@@ -40,7 +40,7 @@
 <div class="container mx-auto px-4 py-8 max-w-xl">
     <div class="mb-6 flex items-center justify-between">
         <h1 class="text-3xl font-bold text-base-content">Add New Board Meeting</h1>
-        <a href="/admin" class="btn btn-ghost btn-sm">
+        <a href="/admin#boardMeetings" class="btn btn-ghost btn-sm">
             <Icon src={ArrowUturnLeft} class="h-5 w-5" />
             Back to Admin
         </a>

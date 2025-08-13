@@ -6,7 +6,7 @@ export const load = async ({ locals, params }) => {
 		throw redirect(303, '/login');
 	}
 	try {
-		const member = await locals.pb.collection('boardMembers').getOne(params.id);
+		const member = await locals.pb.collection('board_members').getOne(params.id);
 		return {
 			member: JSON.parse(JSON.stringify(member))
 		};
@@ -31,7 +31,6 @@ export const actions = {
 
 		const fieldErrors = {};
 		if (!name) fieldErrors.name = 'Name is required.';
-		if (!role) fieldErrors.role = 'Role is required.';
 
 		const currentValues = {
 			memberName: name,
@@ -56,7 +55,7 @@ export const actions = {
 		// If no new avatar and not deleting, don't append avatar field.
 
 		try {
-			await locals.pb.collection('boardMembers').update(params.id, dataToUpdate);
+			await locals.pb.collection('board_members').update(params.id, dataToUpdate);
 		} catch (err) {
 			console.error('Error updating board member:', err.response || err.originalError || err);
 			let errorMessage = 'Failed to update board member.';
@@ -67,6 +66,6 @@ export const actions = {
 			}
 			return fail(500, { ...currentValues, error: errorMessage });
 		}
-		throw redirect(303, '/admin?tab=tab4&updated=boardMember');
+		throw redirect(303, '/admin#boardMembers');
 	}
 };

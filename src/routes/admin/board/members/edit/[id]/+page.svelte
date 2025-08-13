@@ -36,7 +36,7 @@
 <div class="container mx-auto px-4 py-8 max-w-xl">
     <div class="mb-6 flex items-center justify-between">
         <h1 class="text-3xl font-bold text-base-content">Edit Board Member: {data.member?.name || 'Loading...'}</h1>
-         <a href="/admin" class="btn btn-ghost btn-sm">
+         <a href="/admin#boardMembers" class="btn btn-ghost btn-sm">
             <Icon src={ArrowUturnLeft} class="h-5 w-5" />
             Back to Admin
         </a>
@@ -63,7 +63,7 @@
             </div>
 
             <div class="form-control">
-                <label class="label" for="editMemberRoleSelect"><span class="label-text">Role/Title*</span></label>
+                <label class="label" for="editMemberRoleSelect"><span class="label-text">Role/Title</span></label>
                 <select name="role" id="editMemberRoleSelect" class="select select-bordered w-full" bind:value={memberRole} required>
                     {#each boardRoles as roleOption}
                         <option value={roleOption}>{roleOption}</option>

@@ -4,11 +4,9 @@
 
 <svelte:head>
 	<title>Membership Page - {config.title}</title>
-	<!-- Zeffy Script -->
 	<script src="https://zeffy-scripts.s3.ca-central-1.amazonaws.com/embed-form-script.min.js"></script>
 </svelte:head>
 
-<!-- Hero Section -->
 <div class="hero bg-base-200">
 	<div class="hero-content py-12 text-center">
 		<div class="max-w-md">
@@ -30,14 +28,17 @@
 			<li>Entry into all bag tag league events for the year</li>
 			<li>Discounted entry into club events for the year</li>
 		</ul>
+		<p class="font-semibold">The Youth Membership includes everything in the Standard Membership but is for those 17 years and under.</p>
 	</div>
-	<!-- <div class="flex w-full justify-center mt-4">
-		<button
-			zeffy-form-link="https://www.zeffy.com/embed/ticketing/club-membership--2025?modal=true"
-			class="btn btn-secondary p">Join Plumas Disc Golf</button
-		>
-	</div> -->
-	<div style="position:relative;overflow:hidden;height:500px;width:100%;padding-top:500px;">
-		<iframe title="Membership form powered by Zeffy" style="position: absolute; border: 0; top:0;left:0;bottom:0;right:0;width:100%;height:100%" src="https://www.zeffy.com/embed/ticketing/club-membership--2025" allowpaymentrequest allowTransparency="true"></iframe>
+
+	<div class="w-full px-2 pt-8">
+		<iframe
+			title="Membership form powered by Zeffy"
+			src="https://www.zeffy.com/embed/ticketing/club-membership--2025"
+			style="width: 100%; height: 550px; border: none;"
+			allowpaymentrequest
+			allowTransparency="true"
+			scrolling="no"
+		></iframe>
 	</div>
 </div>

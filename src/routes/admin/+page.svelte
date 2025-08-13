@@ -1,14 +1,13 @@
 <script>
-	// No explicit $state or $props import needed in .svelte files with runes
-	import moment from 'moment';
+	import { format, parseISO, isSameDay } from 'date-fns';
 	import { Icon, PencilSquare, Trash, PlusCircle, ArrowRightStartOnRectangle, CalendarDays, Map, Newspaper, UserGroup, Heart, CurrencyDollar, Users, CircleStack, ArrowDownTray, Ticket } from 'svelte-hero-icons';
 	import PocketBase from 'pocketbase';
 	import { page } from '$app/stores';
 	import { replaceState, invalidateAll } from '$app/navigation';
+	import { enhance } from '$app/forms';
 	import { preventDefault } from '$lib/utils.js';
 
 	const pb_client = new PocketBase('https://pdg.pockethost.io/');
-
 	const adminSections = [
 		{ id: 'events', label: 'Events', icon: Ticket, addNewUrl: '/admin/events/new', editUrlBase: '/admin/events/edit' },
 		{ id: 'courses', label: 'Courses', icon: Map, addNewUrl: '/admin/courses/new', editUrlBase: '/admin/courses/edit' },
@@ -19,19 +18,8 @@
 		{ id: 'volunteers', label: 'Volunteers', icon: Heart, addNewUrl: '/admin/volunteers/new', editUrlBase: '/admin/volunteers/edit' },
 		{ id: 'donations', label: 'Donations', icon: CurrencyDollar, addNewUrl: '/admin/donations/new', editUrlBase: '/admin/donations/edit' }
 	];
-	// Us the following syntax for nested menu options
-	//  {
-	//      id: 'board',
-	//      label: 'Board Admin',
-	//      icon: UserGroup,
-	//      subSections: [
-	//         { id: 'boardMembers', label: 'Members', addNewUrl: '/admin/board/members/new', editUrlBase: '/admin/board/members/edit'},
-	//         { id: 'boardMeetings', label: 'Meetings', addNewUrl: '/admin/board/meetings/new', editUrlBase: '/admin/board/meetings/edit'}
-	//     ]
-	// },
 
 	let activeSectionId = $state('events');
-
 	$effect(() => {
 		if (typeof window !== 'undefined') {
 			const hash = window.location.hash.substring(1);
@@ -49,7 +37,6 @@
 			}
 		}
 	});
-
 	function setActiveSection(sectionId) {
 		activeSectionId = sectionId;
 		if (typeof window !== 'undefined') {
@@ -59,7 +46,7 @@
 		}
 	}
 
-	let { data } = $props();
+	let { data, form } = $props();
 
 	let successAlertMessage = $state('');
 	let errorAlertMessage = $state('');
@@ -68,6 +55,17 @@
 		successAlertMessage = '';
 		errorAlertMessage = '';
 	}
+
+	$effect(() => {
+		if (form?.success) {
+			successAlertMessage = 'Item deleted successfully.';
+			setTimeout(() => clearAlerts(), 3000);
+		}
+		if (form?.error) {
+			errorAlertMessage = form.error;
+			setTimeout(() => clearAlerts(), 3000);
+		}
+	});
 
 	$effect(() => {
 		const currentUrl = $page.url;
@@ -94,28 +92,6 @@
 			setTimeout(() => clearAlerts(), 3000);
 		}
 	});
-
-	async function deleteItem(collectionName, itemId, itemName, itemTypeName) {
-		clearAlerts();
-		if (!itemId || !window.confirm(`Are you sure you want to delete ${itemTypeName} "${itemName || 'this item'}"? This action cannot be undone.`)) {
-			return;
-		}
-		try {
-			await pb_client.collection(collectionName).delete(itemId);
-			successAlertMessage = `${itemTypeName} "${itemName}" deleted successfully.`;
-			await invalidateAll();
-			setTimeout(() => clearAlerts(), 3000);
-		} catch (err) {
-			console.error(`Failed to delete ${itemTypeName}:`, err);
-			errorAlertMessage = `Error deleting ${itemTypeName}: ${err.message || 'Unknown error'}.`;
-			if (err.data?.data) {
-				let detailedErrors = Object.entries(err.data.data)
-					.map(([field, errorObj]) => `${field}: ${errorObj.message}`)
-					.join('; ');
-				errorAlertMessage += ` Details: ${detailedErrors}`;
-			}
-		}
-	}
 </script>
 
 <div class="container mx-auto px-4 pt-4">
@@ -133,7 +109,7 @@
 	{/if}
 </div>
 
-<div class="hero bg-base-200 py-10 mb-4">
+<div class="hero mb-4 bg-base-200 py-10">
 	<div class="hero-content text-center">
 		<div class="max-w-md">
 			<h1 class="text-4xl font-bold">Admin Panel</h1>
@@ -171,9 +147,7 @@
 
 				<div class="p-4 {activeSectionId === 'events' ? '' : 'hidden'}">
 					<div class="mb-4 flex justify-end">
-						<a href={adminSections.find((s) => s.id === 'events')?.addNewUrl} class="btn btn-secondary btn-sm flex items-center gap-2">
-							<Icon src={PlusCircle} class="h-6 w-6"></Icon>Add New Event
-						</a>
+						<a href="/admin/events/new" class="btn btn-secondary btn-sm flex items-center gap-2"><Icon src={PlusCircle} class="h-6 w-6"></Icon>Add New Event</a>
 					</div>
 					<div class="overflow-x-auto">
 						<table class="table table-zebra w-full">
@@ -183,28 +157,34 @@
 									{#each data.events as item (item.id)}
 										<tr>
 											<td>{item.name}</td>
-											{#if item.endDateTime && !moment(item.startDateTime).isSame(moment(item.endDateTime), 'day')}
-												<td>
-													{moment(item.startDateTime).format('MMM Do, YYYY')} - {moment(item.endDateTime).format('MMM Do, YYYY')}
-												</td>
-											{:else}
-												<td>
-													{moment(item.startDateTime).format('MMM Do, YYYY')}
-												</td>
-											{/if}
+											<td>
+												{#if item.startDateTime}
+													{#if item.endDateTime && !isSameDay(parseISO(item.startDateTime), parseISO(item.endDateTime))}
+														{format(parseISO(item.startDateTime), 'MMM do, yyyy')} - {format(parseISO(item.endDateTime), 'MMM do, yyyy')}
+													{:else}
+														{format(parseISO(item.startDateTime), 'MMM do, yyyy')}
+													{/if}
+												{/if}
+											</td>
 											<td>{item.eventType}</td>
-
 											<td class="flex gap-2">
-												<a href="{adminSections.find((s) => s.id === 'events')?.editUrlBase}/{item.id}" title="Edit Event" class="btn btn-square btn-info btn-sm">
-													<Icon src={PencilSquare} class="h-4 w-4"></Icon>
-												</a>
-												<button title="Delete Event" class="btn btn-square btn-error btn-sm" onclick={() => deleteItem('events', item.id, item.name, 'Event')}>
-													<Icon src={Trash} class="h-4 w-4"></Icon>
-												</button>
+												<a href="/admin/events/edit/{item.id}" title="Edit Event" class="btn btn-square btn-info btn-sm"><Icon src={PencilSquare} class="h-4 w-4"></Icon></a>
+												<form
+													method="POST"
+													action="?/delete"
+													use:enhance
+													onsubmit={(e) => {
+														if (!window.confirm(`Delete "${item.name}"?`)) e.preventDefault();
+													}}
+												>
+													<input type="hidden" name="collectionName" value="events" />
+													<input type="hidden" name="itemId" value={item.id} />
+													<button type="submit" title="Delete Event" class="btn btn-square btn-error btn-sm"><Icon src={Trash} class="h-4 w-4"></Icon></button>
+												</form>
 											</td>
 										</tr>
 									{/each}
-								{:else}<tr><td colspan="5" class="p-4 text-center">No events found.</td></tr>{/if}
+								{:else}<tr><td colspan="4" class="p-4 text-center">No events found.</td></tr>{/if}
 							</tbody>
 						</table>
 					</div>
@@ -212,9 +192,7 @@
 
 				<div class="p-4 {activeSectionId === 'courses' ? '' : 'hidden'}">
 					<div class="mb-4 flex justify-end">
-						<a href={adminSections.find((s) => s.id === 'courses')?.addNewUrl} class="btn btn-secondary btn-sm flex items-center gap-2">
-							<Icon src={PlusCircle} class="h-6 w-6"></Icon>Add New Course
-						</a>
+						<a href="/admin/courses/new" class="btn btn-secondary btn-sm flex items-center gap-2"><Icon src={PlusCircle} class="h-6 w-6"></Icon>Add New Course</a>
 					</div>
 					<div class="overflow-x-auto">
 						<table class="table table-zebra w-full">
@@ -225,12 +203,19 @@
 										<tr>
 											<td>{item.name}</td><td>{item.numberOfHoles}</td><td>{item.par}</td><td>{item.location}</td>
 											<td class="flex gap-2">
-												<a href="{adminSections.find((s) => s.id === 'courses')?.editUrlBase}/{item.id}" title="Edit Course" class="btn btn-square btn-info btn-sm">
-													<Icon src={PencilSquare} class="h-4 w-4"></Icon>
-												</a>
-												<button title="Delete Course" class="btn btn-square btn-error btn-sm" onclick={() => deleteItem('courses', item.id, item.name, 'Course')}>
-													<Icon src={Trash} class="h-4 w-4"></Icon>
-												</button>
+												<a href="/admin/courses/edit/{item.id}" title="Edit Course" class="btn btn-square btn-info btn-sm"><Icon src={PencilSquare} class="h-4 w-4"></Icon></a>
+												<form
+													method="POST"
+													action="?/delete"
+													use:enhance
+													onsubmit={(e) => {
+														if (!window.confirm(`Delete "${item.name}"?`)) e.preventDefault();
+													}}
+												>
+													<input type="hidden" name="collectionName" value="courses" />
+													<input type="hidden" name="itemId" value={item.id} />
+													<button type="submit" title="Delete Course" class="btn btn-square btn-error btn-sm"><Icon src={Trash} class="h-4 w-4"></Icon></button>
+												</form>
 											</td>
 										</tr>
 									{/each}
@@ -239,46 +224,47 @@
 						</table>
 					</div>
 				</div>
-
 				<div class="p-4 {activeSectionId === 'posts' ? '' : 'hidden'}">
 					<div class="mb-4 flex justify-end">
-						<a href={adminSections.find((s) => s.id === 'posts')?.addNewUrl} class="btn btn-secondary btn-sm flex items-center gap-2">
-							<Icon src={PlusCircle} class="h-6 w-6"></Icon>Add New Post
-						</a>
+						<a href="/admin/posts/new" class="btn btn-secondary btn-sm flex items-center gap-2"><Icon src={PlusCircle} class="h-6 w-6"></Icon>Add New Post</a>
 					</div>
 					<div class="overflow-x-auto">
 						<table class="table table-zebra w-full">
-							<thead><tr><th>Title</th><th>Date</th><th>Categories</th><th>Published</th><th>Actions</th></tr></thead>
+							<thead><tr><th>Title</th><th>Date</th><th>Published</th><th>Actions</th></tr></thead>
 							<tbody>
 								{#if data.posts && data.posts.length > 0}
 									{#each data.posts as item (item.id)}
 										<tr>
 											<td>{item.title}</td>
-											<td>{moment(item.publishedDate).format('MMM Do, YYYY')}</td>
-											<td>{Array.isArray(item.categories) ? item.categories.join(', ') : item.categories}</td>
+											<td
+												>{#if item.publishedDate}{format(parseISO(item.publishedDate), 'MMM do, yyyy')}{/if}</td
+											>
 											<td>{item.published ? 'Yes' : 'No'}</td>
 											<td class="flex gap-2">
-												<a href="{adminSections.find((s) => s.id === 'posts')?.editUrlBase}/{item.id}" title="Edit Post" class="btn btn-square btn-info btn-sm">
-													<Icon src={PencilSquare} class="h-4 w-4"></Icon>
-												</a>
-												<button title="Delete Post" class="btn btn-square btn-error btn-sm" onclick={() => deleteItem('posts', item.id, item.title, 'Post')}>
-													<Icon src={Trash} class="h-4 w-4"></Icon>
-												</button>
+												<a href="/admin/posts/edit/{item.id}" title="Edit Post" class="btn btn-square btn-info btn-sm"><Icon src={PencilSquare} class="h-4 w-4"></Icon></a>
+												<form
+													method="POST"
+													action="?/delete"
+													use:enhance
+													onsubmit={(e) => {
+														if (!window.confirm(`Delete "${item.title}"?`)) e.preventDefault();
+													}}
+												>
+													<input type="hidden" name="collectionName" value="posts" />
+													<input type="hidden" name="itemId" value={item.id} />
+													<button type="submit" title="Delete Post" class="btn btn-square btn-error btn-sm"><Icon src={Trash} class="h-4 w-4"></Icon></button>
+												</form>
 											</td>
 										</tr>
 									{/each}
-								{:else}<tr><td colspan="5" class="p-4 text-center">No posts found.</td></tr>{/if}
+								{:else}<tr><td colspan="4" class="p-4 text-center">No posts found.</td></tr>{/if}
 							</tbody>
 						</table>
 					</div>
 				</div>
-
 				<div class="p-4 {activeSectionId === 'boardMembers' ? '' : 'hidden'}">
-					<div class="mb-2 flex items-center justify-between">
-						<h3 class="text-lg font-semibold">Board Members</h3>
-						<a href={adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === 'boardMembers')?.addNewUrl} class="btn btn-secondary btn-xs flex items-center gap-1">
-							<Icon src={PlusCircle} class="h-4 w-4"></Icon> Add Member
-						</a>
+					<div class="mb-4 flex justify-end">
+						<a href="/admin/board/members/new" class="btn btn-secondary btn-sm"><Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Add New Member</a>
 					</div>
 					<div class="overflow-x-auto">
 						<table class="table table-zebra table-sm w-full">
@@ -290,12 +276,19 @@
 											<td>{item.name}</td><td>{item.role}</td>
 											<td><div class="badge {item.active ? 'badge-primary' : 'badge-neutral'} badge-sm">{item.active ? 'Active' : 'Inactive'}</div></td>
 											<td class="flex gap-1">
-												<a href="{adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === 'boardMembers')?.editUrlBase}/{item.id}" title="Edit Member" class="btn btn-square btn-info btn-xs">
-													<Icon src={PencilSquare} class="h-3 w-3"></Icon>
-												</a>
-												<button title="Delete Member" class="btn btn-square btn-error btn-xs" onclick={() => deleteItem('boardMembers', item.id, item.name, 'Board Member')}>
-													<Icon src={Trash} class="h-3 w-3"></Icon>
-												</button>
+												<a href="/admin/board/members/edit/{item.id}" title="Edit Member" class="btn btn-square btn-info btn-xs"><Icon src={PencilSquare} class="h-3 w-3"></Icon></a>
+												<form
+													method="POST"
+													action="?/delete"
+													use:enhance
+													onsubmit={(e) => {
+														if (!window.confirm(`Delete "${item.name}"?`)) e.preventDefault();
+													}}
+												>
+													<input type="hidden" name="collectionName" value="board_members" />
+													<input type="hidden" name="itemId" value={item.id} />
+													<button type="submit" title="Delete Member" class="btn btn-square btn-error btn-xs"><Icon src={Trash} class="h-3 w-3"></Icon></button>
+												</form>
 											</td>
 										</tr>
 									{/each}
@@ -304,13 +297,9 @@
 						</table>
 					</div>
 				</div>
-
 				<div class="p-4 {activeSectionId === 'boardMeetings' ? '' : 'hidden'}">
-					<div class="mb-2 flex items-center justify-between">
-						<h3 class="text-lg font-semibold">Board Meetings</h3>
-						<a href={adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === 'boardMeetings')?.addNewUrl} class="btn btn-secondary btn-xs flex items-center gap-1">
-							<Icon src={PlusCircle} class="h-4 w-4"></Icon> Add Meeting
-						</a>
+					<div class="mb-4 flex justify-end">
+						<a href="/admin/board/meetings/new" class="btn btn-secondary btn-sm"><Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Add New Meeeting</a>
 					</div>
 					<div class="overflow-x-auto">
 						<table class="table table-zebra table-sm w-full">
@@ -319,26 +308,27 @@
 								{#if data.boardMeetings && data.boardMeetings.length > 0}
 									{#each data.boardMeetings as item (item.id)}
 										<tr>
-											<td>{moment(item.meetingDateTime).format('MMM Do, YYYY h:mm A')}</td>
+											<td
+												>{#if item.meetingDateTime}{format(parseISO(item.meetingDateTime), 'MMM do, yyyy h:mm a')}{/if}</td
+											>
 											<td>
-												{#if item.agendaFile}
-													<a href={pb_client.files.getURL(item, item.agendaFile)} target="_blank" rel="noopener noreferrer" class="link-hover link link-info inline-flex items-center text-xs">
-														<Icon src={ArrowDownTray} class="mr-1 h-4 w-4" />Agenda
-													</a>
-												{/if}
-												{#if item.minutesFile}
-													<a href={pb_client.files.getURL(item, item.minutesFile)} target="_blank" rel="noopener noreferrer" class="link-hover link link-info ml-2 inline-flex items-center text-xs">
-														<Icon src={ArrowDownTray} class="mr-1 h-4 w-4" />Minutes
-													</a>
-												{/if}
+												{#if item.agendaFile}<a href={pb_client.files.getURL(item, item.agendaFile)} target="_blank" rel="noopener noreferrer" class="link-hover link link-info inline-flex items-center text-xs"><Icon src={ArrowDownTray} class="mr-1 h-4 w-4" />Agenda</a>{/if}
+												{#if item.minutesFile}<a href={pb_client.files.getURL(item, item.minutesFile)} target="_blank" rel="noopener noreferrer" class="link-hover link link-info ml-2 inline-flex items-center text-xs"><Icon src={ArrowDownTray} class="mr-1 h-4 w-4" />Minutes</a>{/if}
 											</td>
 											<td class="flex gap-1">
-												<a href="{adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === 'boardMeetings')?.editUrlBase}/{item.id}" title="Edit Meeting" class="btn btn-square btn-info btn-xs">
-													<Icon src={PencilSquare} class="h-3 w-3"></Icon>
-												</a>
-												<button title="Delete Meeting" class="btn btn-square btn-error btn-xs" onclick={() => deleteItem('boardMeetings', item.id, moment(item.meetingDateTime).format('MMM Do, YYYY'), 'Board Meeting')}>
-													<Icon src={Trash} class="h-3 w-3"></Icon>
-												</button>
+												<a href="/admin/board/meetings/edit/{item.id}" title="Edit Meeting" class="btn btn-square btn-info btn-xs"><Icon src={PencilSquare} class="h-3 w-3"></Icon></a>
+												<form
+													method="POST"
+													action="?/delete"
+													use:enhance
+													onsubmit={(e) => {
+														if (!window.confirm(`Delete meeting from ${item.meetingDateTime ? format(parseISO(item.meetingDateTime), 'MMM do, yyyy') : 'this date'}?`)) e.preventDefault();
+													}}
+												>
+													<input type="hidden" name="collectionName" value="board_meetings" />
+													<input type="hidden" name="itemId" value={item.id} />
+													<button type="submit" title="Delete Meeting" class="btn btn-square btn-error btn-xs"><Icon src={Trash} class="h-3 w-3"></Icon></button>
+												</form>
 											</td>
 										</tr>
 									{/each}
@@ -347,36 +337,147 @@
 						</table>
 					</div>
 				</div>
-
 				<div class="p-4 {activeSectionId === 'memberships' ? '' : 'hidden'}">
-					<div class="mb-4 flex items-center justify-between">
-						<h3 class="text-xl font-semibold">Manage Club Memberships</h3>
-						<a href={adminSections.find((s) => s.id === 'memberships')?.addNewUrl} class="btn btn-secondary btn-sm">
-							<Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Add Membership
-						</a>
+					<div class="mb-4 flex justify-end">
+						<a href="/admin/memberships/new" class="btn btn-secondary btn-sm flex items-center gap-2"><Icon src={PlusCircle} class="h-6 w-6"></Icon>Add New Membership</a>
 					</div>
-					<p class="text-base-content/70">Membership management interface, table, and filters will go here...</p>
-					<div class="mt-4 overflow-x-auto"><table class="table w-full"><thead><tr><th>Name</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead><tbody><tr><td colspan="4" class="p-4 text-center italic">No memberships yet.</td></tr></tbody></table></div>
+					<div class="mt-4 overflow-x-auto">
+						<table class="table table-zebra w-full">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Status</th>
+									<th>Member Since</th>
+									<th>Expires</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{#if data.memberships && data.memberships.length > 0}
+									{#each data.memberships as item (item.id)}
+										<tr>
+											<td>{item.name}</td>
+											<td>
+												<div class="badge {item.active ? 'badge-primary' : 'badge-neutral'} badge-sm">
+													{item.active ? 'Active' : 'Inactive'}
+												</div>
+											</td>
+											<td>
+												{#if item.memberSince && typeof item.memberSince === 'string' && item.memberSince.length > 0}
+													{format(parseISO(item.memberSince), 'MMM do, yyyy')}
+												{/if}
+											</td>
+											<td>
+												{#if item.expires && typeof item.expires === 'string' && item.expires.length > 0}
+													{format(parseISO(item.expires), 'MMM do, yyyy')}
+												{/if}
+											</td>
+											<td class="flex gap-2">
+												<a href="{adminSections.find((s) => s.id === 'memberships')?.editUrlBase}/{item.id}" title="Edit Membership" class="btn btn-square btn-info btn-sm">
+													<Icon src={PencilSquare} class="h-4 w-4"></Icon>
+												</a>
+												<form
+													method="POST"
+													action="?/delete"
+													use:enhance
+													onsubmit={(e) => {
+														if (!window.confirm(`Delete membership for "${item.name}"?`)) e.preventDefault();
+													}}
+												>
+													<input type="hidden" name="collectionName" value="memberships" />
+													<input type="hidden" name="itemId" value={item.id} />
+													<button type="submit" title="Delete Membership" class="btn btn-square btn-error btn-sm">
+														<Icon src={Trash} class="h-4 w-4"></Icon>
+													</button>
+												</form>
+											</td>
+										</tr>
+									{/each}
+								{:else}
+									<tr><td colspan="4" class="p-4 text-center italic">No memberships yet.</td></tr>
+								{/if}
+							</tbody>
+						</table>
+					</div>
 				</div>
 				<div class="p-4 {activeSectionId === 'volunteers' ? '' : 'hidden'}">
-					<div class="mb-4 flex items-center justify-between">
-						<h3 class="text-xl font-semibold">Manage Volunteers</h3>
-						<a href={adminSections.find((s) => s.id === 'volunteers')?.addNewUrl} class="btn btn-secondary btn-sm">
-							<Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Add Volunteer Record
-						</a>
+					<div class="mb-4 flex justify-end">
+						<a href="/admin/volunteers/new" class="btn btn-secondary btn-sm flex items-center gap-2"><Icon src={PlusCircle} class="h-6 w-6"></Icon>Log Volunteer Record</a>
 					</div>
-					<p class="text-base-content/70">Volunteer tracking and assignment interface will go here...</p>
-					<div class="mt-4 overflow-x-auto"><table class="table w-full"><thead><tr><th>Name</th><th>Event/Task</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="4" class="p-4 text-center italic">No volunteer records yet.</td></tr></tbody></table></div>
+					<div class="mt-4 overflow-x-auto">
+						<table class="table table-zebra w-full">
+							<thead><tr><th>Name</th><th>Event/Task</th><th>Date</th><th>Actions</th></tr></thead>
+							<tbody>
+								{#if data.volunteers && data.volunteers.length > 0}
+									{#each data.volunteers as item (item.id)}
+										<tr>
+											<td>{item.name}</td>
+											<td>{item.task}</td>
+											<td
+												>{#if item.date}{format(parseISO(item.date), 'MMM do, yyyy')}{/if}</td
+											>
+											<td class="flex gap-2">
+												<a href="/admin/volunteers/edit/{item.id}" title="Edit Volunteer" class="btn btn-square btn-info btn-sm"><Icon src={PencilSquare} class="h-4 w-4"></Icon></a>
+												<form
+													method="POST"
+													action="?/delete"
+													use:enhance
+													onsubmit={(e) => {
+														if (!window.confirm(`Delete record for "${item.name}"?`)) e.preventDefault();
+													}}
+												>
+													<input type="hidden" name="collectionName" value="volunteers" />
+													<input type="hidden" name="itemId" value={item.id} />
+													<button type="submit" title="Delete Volunteer" class="btn btn-square btn-error btn-sm"><Icon src={Trash} class="h-4 w-4"></Icon></button>
+												</form>
+											</td>
+										</tr>
+									{/each}
+								{:else}<tr><td colspan="4" class="p-4 text-center italic">No volunteer records yet.</td></tr>{/if}
+							</tbody>
+						</table>
+					</div>
 				</div>
 				<div class="p-4 {activeSectionId === 'donations' ? '' : 'hidden'}">
-					<div class="mb-4 flex items-center justify-between">
-						<h3 class="text-xl font-semibold">Manage Donations</h3>
-						<a href={adminSections.find((s) => s.id === 'donations')?.addNewUrl} class="btn btn-secondary btn-sm">
-							<Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Log Donation
-						</a>
+					<div class="mb-4 flex justify-end">
+						<a href="/admin/donations/new" class="btn btn-secondary btn-sm"><Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Log Donation</a>
 					</div>
-					<p class="text-base-content/70">Donation tracking and management interface will go here...</p>
-					<div class="mt-4 overflow-x-auto"><table class="table w-full"><thead><tr><th>Donor</th><th>Amount</th><th>Date</th><th>Type</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5" class="p-4 text-center italic">No donations yet.</td></tr></tbody></table></div>
+					<div class="mt-4 overflow-x-auto">
+						<table class="table table-zebra w-full">
+							<thead><tr><th>Donor</th><th>Amount</th><th>Date</th><th>Type</th><th>Actions</th></tr></thead>
+							<tbody>
+								{#if data.donations && data.donations.length > 0}
+									{#each data.donations as item (item.id)}
+										<tr>
+											<td>{item.donorName}</td>
+											<td
+												>{#if item.amount != null}${parseFloat(String(item.amount).replace(/[^0-9.-]+/g, '')).toFixed(2)}{/if}</td
+											>
+											<td
+												>{#if item.donationDate}{format(parseISO(item.donationDate), 'MMM do, yyyy')}{/if}</td
+											>
+											<td>{item.donationType}</td>
+											<td class="flex gap-2">
+												<a href="/admin/donations/edit/{item.id}" title="Edit Donation" class="btn btn-square btn-info btn-sm"><Icon src={PencilSquare} class="h-4 w-4"></Icon></a>
+												<form
+													method="POST"
+													action="?/delete"
+													use:enhance
+													onsubmit={(e) => {
+														if (!window.confirm(`Delete donation from "${item.donorName}"?`)) e.preventDefault();
+													}}
+												>
+													<input type="hidden" name="collectionName" value="donations" />
+													<input type="hidden" name="itemId" value={item.id} />
+													<button type="submit" title="Delete Donation" class="btn btn-square btn-error btn-sm"><Icon src={Trash} class="h-4 w-4"></Icon></button>
+												</form>
+											</td>
+										</tr>
+									{/each}
+								{:else}<tr><td colspan="5" class="p-4 text-center italic">No donations yet.</td></tr>{/if}
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

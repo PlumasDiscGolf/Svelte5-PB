@@ -1,7 +1,6 @@
 <script>
     import { enhance } from '$app/forms';
     import { Icon, CheckCircle, XCircle, ArrowUturnLeft } from 'svelte-hero-icons';
-    import moment from 'moment';
     import { formatPocketBaseDateToDateInput } from '$lib/utils.js'; // For YYYY-MM-DD format
 
     let { data, form } = $props(); // data.post from load, form from action
@@ -37,7 +36,7 @@
 <div class="container mx-auto px-4 py-8 max-w-3xl">
     <div class="mb-6 flex items-center justify-between">
         <h1 class="text-3xl font-bold text-base-content">Edit Post: {data.post?.title || 'Loading...'}</h1>
-         <a href="/admin" class="btn btn-ghost btn-sm">
+         <a href="/admin#posts" class="btn btn-ghost btn-sm">
             <Icon src={ArrowUturnLeft} class="h-5 w-5" />
             Back to Admin
         </a>

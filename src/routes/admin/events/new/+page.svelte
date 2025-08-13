@@ -1,23 +1,20 @@
 <script>
     import { enhance } from '$app/forms';
     import { Icon, CheckCircle, XCircle, ArrowUturnLeft } from 'svelte-hero-icons';
-    import moment from 'moment';
+    import { format } from 'date-fns'; // Use date-fns
 
-    // The `form` prop will contain data returned from the server action (e.g., errors)
     let { form } = $props();
-
     let eventName = $state(form?.eventName || '');
     let eventType = $state(form?.eventType || 'League');
-    // Default to today's date and a common time, or leave blank
-    let eventStartDateTime = $state(form?.eventStartDateTime || moment().format('YYYY-MM-DDTHH:mm'));
+    // Default to today's date and time using date-fns
+    let eventStartDateTime = $state(form?.eventStartDateTime || format(new Date(), "yyyy-MM-dd'T'HH:mm"));
     let eventEndDateTime = $state(form?.eventEndDateTime || '');
     let eventDescription = $state(form?.eventDescription || '');
     let eventPublished = $state(form?.eventPublished === undefined ? true : form.eventPublished);
-    let eventImageFile = $state(null); // For <input type="file">
+    let eventImageFile = $state(null);
     let imagePreviewUrl = $state('');
 
     let isSaving = $state(false);
-
     function handleFileSelect(e) {
         const file = e.target.files?.[0];
         if (file) {
@@ -33,7 +30,7 @@
 <div class="container mx-auto px-4 py-8 max-w-3xl">
     <div class="mb-6 flex items-center justify-between">
         <h1 class="text-3xl font-bold text-base-content">Add New Event</h1>
-        <a href="/admin" class="btn btn-ghost btn-sm">
+        <a href="/admin#events" class="btn btn-ghost btn-sm">
             <Icon src={ArrowUturnLeft} class="h-5 w-5" />
             Back to Admin
         </a>

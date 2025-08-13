@@ -1,7 +1,6 @@
 <script>
     import { enhance } from '$app/forms';
     import { Icon, CheckCircle, XCircle, ArrowUturnLeft, ArrowDownTray, Trash } from 'svelte-hero-icons'; // Added Download
-    import moment from 'moment';
     import { formatPocketBaseDateToLocalInput } from '$lib/utils.js';
 
     let { data, form } = $props(); // data.meeting from load
@@ -73,7 +72,7 @@
 <div class="container mx-auto px-4 py-8 max-w-xl">
     <div class="mb-6 flex items-center justify-between">
         <h1 class="text-3xl font-bold text-base-content">Edit Board Meeting</h1>
-         <a href="/admin" class="btn btn-ghost btn-sm">
+         <a href="/admin#boardMeetings" class="btn btn-ghost btn-sm">
             <Icon src={ArrowUturnLeft} class="h-5 w-5" />
             Back to Admin
         </a>

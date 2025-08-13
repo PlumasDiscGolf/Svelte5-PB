@@ -7,7 +7,7 @@ export const load = async ({ locals, params }) => {
 		throw redirect(303, '/login');
 	}
 	try {
-		const meeting = await locals.pb.collection('boardMeetings').getOne(params.id);
+		const meeting = await locals.pb.collection('board_meetings').getOne(params.id);
 		return {
 			meeting: JSON.parse(JSON.stringify(meeting))
 		};
@@ -76,7 +76,7 @@ export const actions = {
 		// dataToUpdate.append('minutesLink', minutesLink);
 
 		try {
-			await locals.pb.collection('boardMeetings').update(params.id, dataToUpdate);
+			await locals.pb.collection('board_meetings').update(params.id, dataToUpdate);
 		} catch (err) {
 			console.error('Error updating board meeting:', err.response || err.originalError || err);
 			let errorMessage = 'Failed to update board meeting.';
@@ -87,6 +87,6 @@ export const actions = {
 			}
 			return fail(500, { ...currentValues, error: errorMessage });
 		}
-		throw redirect(303, '/admin?tab=tab4&updated=boardMeeting');
+		throw redirect(303, '/admin#boardMeetings');
 	}
 };

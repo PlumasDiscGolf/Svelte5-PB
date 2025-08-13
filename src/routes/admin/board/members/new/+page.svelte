@@ -29,7 +29,7 @@
 <div class="container mx-auto max-w-xl px-4 py-8">
 	<div class="mb-6 flex items-center justify-between">
 		<h1 class="text-3xl font-bold text-base-content">Add New Board Member</h1>
-		<a href="/admin" class="btn btn-ghost btn-sm">
+		<a href="/admin#boardMembers" class="btn btn-ghost btn-sm">
 			<Icon src={ArrowUturnLeft} class="h-5 w-5" />
 			Back to Admin
 		</a>

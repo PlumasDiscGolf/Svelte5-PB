@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { format, parseISO, isValid } from 'date-fns';
 
 /**
  * Formats a date string from YYYY-MM-DD or YYYY-MM-DDTHH:mm
@@ -9,13 +9,17 @@ import moment from 'moment';
  */
 export function formatInputDateToPocketBase(inputDateTime) {
 	if (!inputDateTime) return null;
-	// Moment can parse both 'YYYY-MM-DD' and 'YYYY-MM-DDTHH:mm' correctly
-	// It will assume local time if no timezone info is present.
-	const m = moment(inputDateTime);
-	if (!m.isValid()) {
+
+	// The native Date constructor correctly parses these formats as local time,
+	// mimicking moment's behavior in this specific case.
+	const date = new Date(inputDateTime);
+
+	if (!isValid(date)) {
 		return null; // Or throw an error
 	}
-	return m.toISOString(); // Converts to UTC and formats
+
+	// .toISOString() correctly converts the date to a UTC string
+	return date.toISOString();
 }
 
 /**
@@ -26,8 +30,10 @@ export function formatInputDateToPocketBase(inputDateTime) {
  */
 export function formatPocketBaseDateToLocalInput(pbDateTime) {
 	if (!pbDateTime) return '';
-	// Moment parses ISO string and converts to local time by default for formatting
-	return moment(pbDateTime).format('YYYY-MM-DDTHH:mm');
+
+	// parseISO handles the UTC string, and format displays it in the local timezone by default.
+	const date = parseISO(pbDateTime);
+	return format(date, "yyyy-MM-dd'T'HH:mm");
 }
 
 /**
@@ -38,7 +44,9 @@ export function formatPocketBaseDateToLocalInput(pbDateTime) {
  */
 export function formatPocketBaseDateToDateInput(pbDateTime) {
 	if (!pbDateTime) return '';
-	return moment(pbDateTime).format('YYYY-MM-DD');
+
+	const date = parseISO(pbDateTime);
+	return format(date, 'yyyy-MM-dd');
 }
 
 export const serializeNonPOJOs = (obj) => {
