@@ -1,11 +1,61 @@
 <script>
 	import { format, parseISO, isSameDay } from 'date-fns';
-	import { Icon, PencilSquare, Trash, PlusCircle, ArrowRightStartOnRectangle, CalendarDays, Map, Newspaper, UserGroup, Heart, CurrencyDollar, Users, CircleStack, ArrowDownTray, Ticket } from 'svelte-hero-icons';
+	import { Icon, PencilSquare, Trash, PlusCircle, ArrowRightStartOnRectangle, CalendarDays, Map, Newspaper, UserGroup, Heart, CurrencyDollar, Users, CircleStack, ArrowDownTray, Ticket, ChevronUpDown, ChevronUp, ChevronDown } from 'svelte-hero-icons';
 	import PocketBase from 'pocketbase';
 	import { page } from '$app/stores';
 	import { replaceState, invalidateAll } from '$app/navigation';
 	import { enhance } from '$app/forms';
 	import { preventDefault } from '$lib/utils.js';
+
+	let { data, form } = $props();
+
+	// --- START: SORTING LOGIC ---
+	let sortKey = $state('');
+	let sortOrder = $state(1); // 1 for ascending, -1 for descending
+
+	function setSortKey(key) {
+		if (sortKey === key) {
+			sortOrder *= -1; // Reverse order if same key is clicked
+		} else {
+			sortKey = key;
+			sortOrder = 1; // Default to ascending on new key
+		}
+	}
+
+	// Generic sort function for different data types
+	function sortData(array) {
+		if (!sortKey || !array) return array;
+
+		return [...array].sort((a, b) => {
+			const valA = a[sortKey];
+			const valB = b[sortKey];
+
+			if (valA == null) return 1;
+			if (valB == null) return -1;
+
+			if (typeof valA === 'number' && typeof valB === 'number') {
+				return (valA - valB) * sortOrder;
+			}
+			if (typeof valA === 'boolean' && typeof valB === 'boolean') {
+				return (valA === valB ? 0 : valA ? -1 : 1) * sortOrder;
+			}
+
+			const strA = String(valA).toLowerCase();
+			const strB = String(valB).toLowerCase();
+			return strA.localeCompare(strB) * sortOrder;
+		});
+	}
+
+	// Create derived state for each sorted list
+	let sortedEvents = $derived(sortData(data.events));
+	let sortedCourses = $derived(sortData(data.courses));
+	let sortedPosts = $derived(sortData(data.posts));
+	let sortedBoardMembers = $derived(sortData(data.boardMembers));
+	let sortedBoardMeetings = $derived(sortData(data.boardMeetings));
+	let sortedVolunteers = $derived(sortData(data.volunteers));
+	let sortedDonations = $derived(sortData(data.donations));
+	let sortedMemberships = $derived(sortData(data.memberships));
+	// --- END: SORTING LOGIC ---
 
 	const pb_client = new PocketBase('https://pdg.pockethost.io/');
 	const adminSections = [
@@ -23,17 +73,12 @@
 	$effect(() => {
 		if (typeof window !== 'undefined') {
 			const hash = window.location.hash.substring(1);
-			const isValidMainSection = adminSections.find((s) => s.id === hash && !s.subSections);
-			const isValidSubSection = adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === hash);
+			const isValidSection = adminSections.some((s) => s.id === hash);
 
-			if (hash && (isValidMainSection || isValidSubSection)) {
+			if (hash && isValidSection) {
 				if (activeSectionId !== hash) activeSectionId = hash;
 			} else if (adminSections.length > 0 && !activeSectionId) {
-				const firstSection = adminSections.find((s) => !s.subSections) || adminSections[0];
-				const initialSectionId = firstSection.subSections?.[0]?.id || firstSection.id;
-				if (initialSectionId && activeSectionId !== initialSectionId) {
-					activeSectionId = initialSectionId;
-				}
+				activeSectionId = adminSections[0].id;
 			}
 		}
 	});
@@ -45,8 +90,6 @@
 			replaceState(newUrl, {});
 		}
 	}
-
-	let { data, form } = $props();
 
 	let successAlertMessage = $state('');
 	let errorAlertMessage = $state('');
@@ -136,7 +179,7 @@
 			<div class="card-body p-0">
 				<div class="flex items-center justify-between rounded-t-lg bg-neutral p-4 text-neutral-content">
 					<h2 class="text-xl font-bold">
-						{adminSections.find((s) => s.id === activeSectionId && !s.subSections)?.label || adminSections.flatMap((s) => s.subSections || []).find((sub) => sub.id === activeSectionId)?.label || adminSections.find((s) => s.id === activeSectionId && s.subSections)?.label || 'Dashboard'}
+						{adminSections.find((s) => s.id === activeSectionId)?.label || 'Dashboard'}
 					</h2>
 					<div class="hidden lg:flex">
 						<a href="/logout" class="btn btn-error btn-sm flex items-center gap-2">
@@ -151,10 +194,17 @@
 					</div>
 					<div class="overflow-x-auto">
 						<table class="table table-zebra w-full">
-							<thead><tr><th>Name</th><th>Date</th><th>Type</th><th>Actions</th></tr></thead>
+							<thead>
+								<tr>
+									<th onclick={() => setSortKey('name')} class="cursor-pointer">Name <Icon src={sortKey === 'name' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('startDateTime')} class="cursor-pointer">Date <Icon src={sortKey === 'startDateTime' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('eventType')} class="cursor-pointer">Type <Icon src={sortKey === 'eventType' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th>Actions</th>
+								</tr>
+							</thead>
 							<tbody>
-								{#if data.events && data.events.length > 0}
-									{#each data.events as item (item.id)}
+								{#if sortedEvents && sortedEvents.length > 0}
+									{#each sortedEvents as item (item.id)}
 										<tr>
 											<td>{item.name}</td>
 											<td>
@@ -196,10 +246,18 @@
 					</div>
 					<div class="overflow-x-auto">
 						<table class="table table-zebra w-full">
-							<thead><tr><th>Name</th><th>Holes</th><th>Par</th><th>Location</th><th>Actions</th></tr></thead>
+							<thead>
+								<tr>
+									<th onclick={() => setSortKey('name')} class="cursor-pointer">Name <Icon src={sortKey === 'name' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('numberOfHoles')} class="cursor-pointer">Holes <Icon src={sortKey === 'numberOfHoles' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('par')} class="cursor-pointer">Par <Icon src={sortKey === 'par' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('location')} class="cursor-pointer">Location <Icon src={sortKey === 'location' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th>Actions</th>
+								</tr>
+							</thead>
 							<tbody>
-								{#if data.courses && data.courses.length > 0}
-									{#each data.courses as item (item.id)}
+								{#if sortedCourses && sortedCourses.length > 0}
+									{#each sortedCourses as item (item.id)}
 										<tr>
 											<td>{item.name}</td><td>{item.numberOfHoles}</td><td>{item.par}</td><td>{item.location}</td>
 											<td class="flex gap-2">
@@ -230,10 +288,17 @@
 					</div>
 					<div class="overflow-x-auto">
 						<table class="table table-zebra w-full">
-							<thead><tr><th>Title</th><th>Date</th><th>Published</th><th>Actions</th></tr></thead>
+							<thead>
+								<tr>
+									<th onclick={() => setSortKey('title')} class="cursor-pointer">Title <Icon src={sortKey === 'title' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('publishedDate')} class="cursor-pointer">Date <Icon src={sortKey === 'publishedDate' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('published')} class="cursor-pointer">Published <Icon src={sortKey === 'published' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th>Actions</th>
+								</tr>
+							</thead>
 							<tbody>
-								{#if data.posts && data.posts.length > 0}
-									{#each data.posts as item (item.id)}
+								{#if sortedPosts && sortedPosts.length > 0}
+									{#each sortedPosts as item (item.id)}
 										<tr>
 											<td>{item.title}</td>
 											<td
@@ -264,14 +329,21 @@
 				</div>
 				<div class="p-4 {activeSectionId === 'boardMembers' ? '' : 'hidden'}">
 					<div class="mb-4 flex justify-end">
-						<a href="/admin/board/members/new" class="btn btn-secondary btn-sm"><Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Add New Member</a>
+						<a href="/admin/board/members/new" class="btn btn-secondary btn-sm flex items-center gap-2"><Icon src={PlusCircle} class="h-4 w-4"></Icon> Add Member</a>
 					</div>
 					<div class="overflow-x-auto">
 						<table class="table table-zebra table-sm w-full">
-							<thead><tr><th>Name</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+							<thead>
+								<tr>
+									<th onclick={() => setSortKey('name')} class="cursor-pointer">Name <Icon src={sortKey === 'name' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th>Role</th>
+									<th onclick={() => setSortKey('active')} class="cursor-pointer">Status <Icon src={sortKey === 'active' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th>Actions</th>
+								</tr>
+							</thead>
 							<tbody>
-								{#if data.boardMembers && data.boardMembers.length > 0}
-									{#each data.boardMembers as item (item.id)}
+								{#if sortedBoardMembers && sortedBoardMembers.length > 0}
+									{#each sortedBoardMembers as item (item.id)}
 										<tr>
 											<td>{item.name}</td><td>{item.role}</td>
 											<td><div class="badge {item.active ? 'badge-primary' : 'badge-neutral'} badge-sm">{item.active ? 'Active' : 'Inactive'}</div></td>
@@ -299,14 +371,20 @@
 				</div>
 				<div class="p-4 {activeSectionId === 'boardMeetings' ? '' : 'hidden'}">
 					<div class="mb-4 flex justify-end">
-						<a href="/admin/board/meetings/new" class="btn btn-secondary btn-sm"><Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Add New Meeeting</a>
+						<a href="/admin/board/meetings/new" class="btn btn-secondary btn-sm flex items-center gap-2"><Icon src={PlusCircle} class="h-4 w-4"></Icon> Add Meeting</a>
 					</div>
 					<div class="overflow-x-auto">
 						<table class="table table-zebra table-sm w-full">
-							<thead><tr><th>Date</th><th>Docs</th><th>Actions</th></tr></thead>
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Docs</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
 							<tbody>
-								{#if data.boardMeetings && data.boardMeetings.length > 0}
-									{#each data.boardMeetings as item (item.id)}
+								{#if sortedBoardMeetings && sortedBoardMeetings.length > 0}
+									{#each sortedBoardMeetings as item (item.id)}
 										<tr>
 											<td
 												>{#if item.meetingDateTime}{format(parseISO(item.meetingDateTime), 'MMM do, yyyy h:mm a')}{/if}</td
@@ -339,43 +417,29 @@
 				</div>
 				<div class="p-4 {activeSectionId === 'memberships' ? '' : 'hidden'}">
 					<div class="mb-4 flex justify-end">
-						<a href="/admin/memberships/new" class="btn btn-secondary btn-sm flex items-center gap-2"><Icon src={PlusCircle} class="h-6 w-6"></Icon>Add New Membership</a>
+						<a href="/admin/memberships/new" class="btn btn-secondary btn-sm"><Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Add Membership</a>
 					</div>
 					<div class="mt-4 overflow-x-auto">
 						<table class="table table-zebra w-full">
 							<thead>
 								<tr>
-									<th>Name</th>
-									<th>Status</th>
-									<th>Member Since</th>
-									<th>Expires</th>
+									<th onclick={() => setSortKey('name')} class="cursor-pointer">Name <Icon src={sortKey === 'name' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('active')} class="cursor-pointer">Status <Icon src={sortKey === 'active' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('expires')} class="cursor-pointer">Expires <Icon src={sortKey === 'expires' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
 									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody>
-								{#if data.memberships && data.memberships.length > 0}
-									{#each data.memberships as item (item.id)}
+								{#if sortedMemberships && sortedMemberships.length > 0}
+									{#each sortedMemberships as item (item.id)}
 										<tr>
 											<td>{item.name}</td>
-											<td>
-												<div class="badge {item.active ? 'badge-primary' : 'badge-neutral'} badge-sm">
-													{item.active ? 'Active' : 'Inactive'}
-												</div>
-											</td>
-											<td>
-												{#if item.memberSince && typeof item.memberSince === 'string' && item.memberSince.length > 0}
-													{format(parseISO(item.memberSince), 'MMM do, yyyy')}
-												{/if}
-											</td>
-											<td>
-												{#if item.expires && typeof item.expires === 'string' && item.expires.length > 0}
-													{format(parseISO(item.expires), 'MMM do, yyyy')}
-												{/if}
-											</td>
+											<td><div class="badge {item.active ? 'badge-primary' : 'badge-neutral'} badge-sm">{item.active ? 'Active' : 'Inactive'}</div></td>
+											<td
+												>{#if item.expires && typeof item.expires === 'string' && item.expires.length > 0}{format(parseISO(item.expires), 'MMM do, yyyy')}{/if}</td
+											>
 											<td class="flex gap-2">
-												<a href="{adminSections.find((s) => s.id === 'memberships')?.editUrlBase}/{item.id}" title="Edit Membership" class="btn btn-square btn-info btn-sm">
-													<Icon src={PencilSquare} class="h-4 w-4"></Icon>
-												</a>
+												<a href="/admin/memberships/edit/{item.id}" title="Edit Membership" class="btn btn-square btn-info btn-sm"><Icon src={PencilSquare} class="h-4 w-4"></Icon></a>
 												<form
 													method="POST"
 													action="?/delete"
@@ -386,30 +450,33 @@
 												>
 													<input type="hidden" name="collectionName" value="memberships" />
 													<input type="hidden" name="itemId" value={item.id} />
-													<button type="submit" title="Delete Membership" class="btn btn-square btn-error btn-sm">
-														<Icon src={Trash} class="h-4 w-4"></Icon>
-													</button>
+													<button type="submit" title="Delete Membership" class="btn btn-square btn-error btn-sm"><Icon src={Trash} class="h-4 w-4"></Icon></button>
 												</form>
 											</td>
 										</tr>
 									{/each}
-								{:else}
-									<tr><td colspan="4" class="p-4 text-center italic">No memberships yet.</td></tr>
-								{/if}
+								{:else}<tr><td colspan="4" class="p-4 text-center italic">No memberships yet.</td></tr>{/if}
 							</tbody>
 						</table>
 					</div>
 				</div>
 				<div class="p-4 {activeSectionId === 'volunteers' ? '' : 'hidden'}">
 					<div class="mb-4 flex justify-end">
-						<a href="/admin/volunteers/new" class="btn btn-secondary btn-sm flex items-center gap-2"><Icon src={PlusCircle} class="h-6 w-6"></Icon>Log Volunteer Record</a>
+						<a href="/admin/volunteers/new" class="btn btn-secondary btn-sm"><Icon src={PlusCircle} class="mr-1 h-5 w-5"></Icon>Add Volunteer Record</a>
 					</div>
 					<div class="mt-4 overflow-x-auto">
 						<table class="table table-zebra w-full">
-							<thead><tr><th>Name</th><th>Event/Task</th><th>Date</th><th>Actions</th></tr></thead>
+							<thead>
+								<tr>
+									<th onclick={() => setSortKey('name')} class="cursor-pointer">Name <Icon src={sortKey === 'name' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('task')} class="cursor-pointer">Event/Task <Icon src={sortKey === 'task' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('date')} class="cursor-pointer">Date <Icon src={sortKey === 'date' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th>Actions</th>
+								</tr>
+							</thead>
 							<tbody>
-								{#if data.volunteers && data.volunteers.length > 0}
-									{#each data.volunteers as item (item.id)}
+								{#if sortedVolunteers && sortedVolunteers.length > 0}
+									{#each sortedVolunteers as item (item.id)}
 										<tr>
 											<td>{item.name}</td>
 											<td>{item.task}</td>
@@ -444,10 +511,18 @@
 					</div>
 					<div class="mt-4 overflow-x-auto">
 						<table class="table table-zebra w-full">
-							<thead><tr><th>Donor</th><th>Amount</th><th>Date</th><th>Type</th><th>Actions</th></tr></thead>
+							<thead>
+								<tr>
+									<th onclick={() => setSortKey('donorName')} class="cursor-pointer">Donor <Icon src={sortKey === 'donorName' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('amount')} class="cursor-pointer">Amount <Icon src={sortKey === 'amount' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('donationDate')} class="cursor-pointer">Date <Icon src={sortKey === 'donationDate' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th onclick={() => setSortKey('donationType')} class="cursor-pointer">Type <Icon src={sortKey === 'donationType' ? (sortOrder === 1 ? ChevronUp : ChevronDown) : ChevronUpDown} class="inline-block h-4 w-4" /></th>
+									<th>Actions</th>
+								</tr>
+							</thead>
 							<tbody>
-								{#if data.donations && data.donations.length > 0}
-									{#each data.donations as item (item.id)}
+								{#if sortedDonations && sortedDonations.length > 0}
+									{#each sortedDonations as item (item.id)}
 										<tr>
 											<td>{item.donorName}</td>
 											<td
@@ -487,32 +562,12 @@
 		<ul class="menu min-h-full w-60 bg-base-200 p-4 text-base-content md:w-64">
 			<li class="menu-title text-sm"><span>Admin Menu</span></li>
 			{#each adminSections as section (section.id)}
-				{#if section.subSections}
-					<li>
-						<details open={section.subSections.some((sub) => sub.id === activeSectionId)}>
-							<summary class="text-base font-medium {section.subSections.some((sub) => sub.id === activeSectionId) ? 'active' : ''}">
-								<Icon src={section.icon || CircleStack} class="h-5 w-5" />
-								{section.label}
-							</summary>
-							<ul class="!pl-2">
-								{#each section.subSections as subSection (subSection.id)}
-									<li>
-										<a href="#{subSection.id}" class:active={activeSectionId === subSection.id} onclick={preventDefault(() => setActiveSection(subSection.id))}>
-											{subSection.label}
-										</a>
-									</li>
-								{/each}
-							</ul>
-						</details>
-					</li>
-				{:else}
-					<li>
-						<a href="#{section.id}" class:active={activeSectionId === section.id} onclick={preventDefault(() => setActiveSection(section.id))}>
-							<Icon src={section.icon || CircleStack} solid class="h-5 w-5" />
-							{section.label}
-						</a>
-					</li>
-				{/if}
+				<li>
+					<a href="#{section.id}" class:active={activeSectionId === section.id} onclick={preventDefault(() => setActiveSection(section.id))}>
+						<Icon src={section.icon || CircleStack} solid class="h-5 w-5" />
+						{section.label}
+					</a>
+				</li>
 			{/each}
 		</ul>
 	</div>
