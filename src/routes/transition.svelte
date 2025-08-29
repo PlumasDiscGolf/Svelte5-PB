@@ -1,14 +1,19 @@
-<script >
-	import { fade } from 'svelte/transition'
+<script>
+	import { fade } from 'svelte/transition';
+	import { browser } from '$app/environment';
 
-	let { children, url } = $props()
+	let { children, url } = $props();
 </script>
 
-{#key url}
-	<div class="transition" in:fade>
-		{@render children?.()}
-	</div>
-{/key}
+{#if browser}
+	{#key url}
+		<div class="transition" in:fade>
+			{@render children?.()}
+		</div>
+	{/key}
+{:else}
+	{@render children?.()}
+{/if}
 
 <style>
 	.transition {
