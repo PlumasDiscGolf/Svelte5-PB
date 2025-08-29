@@ -1,0 +1,58 @@
+{
+	"name": "holes",
+	"type": "base",
+	"system": false,
+	"schema": [
+		{
+			"name": "layout",
+			"type": "relation",
+			"required": true,
+			"options": {
+				"collectionId": "layouts",
+				"cascadeDelete": true,
+				"minSelect": 1,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "hole_number",
+			"type": "number",
+			"required": true,
+			"options": {
+				"min": 1,
+				"max": null
+			}
+		},
+		{
+			"name": "par",
+			"type": "number",
+			"required": true,
+			"options": {
+				"min": 2,
+				"max": 6
+			}
+		},
+		{
+			"name": "distance_feet",
+			"type": "number",
+			"required": true,
+			"options": {
+				"min": 100,
+				"max": null
+			}
+		},
+		{
+			"name": "notes",
+			"type": "editor",
+			"required": false,
+			"options": {}
+		}
+	],
+	"indexes": ["CREATE UNIQUE INDEX `idx_unique_layout_hole` ON `holes` (`layout`, `hole_number`)"],
+	"listRule": "",
+	"viewRule": "",
+	"createRule": null,
+	"updateRule": null,
+	"deleteRule": null
+}

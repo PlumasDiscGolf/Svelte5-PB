@@ -1,0 +1,46 @@
+{
+	"name": "bag_tags",
+	"type": "base",
+	"system": false,
+	"schema": [
+		{
+			"name": "series",
+			"type": "relation",
+			"required": true,
+			"options": {
+				"collectionId": "bag_tag_series",
+				"cascadeDelete": true,
+				"minSelect": 1,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "number",
+			"type": "number",
+			"required": true,
+			"options": {
+				"min": 1,
+				"max": null
+			}
+		},
+		{
+			"name": "current_holder",
+			"type": "relation",
+			"required": false,
+			"options": {
+				"collectionId": "people",
+				"cascadeDelete": false,
+				"minSelect": null,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		}
+	],
+	"indexes": ["CREATE UNIQUE INDEX `idx_unique_series_tag` ON `bag_tags` (`series`, `number`)"],
+	"listRule": "",
+	"viewRule": "",
+	"createRule": null,
+	"updateRule": null,
+	"deleteRule": null
+}

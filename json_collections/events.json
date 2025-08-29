@@ -1,0 +1,107 @@
+{
+	"name": "events",
+	"type": "base",
+	"system": false,
+	"schema": [
+		{
+			"name": "name",
+			"type": "text",
+			"required": true,
+			"options": {
+				"min": null,
+				"max": null,
+				"pattern": ""
+			}
+		},
+		{
+			"name": "type",
+			"type": "select",
+			"required": true,
+			"options": {
+				"maxSelect": 1,
+				"values": ["Tournament", "League", "Series", "Workday", "Clinic"]
+			}
+		},
+		{
+			"name": "description",
+			"type": "editor",
+			"required": false,
+			"options": {}
+		},
+		{
+			"name": "start_datetime",
+			"type": "date",
+			"required": true,
+			"options": {
+				"min": "",
+				"max": ""
+			}
+		},
+		{
+			"name": "end_datetime",
+			"type": "date",
+			"required": false,
+			"options": {
+				"min": "",
+				"max": ""
+			}
+		},
+		{
+			"name": "location",
+			"type": "relation",
+			"required": true,
+			"options": {
+				"collectionId": "locations",
+				"cascadeDelete": false,
+				"minSelect": 1,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "parent_event",
+			"type": "relation",
+			"required": false,
+			"options": {
+				"collectionId": "events",
+				"cascadeDelete": false,
+				"minSelect": null,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "capacity",
+			"type": "number",
+			"required": false,
+			"options": {
+				"min": 1,
+				"max": null
+			}
+		},
+		{
+			"name": "status",
+			"type": "select",
+			"required": true,
+			"options": {
+				"maxSelect": 1,
+				"values": ["Scheduled", "Completed", "Cancelled"]
+			}
+		},
+		{
+			"name": "external_url",
+			"type": "url",
+			"required": false,
+			"options": {
+				"exceptDomains": [],
+				"onlyDomains": []
+			}
+		}
+	],
+	"indexes": [],
+	"listRule": "",
+	"viewRule": "",
+	"createRule": null,
+	"updateRule": null,
+	"deleteRule": null
+}

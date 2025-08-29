@@ -1,0 +1,72 @@
+{
+	"name": "donations",
+	"type": "base",
+	"system": false,
+	"schema": [
+		{
+			"name": "donator",
+			"type": "relation",
+			"required": true,
+			"options": {
+				"collectionId": "people",
+				"cascadeDelete": false,
+				"minSelect": 1,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "type",
+			"type": "select",
+			"required": true,
+			"options": {
+				"maxSelect": 1,
+				"values": ["Monetary", "In-Kind"]
+			}
+		},
+		{
+			"name": "description",
+			"type": "text",
+			"required": true,
+			"options": {
+				"min": null,
+				"max": 200,
+				"pattern": ""
+			}
+		},
+		{
+			"name": "estimated_value",
+			"type": "number",
+			"required": false,
+			"options": {
+				"min": 0,
+				"max": null
+			}
+		},
+		{
+			"name": "donation_date",
+			"type": "date",
+			"required": true,
+			"options": {
+				"min": "",
+				"max": ""
+			}
+		},
+		{
+			"name": "notes",
+			"type": "text",
+			"required": false,
+			"options": {
+				"min": null,
+				"max": null,
+				"pattern": ""
+			}
+		}
+	],
+	"indexes": [],
+	"listRule": "donator = @request.auth.person",
+	"viewRule": "donator = @request.auth.person",
+	"createRule": "@request.auth.id != \"\"",
+	"updateRule": null,
+	"deleteRule": null
+}

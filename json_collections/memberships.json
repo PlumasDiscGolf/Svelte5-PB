@@ -1,0 +1,52 @@
+{
+	"name": "memberships",
+	"type": "base",
+	"system": false,
+	"schema": [
+		{
+			"name": "person",
+			"type": "relation",
+			"required": true,
+			"options": {
+				"collectionId": "people",
+				"cascadeDelete": true,
+				"minSelect": 1,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "type",
+			"type": "select",
+			"required": true,
+			"options": {
+				"maxSelect": 1,
+				"values": ["Standard", "Youth"]
+			}
+		},
+		{
+			"name": "first_joined_date",
+			"type": "date",
+			"required": true,
+			"options": {
+				"min": "",
+				"max": ""
+			}
+		},
+		{
+			"name": "expiration_date",
+			"type": "date",
+			"required": true,
+			"options": {
+				"min": "",
+				"max": ""
+			}
+		}
+	],
+	"indexes": ["CREATE UNIQUE INDEX `idx_unique_person_membership` ON `memberships` (`person`)"],
+	"listRule": "@request.auth.id != \"\"",
+	"viewRule": "@request.auth.id != \"\" && person = @request.auth.person",
+	"createRule": null,
+	"updateRule": null,
+	"deleteRule": null
+}

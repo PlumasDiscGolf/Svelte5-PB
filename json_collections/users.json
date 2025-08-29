@@ -1,0 +1,20 @@
+{
+	"name": "users",
+	"type": "auth",
+	"system": false,
+	"schema": [
+		{
+			"name": "person",
+			"type": "relation",
+			"required": true,
+			"options": {
+				"collectionId": "people",
+				"cascadeDelete": false,
+				"minSelect": 1,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		}
+	],
+	"indexes": ["CREATE UNIQUE INDEX `idx_unique_person` ON `users` (`person`)"]
+}

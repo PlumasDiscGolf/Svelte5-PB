@@ -1,0 +1,56 @@
+{
+	"name": "volunteers",
+	"type": "base",
+	"system": false,
+	"schema": [
+		{
+			"name": "volunteer",
+			"type": "relation",
+			"required": true,
+			"options": {
+				"collectionId": "people",
+				"cascadeDelete": true,
+				"minSelect": 1,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "event",
+			"type": "relation",
+			"required": false,
+			"options": {
+				"collectionId": "events",
+				"cascadeDelete": false,
+				"minSelect": null,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "notes",
+			"type": "text",
+			"required": false,
+			"options": {
+				"min": null,
+				"max": 200,
+				"pattern": ""
+			}
+		},
+		{
+			"name": "status",
+			"type": "select",
+			"required": true,
+			"options": {
+				"maxSelect": 1,
+				"values": ["Signed Up", "Completed", "No-show"]
+			}
+		}
+	],
+	"indexes": [],
+	"listRule": "volunteer = @request.auth.person",
+	"viewRule": "volunteer = @request.auth.person",
+	"createRule": "@request.auth.id != \"\"",
+	"updateRule": "volunteer = @request.auth.person",
+	"deleteRule": "volunteer = @request.auth.person"
+}

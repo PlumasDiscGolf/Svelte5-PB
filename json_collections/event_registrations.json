@@ -1,0 +1,46 @@
+{
+	"name": "event_registrations",
+	"type": "base",
+	"system": false,
+	"schema": [
+		{
+			"name": "event",
+			"type": "relation",
+			"required": true,
+			"options": {
+				"collectionId": "events",
+				"cascadeDelete": true,
+				"minSelect": 1,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "person",
+			"type": "relation",
+			"required": true,
+			"options": {
+				"collectionId": "people",
+				"cascadeDelete": true,
+				"minSelect": 1,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "placement",
+			"type": "number",
+			"required": false,
+			"options": {
+				"min": 1,
+				"max": null
+			}
+		}
+	],
+	"indexes": ["CREATE UNIQUE INDEX `idx_unique_event_person` ON `event_registrations` (`event`, `person`)"],
+	"listRule": "",
+	"viewRule": "",
+	"createRule": null,
+	"updateRule": null,
+	"deleteRule": null
+}

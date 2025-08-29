@@ -1,0 +1,51 @@
+{
+	"name": "people",
+	"type": "base",
+	"system": false,
+	"schema": [
+		{
+			"name": "name",
+			"type": "text",
+			"required": true,
+			"options": {
+				"min": 3,
+				"max": 100,
+				"pattern": ""
+			}
+		},
+		{
+			"name": "email",
+			"type": "email",
+			"required": false,
+			"options": {
+				"exceptDomains": [],
+				"onlyDomains": []
+			}
+		},
+		{
+			"name": "phone",
+			"type": "text",
+			"required": false,
+			"options": {
+				"min": null,
+				"max": null,
+				"pattern": ""
+			}
+		},
+		{
+			"name": "pdga_number",
+			"type": "number",
+			"required": false,
+			"options": {
+				"min": 1,
+				"max": null
+			}
+		}
+	],
+	"indexes": [],
+	"listRule": "@request.auth.id != \"\" && @request.auth.collectionName = \"users\"",
+	"viewRule": "@request.auth.id != \"\" && @request.auth.collectionName = \"users\"",
+	"createRule": null,
+	"updateRule": "@request.auth.id != \"\" && @request.auth.collectionName = \"users\" && id = @request.auth.person",
+	"deleteRule": null
+}

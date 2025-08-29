@@ -1,0 +1,39 @@
+{
+	"name": "locations",
+	"type": "base",
+	"system": false,
+	"schema": [
+		{
+			"name": "name",
+			"type": "text",
+			"required": true,
+			"options": {
+				"min": null,
+				"max": 100,
+				"pattern": ""
+			}
+		},
+		{
+			"name": "address",
+			"type": "text",
+			"required": false,
+			"options": {
+				"min": null,
+				"max": null,
+				"pattern": ""
+			}
+		},
+		{
+			"name": "notes",
+			"type": "editor",
+			"required": false,
+			"options": {}
+		}
+	],
+	"indexes": [],
+	"listRule": "",
+	"viewRule": "",
+	"createRule": null,
+	"updateRule": null,
+	"deleteRule": null
+}

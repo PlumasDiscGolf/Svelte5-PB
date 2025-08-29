@@ -1,0 +1,47 @@
+{
+	"name": "course_layouts",
+	"type": "base",
+	"system": false,
+	"schema": [
+		{
+			"name": "course",
+			"type": "relation",
+			"required": true,
+			"options": {
+				"collectionId": "courses",
+				"cascadeDelete": true,
+				"minSelect": 1,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "name",
+			"type": "text",
+			"required": true,
+			"options": {
+				"min": null,
+				"max": 100,
+				"pattern": ""
+			}
+		},
+		{
+			"name": "is_primary",
+			"type": "bool",
+			"required": false,
+			"options": {}
+		},
+		{
+			"name": "description",
+			"type": "editor",
+			"required": false,
+			"options": {}
+		}
+	],
+	"indexes": [],
+	"listRule": "",
+	"viewRule": "",
+	"createRule": null,
+	"updateRule": null,
+	"deleteRule": null
+}

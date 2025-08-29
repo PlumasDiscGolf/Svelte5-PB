@@ -1,0 +1,79 @@
+{
+	"name": "bag_tag_exchanges",
+	"type": "base",
+	"system": false,
+	"schema": [
+		{
+			"name": "type",
+			"type": "select",
+			"required": true,
+			"options": {
+				"maxSelect": 1,
+				"values": ["Challenge", "Forfeit", "Initial"]
+			}
+		},
+		{
+			"name": "bag_tag",
+			"type": "relation",
+			"required": true,
+			"options": {
+				"collectionId": "bag_tags",
+				"cascadeDelete": false,
+				"minSelect": 1,
+				"maxSelect": 1,
+				"displayFields": ["number"]
+			}
+		},
+		{
+			"name": "new_holder",
+			"type": "relation",
+			"required": false,
+			"options": {
+				"collectionId": "people",
+				"cascadeDelete": false,
+				"minSelect": null,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "previous_holder",
+			"type": "relation",
+			"required": false,
+			"options": {
+				"collectionId": "people",
+				"cascadeDelete": false,
+				"minSelect": null,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		},
+		{
+			"name": "exchange_date",
+			"type": "date",
+			"required": true,
+			"options": {
+				"min": "",
+				"max": ""
+			}
+		},
+		{
+			"name": "related_event",
+			"type": "relation",
+			"required": false,
+			"options": {
+				"collectionId": "events",
+				"cascadeDelete": false,
+				"minSelect": null,
+				"maxSelect": 1,
+				"displayFields": ["name"]
+			}
+		}
+	],
+	"indexes": [],
+	"listRule": "",
+	"viewRule": "",
+	"createRule": null,
+	"updateRule": null,
+	"deleteRule": null
+}

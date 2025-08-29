@@ -1,0 +1,38 @@
+{
+	"name": "bag_tag_series",
+	"type": "base",
+	"system": false,
+	"schema": [
+		{
+			"name": "name",
+			"type": "text",
+			"required": true,
+			"options": {
+				"min": null,
+				"max": 100,
+				"pattern": ""
+			}
+		},
+		{
+			"name": "year",
+			"type": "number",
+			"required": true,
+			"options": {
+				"min": 2020,
+				"max": null
+			}
+		},
+		{
+			"name": "is_active",
+			"type": "bool",
+			"required": true,
+			"options": {}
+		}
+	],
+	"indexes": [],
+	"listRule": "",
+	"viewRule": "",
+	"createRule": null,
+	"updateRule": null,
+	"deleteRule": null
+}
